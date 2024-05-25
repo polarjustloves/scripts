@@ -82,8 +82,13 @@ infButton.MouseButton1Click:Connect(function()
     end
 end)
 
-queueteleport = (syn and syn.queue_on_teleport) or queue_on_teleport or (fluxus and fluxus.queue_on_teleport)
-Players.LocalPlayer.OnTeleport:Connect(function(State)
-		queueteleport("loadstring(game:HttpGet('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source'))()")
-	end
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+
+local queueteleport = (syn and syn.queue_on_teleport) or queue_on_teleport or (fluxus and fluxus.queue_on_teleport)
+
+player.OnTeleport:Connect(function(State)
+    if queueteleport then
+        queueteleport("loadstring(game:HttpGet('https://raw.githubusercontent.com/e266cfd65ad46a67fc54b0efd38e40dd/scripthub/main/loader'))()")
+    end
 end)
