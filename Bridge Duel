@@ -1,0 +1,874 @@
+if getgenv().Bridger then
+    return
+end
+getgenv().Bridger = {}
+if not getgenv().Bridger then
+    return
+end
+
+local Library = loadstring(game:GetObjects("rbxassetid://7657867786")[1].Source)()
+
+Library.UnloadCallback = function()
+    getgenv().Bridger = nil
+end
+
+local MainFrame =
+    Library:CreateWindow(
+    {
+        Name = "Bridger",
+        Themeable = {
+            Image = "7059346386",
+            Credit = false
+        },
+        Background = "",
+        Theme = [[{
+        "__Designer.Colors.topGradient": "3F0C64",
+        "__Designer.Colors.section": "C259FB",
+        "__Designer.Colors.hoveredOptionBottom": "4819B4",
+        "__Designer.Background.ImageAssetID": "rbxassetid://4427304036",
+        "__Designer.Colors.selectedOption": "4E149C",
+        "__Designer.Colors.unselectedOption": "482271",
+        "__Designer.Files.WorkspaceFile": "Bridger",
+        "__Designer.Colors.unhoveredOptionTop": "310269",
+        "__Designer.Colors.outerBorder": "391D57",
+        "__Designer.Background.ImageColor": "69009C",
+        "__Designer.Colors.tabText": "B9B9B9",
+        "__Designer.Colors.elementBorder": "160B24",
+        "__Designer.Background.ImageTransparency": 100,
+        "__Designer.Colors.background": "1E1237",
+        "__Designer.Colors.innerBorder": "531E79",
+        "__Designer.Colors.bottomGradient": "361A60",
+        "__Designer.Colors.sectionBackground": "21002C",
+        "__Designer.Colors.hoveredOptionTop": "6B10F9",
+        "__Designer.Colors.otherElementText": "7B44A8",
+        "__Designer.Colors.main": "AB26FF",
+        "__Designer.Colors.elementText": "9F7DB5",
+        "__Designer.Colors.unhoveredOptionBottom": "3E0088",
+        "__Designer.Background.UseBackgroundImage": false
+    }] ]]
+    }
+)
+
+--// Combat
+
+local CombatTab =
+    MainFrame:CreateTab( {
+        Name = "Combat"
+})
+
+local PvPSection =
+    CombatTab:CreateSection({
+        Name = "PvP"
+})
+
+local MovementSection =
+    CombatTab:CreateSection({
+        Name = "Movement",
+        Side = "Right"
+})
+
+--// VisualsTab
+
+local VisualsTab =
+    MainFrame:CreateTab( {
+        Name = "Visuals"
+})
+
+local espSection =
+    VisualsTab:CreateSection({
+        Name = "Esp"
+})
+
+local targethubSection =
+    VisualsTab:CreateSection({
+        Name = "Target hub",
+        Side = "Right"
+})
+
+local RenderSection =
+    VisualsTab:CreateSection({
+        Name = "Render",
+        Side = "Right"
+})
+
+--// FunctionsTab
+
+local FunctionsTab =
+    MainFrame:CreateTab({
+        Name = "Functions"
+})
+
+local FunctionsSection =
+    FunctionsTab:CreateSection({
+        Name = "Main Functions"
+})
+
+--// combat
+
+local AttackConnection
+local Arange = 24
+local AutoBlockEnabled = false
+
+PvPSection:AddSlider({
+    Name = "Aura Range",
+    Min = 1,
+    Max = 24,
+    Callback = function(value)
+        Arange = value
+    end
+})
+
+PvPSection:AddToggle({
+    Name = "Auto block",
+    Callback = function(enabled)
+        AutoBlockEnabled = enabled
+    end
+})
+
+PvPSection:AddToggle({
+    Name = "Aura",
+    Keybind = 1,
+    Callback = function(enabled)
+        local RunService = game:GetService("RunService")
+        local Player = game.Players.LocalPlayer
+
+        local function FindNearestPlayer()
+            local nearest, distancemax = nil, Arange
+            for _, plr in ipairs(game:GetService("Players"):GetPlayers()) do
+                if plr ~= Player then
+                    local distance = (Player.Character.HumanoidRootPart.Position - plr.Character.HumanoidRootPart.Position).Magnitude
+                    if distance < distancemax then
+                        nearest, distancemax = plr, distance
+                    end
+                end
+            end
+            return nearest
+        end
+
+        local function AttackNearestPlayer()
+            local nearestPlayer = FindNearestPlayer()
+            if nearestPlayer then
+                if AutoBlockEnabled then
+                    local args = {
+                        [1] = true,
+                        [2] = "WoodenSword"
+                    }
+                    game:GetService("ReplicatedStorage").Packages.Knit.Services.ToolService.RF.ToggleBlockSword:InvokeServer(unpack(args))
+                end
+                game:GetService("ReplicatedStorage").Packages.Knit.Services.ToolService.RF.AttackPlayerWithSword:InvokeServer(nearestPlayer.Character, true, "WoodenSword")
+            else
+                if AutoBlockEnabled then
+                    local args = {
+                        [1] = false,
+                        [2] = "WoodenSword"
+                    }
+                    game:GetService("ReplicatedStorage").Packages.Knit.Services.ToolService.RF.ToggleBlockSword:InvokeServer(unpack(args))
+                end
+            end
+        end
+
+        if enabled then
+            AttackConnection = RunService.Stepped:Connect(function()
+                pcall(AttackNearestPlayer)
+            end)
+        else
+            if AttackConnection then
+                AttackConnection:Disconnect()
+            end
+        end
+    end
+})
+
+local function equipItem(itemName)
+    local item = game.Players.LocalPlayer:WaitForChild("Backpack"):FindFirstChild(itemName)
+    if item and item:IsA("Tool") then
+        item.Parent = game.Players.LocalPlayer.Character or game.Players.LocalPlayer.CharacterAdded:Wait()
+    end
+end
+
+local function unequipItem(itemName)
+    local item = (game.Players.LocalPlayer.Character or game.Players.LocalPlayer.CharacterAdded:Wait()):FindFirstChild(itemName)
+    if item and item:IsA("Tool") then
+        item.Parent = game.Players.LocalPlayer:WaitForChild("Backpack")
+    end
+end
+
+local function predictPosition(targetPosition, targetVelocity, multiplier, yOffset)
+    return Vector3.new(targetPosition.X + (targetVelocity.X * multiplier), targetPosition.Y + yOffset, targetPosition.Z + (targetVelocity.Z * multiplier))
+end
+
+PvPSection:AddToggle({
+    Name = "Bow Aura",
+    Callback = function(enabled)
+        if enabled then
+            while enabled do
+                local localPlayer = game.Players.LocalPlayer
+                local localHead = (localPlayer.Character or localPlayer.CharacterAdded:Wait()):FindFirstChild("Head")
+                local localHeadPosition = localHead and localHead.Position
+                if not localHeadPosition then
+                    return
+                end
+
+                local closestPlayer, closestDistance
+                for _, player in ipairs(game.Players:GetPlayers()) do
+                    if player ~= localPlayer and player.Character then
+                        local playerHead = player.Character:FindFirstChild("Head")
+                        local playerHeadPosition = playerHead and playerHead.Position
+                        local playerVelocity = player.Character:FindFirstChildOfClass("Humanoid").RootPart.Velocity
+                        if playerHeadPosition then
+                            local distance = (playerHeadPosition - localHeadPosition).magnitude
+                            local predictedPosition = predictPosition(playerHeadPosition, playerVelocity, 1.3, 15.78)
+                            local predictedDistance = (predictedPosition - localHeadPosition).magnitude
+                            if not closestDistance or predictedDistance < closestDistance then
+                                closestPlayer = player
+                                closestDistance = predictedDistance
+                            end
+                        end
+                    end
+                end
+
+                if closestPlayer then
+                    equipItem("DefaultBow")
+                    game.Players.LocalPlayer.Character.DefaultBow.__comm__.RF.Fire:InvokeServer(closestPlayer.Character:FindFirstChild("Head").Position, 9e9)
+                    unequipItem("DefaultBow")
+                end
+                wait(3)
+            end
+        end
+    end
+})
+
+local sizex, sizey, sizez = 1, 1, 1
+local ReachVisualEnabled = false
+local reachConnection
+
+PvPSection:AddSlider({
+        Name = "Size x",
+        Min = 1,
+        Max = 10,
+        Callback = function(value)
+            sizex = value
+        end
+})
+
+PvPSection:AddSlider({
+        Name = "Size y",
+        Min = 1,
+        Max = 20,
+        Callback = function(value)
+            sizey = value
+        end
+})
+
+PvPSection:AddSlider({
+        Name = "Size z",
+        Min = 1,
+        Max = 10,
+        Callback = function(value)
+            sizez = value
+        end
+})
+
+PvPSection:AddToggle({
+        Name = "Reach Visual",
+        Callback = function(enabled)
+            ReachVisualEnabled = enabled
+        end
+})
+
+PvPSection:AddToggle({
+        Name = "Reach",
+        Callback = function(enabled)
+            if enabled then
+                local function Reach()
+                    reachConnection =
+                        game:GetService("RunService").RenderStepped:Connect(
+                        function()
+                            for _, player in ipairs(game:GetService("Players"):GetPlayers()) do
+                                if player.Name ~= game:GetService("Players").LocalPlayer.Name then
+                                    pcall(
+                                        function()
+                                            local humanoidRootPart =
+                                                player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+                                            if humanoidRootPart then
+                                                humanoidRootPart.Size = Vector3.new(sizex, sizey, sizez)
+                                                humanoidRootPart.Transparency = ReachVisualEnabled and 0.5 or 1
+                                                humanoidRootPart.Material = Enum.Material.Neon
+                                                humanoidRootPart.CanCollide = false
+                                            end
+                                        end
+                                    )
+                                end
+                            end
+                        end
+                    )
+                end
+
+                Reach()
+            else
+                if reachConnection then
+                    reachConnection:Disconnect()
+                    reachConnection = nil
+                end
+
+                for _, player in ipairs(game:GetService("Players"):GetPlayers()) do
+                    if player.Name ~= game:GetService("Players").LocalPlayer.Name then
+                        pcall(
+                            function()
+                                local humanoidRootPart =
+                                    player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+                                if humanoidRootPart then
+                                    humanoidRootPart.Size = Vector3.new(2, 2, 2)
+                                    humanoidRootPart.Transparency = 1
+                                    humanoidRootPart.Material = Enum.Material.Plastic
+                                    humanoidRootPart.CanCollide = false
+                                end
+                            end
+                        )
+                    end
+                end
+            end
+        end
+})
+
+--// Movement Section
+
+MovementSection:AddToggle({
+        Name = "Block noslow",
+        Value = Blockns,
+        Callback = function(enabled)
+            Blockns = enabled
+        end
+})
+
+
+MovementSection:AddToggle({
+        Name = "Walk Speed",
+        Value = WalkSpeedEnabled,
+        Keybind = 1,
+        Callback = function(enabled)
+            WalkSpeedEnabled = enabled
+            if enabled then
+                SE = true
+                while SE do
+                    local speedMultiplier = WalkSpeedValue
+                    if Blockns and game.Players.LocalPlayer:GetAttribute("Blocking") == true then
+                        speedMultiplier = speedMultiplier * 1.82
+                    end
+                    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame =
+                        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame +
+                        game.Players.LocalPlayer.Character.Humanoid.MoveDirection * speedMultiplier
+                    game:GetService("RunService").Stepped:wait()
+                end
+            else
+                SE = false
+                if SL then
+                    SL:Disconnect()
+                end
+            end
+        end
+})
+
+MovementSection:AddSlider({
+        Name = "Walk Speed Value",
+        Min = 0,
+        Max = 50,
+        Value = WalkSpeedValue,
+        Callback = function(New, Old)
+            WalkSpeedValue = New / 200
+            if WalkSpeedEnabled then
+                Multiplier = WalkSpeedValue
+            end
+        end
+})
+
+local Flying = false
+local basePlate
+
+local function updatePosition(character)
+    if character:FindFirstChild("HumanoidRootPart") then
+        local rootPosition = character.HumanoidRootPart.Position
+        local yOffset = character.Humanoid.HipHeight - -1
+        basePlate.Position = Vector3.new(rootPosition.X, rootPosition.Y - yOffset, rootPosition.Z)
+    end
+end
+
+MovementSection:AddToggle({
+    Name = "Fly",
+    Value = Flying,
+    Keybind = 1,
+    Callback = function(enabled)
+        Flying = enabled
+        local player = game.Players.LocalPlayer
+        local character = player.Character or player.CharacterAdded:Wait()
+
+        if enabled then
+            basePlate = Instance.new("Part")
+            basePlate.Size =  Vector3.new(2, 0.1, 2)
+            basePlate.Anchored = true
+            basePlate.CanCollide = true
+            basePlate.Transparency = 1
+            basePlate.BrickColor = BrickColor.new("Medium stone grey")
+            basePlate.Parent = game.Workspace
+            
+            while Flying do
+                updatePosition(character)
+                task.wait()
+            end
+        else
+            if basePlate then
+                basePlate:Destroy()
+            end
+        end
+    end
+})
+
+MovementSection:AddToggle({
+    Name = "Antivoid",
+    Value = false,
+    Callback = function(enabled)
+        if enabled then
+            local Antivoid = Instance.new("Part")
+            Antivoid.Name = "Antivoid"
+            Antivoid.Position = Vector3.new(0, -160, 0)
+            Antivoid.Size = Vector3.new(1000, 1, 1000)
+            Antivoid.Anchored = true
+            Antivoid.CanCollide = true
+            Antivoid.Transparency = 1
+            Antivoid.BrickColor = BrickColor.new("Medium stone grey")
+            Antivoid.Parent = game.Workspace
+        else
+            local Antivoid = game.Workspace:FindFirstChild("Antivoid")
+            if Antivoid then
+                Antivoid:Destroy()
+            end
+        end
+    end
+})
+
+-- Visuals
+
+local function createTargetHub()
+    local gui = Instance.new("ScreenGui")
+    gui.Name = "PlayerInfoGUI"
+    gui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+    gui.ResetOnSpawn = false
+
+    local frame = Instance.new("Frame")
+    frame.Size, frame.Position = UDim2.new(0.1, 0, 0.08, 0), UDim2.new(0.56, 0, 0.55, 0)
+    frame.BackgroundColor3, frame.BackgroundTransparency, frame.BorderSizePixel = Color3.new(0, 0, 0), 0.5, 2
+    frame.BorderColor3 = Color3.fromRGB(148, 0, 211)
+    frame.Parent = gui
+    frame.Active = true
+
+    local nameLabel = Instance.new("TextLabel")
+    nameLabel.Text = "..."
+    nameLabel.TextColor3, nameLabel.Size, nameLabel.Position =
+        Color3.new(1, 1, 1),
+        UDim2.new(1, 0, 0.3, 0),
+        UDim2.new(0, 0, 0, 0)
+    nameLabel.BackgroundTransparency,
+        nameLabel.Font,
+        nameLabel.TextSize,
+        nameLabel.TextWrapped,
+        nameLabel.TextXAlignment = 1, Enum.Font.SourceSansBold, 20, true, Enum.TextXAlignment.Center
+    nameLabel.Parent = frame
+
+    local hpLabel = Instance.new("TextLabel")
+    hpLabel.Text, hpLabel.TextColor3, hpLabel.Size, hpLabel.Position =
+        "",
+        Color3.new(1, 1, 1),
+        UDim2.new(1, 0, 0.3, 0),
+        UDim2.new(0, 0, 0.3, 0)
+    hpLabel.BackgroundTransparency, hpLabel.Font, hpLabel.TextSize, hpLabel.TextWrapped, hpLabel.TextXAlignment =
+        1,
+        Enum.Font.SourceSansBold,
+        20,
+        true,
+        Enum.TextXAlignment.Center
+    hpLabel.Parent = frame
+
+    local healthBarBackground = Instance.new("Frame")
+    healthBarBackground.Size, healthBarBackground.Position = UDim2.new(0.6, 0, 0.2, 0), UDim2.new(0.2, 0, 0.7, 0)
+    healthBarBackground.BackgroundColor3, healthBarBackground.BorderSizePixel, healthBarBackground.BorderColor3 =
+        Color3.new(0, 0, 0),
+        2,
+        Color3.new(0, 0, 0)
+    healthBarBackground.Parent = frame
+
+    local healthBar = Instance.new("Frame")
+    healthBar.Size, healthBar.Position, healthBar.BackgroundColor3, healthBar.BorderSizePixel =
+        UDim2.new(0.6, 0, 0.2, 0),
+        UDim2.new(0.2, 0, 0.7, 0),
+        Color3.fromRGB(0, 255, 0),
+        0
+    healthBar.Parent = frame
+
+    local statusLabel = Instance.new("TextLabel")
+    statusLabel.Text, statusLabel.TextColor3, statusLabel.Size, statusLabel.Position =
+        "",
+        Color3.new(1, 0, 0),
+        UDim2.new(0.6, 0, 0.3, 0),
+        UDim2.new(0.615, 0, 0.7, 0)
+    statusLabel.BackgroundTransparency,
+        statusLabel.Font,
+        statusLabel.TextSize,
+        statusLabel.TextWrapped,
+        statusLabel.TextXAlignment = 1, Enum.Font.SourceSansBold, 18, true, Enum.TextXAlignment.Center
+    statusLabel.Parent = frame
+
+    local line = Instance.new("Frame")
+    line.Size, line.Position, line.BorderSizePixel, line.BackgroundColor3, line.BackgroundTransparency =
+        UDim2.new(1, 0, 0, 2),
+        UDim2.new(0, 0, 0.3, 0),
+        0,
+        Color3.fromRGB(148, 0, 211),
+        0.5
+    line.Parent = frame
+
+    local function updateGUI()
+        local closestPlayer, closestDistance = nil, math.huge
+        local playerPosition = game.Players.LocalPlayer.Character.HumanoidRootPart.Position
+        local anyPlayersNearby = false
+
+        for _, player in ipairs(game.Players:GetPlayers()) do
+            local character = player.Character
+            if player ~= game.Players.LocalPlayer and character and character:FindFirstChild("HumanoidRootPart") then
+                local distance = (character.HumanoidRootPart.Position - playerPosition).magnitude
+                if distance < closestDistance then
+                    closestPlayer, closestDistance = player, distance
+                end
+                anyPlayersNearby = true
+            end
+        end
+
+        if anyPlayersNearby then
+            nameLabel.Text = closestPlayer.Name
+            local hp = math.floor(closestPlayer.Character.Humanoid.Health)
+            hpLabel.Text = hp
+            local maxHP = closestPlayer.Character.Humanoid.MaxHealth
+            local healthPercentage = hp / maxHP
+            healthBar.Size = UDim2.new(0.6 * healthPercentage, 0, 0.2, 0)
+            healthBar.BackgroundColor3 = Color3.fromRGB(255 * (1 - healthPercentage), 255 * healthPercentage, 0)
+            hpLabel.Visible = true
+            healthBarBackground.Visible = true
+            healthBar.Visible = true
+
+            local localPlayerHP = math.floor(game.Players.LocalPlayer.Character.Humanoid.Health)
+            if localPlayerHP > hp then
+                statusLabel.Text = "winning"
+                statusLabel.TextColor3 = Color3.new(0, 1, 0)
+            elseif localPlayerHP < hp then
+                statusLabel.Text = "losing"
+                statusLabel.TextColor3 = Color3.new(1, 0, 0)
+            else
+                statusLabel.Text = "none"
+                statusLabel.TextColor3 = Color3.new(1, 1, 0)
+            end
+            statusLabel.Visible = true
+        else
+            nameLabel.Text = ""
+            hpLabel.Visible = false
+            healthBarBackground.Visible = false
+            healthBar.Visible = false
+            statusLabel.Visible = false
+        end
+    end
+
+    game:GetService("RunService").Heartbeat:Connect(updateGUI)
+end
+
+targethubSection:AddToggle({
+        Name = "Target Hub",
+        Callback = function(enabled)
+            targetHubEnabled = enabled
+            if targetHubEnabled then
+                createTargetHub()
+            else
+                local gui = game.Players.LocalPlayer:FindFirstChild("PlayerGui"):FindFirstChild("PlayerInfoGUI")
+                if gui then
+                    gui:Destroy()
+                end
+            end
+        end
+})
+
+local originalSettings = {
+    Ambient = nil,
+    OutdoorAmbient = nil,
+    FogColor = nil,
+    PartColors = {}
+}
+
+local currentAtmoColor = Color3.new(225, 160, 255)
+local currentSwordColor = Color3.fromRGB(225, 160, 255)
+local currentSwordOffset = Vector3.new(2, 1, 3)
+
+RenderSection:AddToggle({
+        Name = "atmo",
+        Callback = function(enabled)
+            local lighting = game:GetService("Lighting")
+
+            if enabled then
+                originalSettings.Ambient = lighting.Ambient
+                originalSettings.OutdoorAmbient = lighting.OutdoorAmbient
+                originalSettings.FogColor = lighting.FogColor
+
+                for _, part in ipairs(workspace:GetDescendants()) do
+                    if part:IsA("BasePart") then
+                        originalSettings.PartColors[part] = part.Color
+                    end
+                end
+
+                lighting.Ambient = currentAtmoColor
+                lighting.OutdoorAmbient = currentAtmoColor
+                lighting.FogColor = currentAtmoColor
+
+                for _, part in ipairs(workspace:GetDescendants()) do
+                    if part:IsA("BasePart") then
+                        part.Color = currentAtmoColor
+                    end
+                end
+            else
+                lighting.Ambient = originalSettings.Ambient
+                lighting.OutdoorAmbient = originalSettings.OutdoorAmbient
+                lighting.FogColor = originalSettings.FogColor
+
+                for _, part in ipairs(workspace:GetDescendants()) do
+                    if part:IsA("BasePart") and originalSettings.PartColors[part] then
+                        part.Color = originalSettings.PartColors[part]
+                    end
+                end
+            end
+        end
+})
+
+local isToggleEnabled = false
+
+RenderSection:AddToggle({
+    Name = "sword",
+    Callback = function(enabled)
+        isToggleEnabled = enabled
+        if not isToggleEnabled then
+            local swordMesh = game:GetService("Workspace").Camera.Viewmodel.WoodenSword.MainPart.Mesh
+            swordMesh.VertexColor = Vector3.new(225 / 255, 160 / 255, 255 / 255)
+            swordMesh.Offset = Vector3.new(0, 0, 0)
+        end
+    end
+})
+
+game:GetService("RunService").Heartbeat:Connect(function()
+    if isToggleEnabled then
+        local swordMesh = game:GetService("Workspace").Camera.Viewmodel.WoodenSword.MainPart.Mesh
+        swordMesh.VertexColor = Vector3.new(currentSwordColor.r, currentSwordColor.g, currentSwordColor.b)
+        swordMesh.Offset = currentSwordOffset
+    end
+end)
+
+
+RenderSection:AddSlider( {
+        Name = "Sword front",
+        Min = -10,
+        Max = 10,
+        Value = currentSwordOffset.X,
+        Callback = function(value)
+            currentSwordOffset = Vector3.new(value, currentSwordOffset.Y, currentSwordOffset.Z)
+            if enabled then
+                game:GetService("Workspace").Camera.Viewmodel.WoodenSword.MainPart.Mesh.Offset = currentSwordOffset
+            end
+        end
+})
+
+RenderSection:AddSlider( {
+        Name = "Sword vertical",
+        Min = -10,
+        Max = 10,
+        Value = currentSwordOffset.Y,
+        Callback = function(value)
+            currentSwordOffset = Vector3.new(currentSwordOffset.X, value, currentSwordOffset.Z)
+            if enabled then
+                game:GetService("Workspace").Camera.Viewmodel.WoodenSword.MainPart.Mesh.Offset = currentSwordOffset
+            end
+        end
+})
+
+RenderSection:AddSlider({
+        Name = "Sword side",
+        Min = -10,
+        Max = 10,
+        Value = currentSwordOffset.Z,
+        Callback = function(value)
+            currentSwordOffset = Vector3.new(currentSwordOffset.X, currentSwordOffset.Y, value)
+            if enabled then
+                game:GetService("Workspace").Camera.Viewmodel.WoodenSword.MainPart.Mesh.Offset = currentSwordOffset
+            end
+        end
+})
+
+RenderSection:AddColorpicker({
+        Name = "Atmo color",
+        Value = currentAtmoColor,
+        Callback = function(newColor, lastColor)
+            currentAtmoColor = newColor
+            if enabled then
+                local lighting = game:GetService("Lighting")
+                lighting.Ambient = currentAtmoColor
+                lighting.OutdoorAmbient = currentAtmoColor
+                lighting.FogColor = currentAtmoColor
+
+                for _, part in ipairs(workspace:GetDescendants()) do
+                    if part:IsA("BasePart") then
+                        part.Color = currentAtmoColor
+                    end
+                end
+            end
+        end
+})
+
+RenderSection:AddColorpicker( {
+        Name = "Sword color",
+        Value = currentSwordColor,
+        Callback = function(newColor, lastColor)
+            currentSwordColor = newColor
+            if enabled then
+                game:GetService("Workspace").Camera.Viewmodel.WoodenSword.MainPart.Mesh.VertexColor =
+                    Vector3.new(currentSwordColor.r, currentSwordColor.g, currentSwordColor.b)
+            end
+        end
+})
+
+local Transparency = 0.5
+local showSelf = false
+local showTeam = false
+local espEnabled = false
+local Storage
+
+local function teamColorToColor3(teamColor)
+    return Color3.new(teamColor.r, teamColor.g, teamColor.b)
+end
+
+local function Highlight(plr)
+    local teamColor = plr.TeamColor
+    local Highlight = Instance.new("Highlight")
+    Highlight.Name = plr.Name
+    Highlight.FillColor = Color3.fromRGB(200, 150, 255)
+    Highlight.DepthMode = "AlwaysOnTop"
+    Highlight.FillTransparency = Transparency
+    Highlight.OutlineTransparency = Transparency
+    Highlight.Parent = Storage
+
+    local plrchar = plr.Character
+    if plrchar then
+        Highlight.Adornee = plrchar
+    end
+
+    plr.CharacterAdded:Connect(
+        function(char)
+            Highlight.Adornee = char
+        end
+    )
+
+    plr:GetPropertyChangedSignal("Team"):Connect(
+        function()
+            local newTeamColor = plr.TeamColor
+            Highlight.FillColor = teamColorToColor3(newTeamColor)
+        end
+    )
+end
+
+local function UpdateHighlights()
+    for _, player in ipairs(game.Players:GetPlayers()) do
+        if player == game.Players.LocalPlayer then
+            if showSelf then
+                if not Storage:FindFirstChild(player.Name) then
+                    Highlight(player)
+                end
+            else
+                local highlight = Storage:FindFirstChild(player.Name)
+                if highlight then
+                    highlight:Destroy()
+                end
+            end
+        else
+            if not Storage:FindFirstChild(player.Name) then
+                Highlight(player)
+            end
+        end
+    end
+end
+
+local function EspCallback(enabled)
+    if enabled then
+        espEnabled = true
+        local CoreGui = game:GetService("CoreGui")
+        local Players = game:GetService("Players")
+        Storage = Instance.new("Folder")
+        Storage.Parent = CoreGui
+        Storage.Name = "Highlight_Storage"
+        UpdateHighlights()
+
+        coroutine.wrap(
+            function()
+                while espEnabled do
+                    wait(0.15)
+                    UpdateHighlights()
+                end
+            end
+        )()
+    else
+        espEnabled = false
+        local Storage = game.CoreGui:FindFirstChild("Highlight_Storage")
+        if Storage then
+            for _, child in ipairs(Storage:GetChildren()) do
+                child:Destroy()
+            end
+            Storage:Destroy()
+        end
+    end
+end
+
+local function SelfCallback(enabled)
+    showSelf = enabled
+    UpdateHighlights()
+end
+
+local function TeamCallback(enabled)
+    showTeam = enabled
+    UpdateHighlights()
+end
+
+espSection:AddToggle({
+        Name = "Esp",
+        Value = false,
+        Callback = EspCallback
+})
+
+espSection:AddToggle({
+        Name = "Self",
+        Value = false,
+        Callback = SelfCallback
+})
+
+espSection:AddSlider({
+        Name = "Transparency",
+        Min = 0,
+        Max = 1,
+        Value = Transparency,
+        Callback = function(value)
+            Transparency = value
+            local Storage = game.CoreGui:FindFirstChild("Highlight_Storage")
+            if Storage then
+                for _, child in ipairs(Storage:GetChildren()) do
+                    child.FillTransparency = value
+                    child.OutlineTransparency = value
+                end
+            end
+        end
+})
+
+--// Functions
+
+FunctionsSection:AddButton({
+        Name = "Exit",
+        Callback = Library.Unload
+})
