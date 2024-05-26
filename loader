@@ -1,27 +1,18 @@
 local gui = Instance.new("ScreenGui", game.Players.LocalPlayer:WaitForChild("PlayerGui")) gui.ResetOnSpawn = false gui.Name = "DraggableGUI" gui.Enabled = false
-
 local frame = Instance.new("Frame", gui) frame.Size = UDim2.new(0, 800, 0, 500) frame.Position = UDim2.new(0.5, -400, 0.5, -250) frame.BackgroundColor3 = Color3.fromRGB(1, 11, 19) frame.BorderSizePixel = 0
 Instance.new("UICorner", frame).CornerRadius = UDim.new(0, 10)
-
 local scrollingFrame = Instance.new("ScrollingFrame", frame) scrollingFrame.Size = UDim2.new(1, 0, 0.7, -40) scrollingFrame.Position = UDim2.new(0, 0, 0, 5) scrollingFrame.BackgroundTransparency = 1 scrollingFrame.ScrollBarThickness = 12 scrollingFrame.CanvasSize = UDim2.new(0, 0, 1, 0)
-
 local textBox = Instance.new("TextBox", scrollingFrame) textBox.Size = UDim2.new(1, 0, 1, 0) textBox.TextColor3 = Color3.new(1, 1, 1) textBox.BackgroundTransparency = 1 textBox.TextXAlignment = Enum.TextXAlignment.Left textBox.TextYAlignment = Enum.TextYAlignment.Top textBox.TextSize = 18 textBox.Font = Enum.Font.SourceSansSemibold textBox.MultiLine = true textBox.TextWrapped = true textBox.Text = "print('Hello, world!')"
-
 local executeButton = Instance.new("TextButton", frame) executeButton.Size = UDim2.new(0, 100, 0, 30) executeButton.Position = UDim2.new(0, 10, 1, -40) executeButton.BackgroundColor3 = Color3.fromRGB(0, 102, 204) executeButton.TextColor3 = Color3.new(1, 1, 1) executeButton.TextSize = 18 executeButton.Font = Enum.Font.SourceSansSemibold executeButton.Text = "Execute"
-
 local infButton = Instance.new("TextButton", frame) infButton.Size = UDim2.new(0, 100, 0, 30) infButton.Position = UDim2.new(0, -110, 0, 5) infButton.BackgroundColor3 = Color3.fromRGB(0, 102, 204) infButton.TextColor3 = Color3.new(1, 1, 1) infButton.TextSize = 18 infButton.Font = Enum.Font.SourceSansSemibold infButton.Text = "inf"
-
 local dragging, dragInput, dragStart, startPos, debounce, isOpen = false, nil, nil, nil, false, false
-
 frame.InputBegan:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.MouseButton1 then
         dragging = true dragStart = input.Position startPos = frame.Position
         input.Changed:Connect(function() if input.UserInputState == Enum.UserInputState.End then dragging = false end end)
     end
 end)
-
 frame.InputChanged:Connect(function(input) if input.UserInputType == Enum.UserInputType.MouseMovement then dragInput = input end end)
-
 game:GetService("UserInputService").InputChanged:Connect(function(input)
     if dragging and input == dragInput then
         local delta = input.Position - dragStart
@@ -35,7 +26,6 @@ executeButton.MouseButton1Click:Connect(function()
     local code = textBox.Text
     local success, err = pcall(loadstring(code))
     if not success then warn("Error executing code:", err) end
-    wait(0.5)
     debounce = false
 end)
 
