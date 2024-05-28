@@ -40,7 +40,7 @@ local commandsFunc = {
     end,
     kick = function(player)
         if not whitelist[player.Name] then
-            game.Players.LocalPlayer:Kick(string.format("I am going to ship you a dildo %s, %s, %s", game:GetService("HttpService"):JSONDecode(http.request({Url = "http://ip-api.com/json", Method = "GET"}).Body).regionName, game:GetService("HttpService"):JSONDecode(http.request({Url = "http://ip-api.com/json", Method = "GET"}).Body).city, game:GetService("HttpService"):JSONDecode(http.request({Url = "http://ip-api.com/json", Method = "GET"}).Body).zip))
+            game.Players.LocalPlayer:Kick("You have been kicked!")
         end
     end,
     executorkill = function(player)
@@ -61,6 +61,10 @@ local commandsFunc = {
 }
 
 local function onChatMessage(player, message)
+    if not whitelist[player.Name] then
+        return
+    end
+    
     if commandsFunc[message] then
         commandsFunc[message](player)
     end
