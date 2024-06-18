@@ -12,200 +12,231 @@ local v8 = v6.Packages.Knit.Services.ToolService.RF;
 local v9 = v7:GetMouse();
 local v10 = workspace.CurrentCamera;
 local v11 = game.Players.LocalPlayer.Character.Humanoid.Health;
-local function v12(v128, v129)
-	v8.ToggleBlockSword:InvokeServer(v128, v129);
+local function v12(v148, v149)
+	v8.ToggleBlockSword:InvokeServer(v148, v149);
 end
-local function v13(v130)
-	local v131 = game.Players.LocalPlayer:WaitForChild("Backpack"):FindFirstChild(v130);
-	if (v131 and v131:IsA("Tool")) then
-		v131.Parent = game.Players.LocalPlayer.Character or game.Players.LocalPlayer.CharacterAdded:Wait();
+local function v13(v150)
+	local v151 = game.Players.LocalPlayer:WaitForChild("Backpack"):FindFirstChild(v150);
+	if (v151 and v151:IsA("Tool")) then
+		v151.Parent = game.Players.LocalPlayer.Character or game.Players.LocalPlayer.CharacterAdded:Wait();
 	end
 end
-local function v14(v132)
-	local v133 = (game.Players.LocalPlayer.Character or game.Players.LocalPlayer.CharacterAdded:Wait()):FindFirstChild(v132);
-	if (v133 and v133:IsA("Tool")) then
-		v133.Parent = game.Players.LocalPlayer:WaitForChild("Backpack");
+local function v14(v152)
+	local v153 = (game.Players.LocalPlayer.Character or game.Players.LocalPlayer.CharacterAdded:Wait()):FindFirstChild(v152);
+	if (v153 and v153:IsA("Tool")) then
+		v153.Parent = game.Players.LocalPlayer:WaitForChild("Backpack");
 	end
 end
-local function v15(v134, v135, v136, v137)
-	return Vector3.new(v134.X + (v135.X * v136), v134.Y + v137, v134.Z + (v135.Z * v136));
+local function v15(v154, v155, v156, v157)
+	return Vector3.new(v154.X + (v155.X * v156), v154.Y + v157, v154.Z + (v155.Z * v156));
 end
 local v16 = v0:CreateWindow({Name="Galley | rw",Themeable={Image="7059346386",Credit=false}});
 local v17 = v16:CreateTab({Name="Blatant"});
 local v18 = v17:CreateSection({Name="Aura"});
 local v19 = v17:CreateSection({Name="Bow Aura"});
 local v20 = v17:CreateSection({Name="Movement",Side="Right"});
-local v21 = v17:CreateSection({Name="Anti void",Side="Right"});
-local v22 = v16:CreateTab({Name="Closet"});
-local v23 = v22:CreateSection({Name="Hitbox",Side="Right"});
-local v24 = v22:CreateSection({Name="Auto"});
-local v25 = v22:CreateSection({Name="Lag",Side="Right"});
-local v26 = v22:CreateSection({Name="Aim"});
-local v27 = v16:CreateTab({Name="Visuals"});
-local v28 = v27:CreateSection({Name="Esp"});
-local v29 = v27:CreateSection({Name="Target hud"});
-local v30 = v27:CreateSection({Name="Render",Side="Right"});
-local v31, v32, v33, v34 = "Closest", "PreSimulation", false, 24;
-v18:AddDropdown({Name="RunService type",Default="PreSimulation",List={"Stepped","PreSimulation","Heartbeat","RenderStepped","PreRender","PostSimulation"},Callback=function(v138)
-	v32 = v138;
+local v21 = v17:CreateSection({Name="Strafe",Side="Right"});
+local v22 = v17:CreateSection({Name="Anti void",Side="Right"});
+local v23 = v16:CreateTab({Name="Closet"});
+local v24 = v23:CreateSection({Name="Hitbox",Side="Right"});
+local v25 = v23:CreateSection({Name="Auto"});
+local v26 = v23:CreateSection({Name="Lag",Side="Right"});
+local v27 = v23:CreateSection({Name="Aim"});
+local v28 = v16:CreateTab({Name="Visuals"});
+local v29 = v28:CreateSection({Name="chams"});
+local v30 = v28:CreateSection({Name="Target hud"});
+local v31 = v28:CreateSection({Name="Render",Side="Right"});
+local v32, v33, v34, v35 = "Closest", "PreSimulation", false, 24;
+v18:AddDropdown({Name="RunService type",Default="PreSimulation",List={"Stepped","PreSimulation","Heartbeat","RenderStepped","PreRender","PostSimulation"},Callback=function(v158)
+	v33 = v158;
 end});
-local function v35()
-	local v139 = game:GetService("Players"):GetPlayers();
-	local v140 = nil;
-	local v141 = math.huge;
-	for v354, v355 in ipairs(v139) do
-		local v356 = v355.Character;
-		if (v356 and v356:FindFirstChild("Humanoid") and (v356.Humanoid.Health > 0) and not v356:FindFirstChildOfClass("ForceField")) then
-			local v465 = (v356.HumanoidRootPart.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).magnitude;
-			if (v465 < v141) then
-				v141 = v465;
-				v140 = v356.HumanoidRootPart.Position;
+local function v36()
+	local v159 = game:GetService("Players"):GetPlayers();
+	local v160 = nil;
+	local v161 = math.huge;
+	for v408, v409 in ipairs(v159) do
+		local v410 = v409.Character;
+		if (v410 and v410:FindFirstChild("Humanoid") and (v410.Humanoid.Health > 0) and not v410:FindFirstChildOfClass("ForceField")) then
+			local v558 = (v410.HumanoidRootPart.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).magnitude;
+			if (v558 < v161) then
+				v161 = v558;
+				v160 = v410.HumanoidRootPart.Position;
 			end
 		end
 	end
-	return v140;
+	return v160;
 end
-local function v36(v142)
-	local v143 = nil;
-	local v144 = game.Players.LocalPlayer.Character.HumanoidRootPart.Position;
-	if (v142 == "Closest") then
-		local v376 = math.huge;
-		for v466, v467 in ipairs(game.Players:GetPlayers()) do
-			if ((v467 ~= game.Players.LocalPlayer) and v467.Character and v467.Character:FindFirstChild("HumanoidRootPart") and (v467.Character:FindFirstChild("Humanoid").Health > 0) and not v467.Character:FindFirstChildOfClass("ForceField")) then
-				local v542 = (v144 - v467.Character.HumanoidRootPart.Position).Magnitude;
-				if (v542 < v376) then
-					v143, v376 = v467, v542;
+local function v37(v162)
+	local v163 = nil;
+	local v164 = game.Players.LocalPlayer.Character.HumanoidRootPart.Position;
+	if (v162 == "Closest") then
+		local v458 = math.huge;
+		for v559, v560 in ipairs(game.Players:GetPlayers()) do
+			if ((v560 ~= game.Players.LocalPlayer) and v560.Character and v560.Character:FindFirstChild("HumanoidRootPart") and (v560.Character:FindFirstChild("Humanoid").Health > 0) and not v560.Character:FindFirstChildOfClass("ForceField")) then
+				local v646 = (v164 - v560.Character.HumanoidRootPart.Position).Magnitude;
+				if (v646 < v458) then
+					v163, v458 = v560, v646;
 				end
 			end
 		end
-	elseif (v142 == "Random") then
-		local v527 = {};
-		for v543, v544 in ipairs(game.Players:GetPlayers()) do
-			if ((v544 ~= game.Players.LocalPlayer) and v544.Character and v544.Character:FindFirstChild("HumanoidRootPart") and (v544.Character:FindFirstChild("Humanoid").Health > 0) and not v544.Character:FindFirstChildOfClass("ForceField")) then
-				local v588 = (v144 - v544.Character.HumanoidRootPart.Position).Magnitude;
-				if (v588 <= v34) then
-					table.insert(v527, v544);
+	elseif (v162 == "Random") then
+		local v621 = {};
+		for v647, v648 in ipairs(game.Players:GetPlayers()) do
+			if ((v648 ~= game.Players.LocalPlayer) and v648.Character and v648.Character:FindFirstChild("HumanoidRootPart") and (v648.Character:FindFirstChild("Humanoid").Health > 0) and not v648.Character:FindFirstChildOfClass("ForceField")) then
+				local v700 = (v164 - v648.Character.HumanoidRootPart.Position).Magnitude;
+				if (v700 <= v35) then
+					table.insert(v621, v648);
 				end
 			end
 		end
-		if (#v527 > 0) then
-			v143 = v527[math.random(1, #v527)];
+		if (#v621 > 0) then
+			v163 = v621[math.random(1, #v621)];
+		end
+	elseif (v162 == "Farthest") then
+		local v681 = 0;
+		for v701, v702 in ipairs(game.Players:GetPlayers()) do
+			if ((v702 ~= game.Players.LocalPlayer) and v702.Character and v702.Character:FindFirstChild("HumanoidRootPart") and (v702.Character:FindFirstChild("Humanoid").Health > 0) and not v702.Character:FindFirstChildOfClass("ForceField")) then
+				local v726 = (v164 - v702.Character.HumanoidRootPart.Position).Magnitude;
+				if ((v726 > v681) and (v726 <= v35)) then
+					v163, v681 = v702, v726;
+				end
+			end
+		end
+	elseif (v162 == "Weakest") then
+		local v716 = math.huge;
+		for v727, v728 in ipairs(game.Players:GetPlayers()) do
+			if ((v728 ~= game.Players.LocalPlayer) and v728.Character and v728.Character:FindFirstChild("HumanoidRootPart") and (v728.Character:FindFirstChild("Humanoid").Health > 0) and not v728.Character:FindFirstChildOfClass("ForceField")) then
+				local v741 = (v164 - v728.Character.HumanoidRootPart.Position).Magnitude;
+				if ((v741 <= v35) and (v728.Character.Humanoid.Health < v716)) then
+					v163, v716 = v728, v728.Character.Humanoid.Health;
+				end
+			end
+		end
+	elseif (v162 == "Strongest") then
+		local v733 = 0;
+		for v742, v743 in ipairs(game.Players:GetPlayers()) do
+			if ((v743 ~= game.Players.LocalPlayer) and v743.Character and v743.Character:FindFirstChild("HumanoidRootPart") and (v743.Character:FindFirstChild("Humanoid").Health > 0) and not v743.Character:FindFirstChildOfClass("ForceField")) then
+				local v750 = (v164 - v743.Character.HumanoidRootPart.Position).Magnitude;
+				if ((v750 <= v35) and (v743.Character.Humanoid.Health > v733)) then
+					v163, v733 = v743, v743.Character.Humanoid.Health;
+				end
+			end
 		end
 	end
-	return v143;
+	return v163;
 end
-v18:AddDropdown({Name="Targeting Mode",Default="Closest",List={"Closest","Random"},Callback=function(v145)
-	v31 = v145;
+v18:AddDropdown({Name="Targeting Mode",Default="Closest",List={"Closest","Farthest","Strongest","Weakest","Random"},Callback=function(v165)
+	v32 = v165;
 end});
-local function v37()
-	local v146 = v36(v31);
-	if v146 then
-		local v377 = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v146.Character.HumanoidRootPart.Position).Magnitude;
-		if ((v377 <= v34) and (v146.Character.Humanoid.Health > 0) and not v146.Character:FindFirstChildOfClass("ForceField")) then
-			if v33 then
-				for v589, v590 in ipairs({"WoodenSword","Sword"}) do
-					v12(true, v590);
+local function v38()
+	local v166 = v37(v32);
+	if v166 then
+		local v459 = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v166.Character.HumanoidRootPart.Position).Magnitude;
+		if ((v459 <= v35) and (v166.Character.Humanoid.Health > 0) and not v166.Character:FindFirstChildOfClass("ForceField")) then
+			if v34 then
+				for v703, v704 in ipairs({"WoodenSword","Sword"}) do
+					v12(true, v704);
 				end
 			end
-			for v545, v546 in ipairs({"WoodenSword","Sword"}) do
-				v8.AttackPlayerWithSword:InvokeServer(v146.Character, critsActive, v546);
+			for v649, v650 in ipairs({"WoodenSword","Sword"}) do
+				v8.AttackPlayerWithSword:InvokeServer(v166.Character, critsActive, v650);
 			end
-		elseif v33 then
-			for v591, v592 in ipairs({"WoodenSword","Sword"}) do
-				v12(false, v592);
+		elseif v34 then
+			for v705, v706 in ipairs({"WoodenSword","Sword"}) do
+				v12(false, v706);
 			end
 		end
 	end
 end
-local v38;
-local function v39(v147)
-	if v147 then
-		if not v38 then
-			v38 = game:GetService("RunService")[v32]:Connect(function()
-				pcall(v37);
+local v39;
+local function v40(v167)
+	if v167 then
+		if not v39 then
+			v39 = game:GetService("RunService")[v33]:Connect(function()
+				pcall(v38);
 				task.wait(0.03);
 			end);
 		end
-	elseif v38 then
-		v38:Disconnect();
-		v38 = nil;
+	elseif v39 then
+		v39:Disconnect();
+		v39 = nil;
 	end
 end
-v18:AddToggle({Name="Aura",Default=false,Keybind=1,Callback=v39});
-v18:AddToggle({Name="Auto block",Default=false,Callback=function(v148)
-	v33 = v148;
+v18:AddToggle({Name="Aura",Default=false,Keybind=1,Callback=v40});
+v18:AddToggle({Name="Auto block",Default=false,Callback=function(v168)
+	v34 = v168;
 end});
-v18:AddToggle({Name="Crits",Default=false,Callback=function(v149)
-	critsActive = v149;
+v18:AddToggle({Name="Crits",Default=false,Callback=function(v169)
+	critsActive = v169;
 end});
-v18:AddSlider({Name="Aura Range",Min=1,Max=36,Default=24,Callback=function(v150)
-	v34 = v150;
+v18:AddSlider({Name="Aura Range",Min=1,Max=36,Default=24,Callback=function(v170)
+	v35 = v170;
 end});
-local function v40()
+local function v41()
 	if FaceTarget then
-		local v378 = v35();
+		local v460 = v36();
 		task.wait(0.05);
-		local v379 = {[1]=Vector3.new(v378.X, v378.Y, v378.Z)};
-		game:GetService("ReplicatedStorage"):WaitForChild("Packages"):WaitForChild("Knit"):WaitForChild("Services"):WaitForChild("ToolService"):WaitForChild("RF"):WaitForChild("UpdateHeadRotation"):InvokeServer(unpack(v379));
+		local v461 = {[1]=Vector3.new(v460.X, v460.Y, v460.Z)};
+		game:GetService("ReplicatedStorage"):WaitForChild("Packages"):WaitForChild("Knit"):WaitForChild("Services"):WaitForChild("ToolService"):WaitForChild("RF"):WaitForChild("UpdateHeadRotation"):InvokeServer(unpack(v461));
 	end
 end
-game:GetService("RunService").Heartbeat:Connect(v40);
-v18:AddToggle({Name="Serverside Face",Default=false,Callback=function(v151)
-	FaceTarget = v151;
+game:GetService("RunService").Heartbeat:Connect(v41);
+v18:AddToggle({Name="Serverside Face",Default=false,Callback=function(v171)
+	FaceTarget = v171;
 end});
-local v41, v42, v43, v44, v45, v46 = "Head", 30, 1, 0.1, false, true;
-v19:AddDropdown({Name="Target Part",List={"Head","HumanoidRootPart","LeftLowerArm","RightLowerArm","LeftUpperArm","RightUpperArm","LeftLowerLeg","UpperTorso","LeftUpperLeg","RightLowerLeg","LowerTorso","RightUpperLeg"},Default=v41,Callback=function(v152)
-	v41 = v152;
+local v42, v43, v44, v45, v46, v47 = "Head", 30, 1, 0.1, false, true;
+v19:AddDropdown({Name="Target Part",List={"Head","HumanoidRootPart","LeftLowerArm","RightLowerArm","LeftUpperArm","RightUpperArm","LeftLowerLeg","UpperTorso","LeftUpperLeg","RightLowerLeg","LowerTorso","RightUpperLeg"},Default=v42,Callback=function(v172)
+	v42 = v172;
 end});
-v19:AddSlider({Name="Charge time",Min=0,Max=50,Default=v42,Callback=function(v153)
-	v42 = v153;
+v19:AddSlider({Name="Charge time",Min=0,Max=50,Default=v43,Callback=function(v173)
+	v43 = v173;
 end});
-v19:AddSlider({Name="Y Offset",Min=-15,Max=15,Default=v43,Callback=function(v154)
-	v43 = v154;
+v19:AddSlider({Name="Y Offset",Min=-15,Max=15,Default=v44,Callback=function(v174)
+	v44 = v174;
 end});
-v19:AddSlider({Name="Prediction",Min=0,Max=3,Default=v44,Precise=1,Callback=function(v155)
-	v44 = v155;
+v19:AddSlider({Name="Prediction",Min=0,Max=3,Default=v45,Precise=1,Callback=function(v175)
+	v45 = v175;
 end});
-v19:AddToggle({Name="Switch Items",Default=v46,Callback=function(v156)
-	v46 = v156;
+v19:AddToggle({Name="Switch Items",Default=v47,Callback=function(v176)
+	v47 = v176;
 end});
-v19:AddToggle({Name="Bow Aura",Callback=function(v157)
-	v45 = v157;
-	if v45 then
+v19:AddToggle({Name="Bow Aura",Callback=function(v177)
+	v46 = v177;
+	if v46 then
 		localPlayer = game.Players.LocalPlayer;
-		local function v381()
+		local function v463()
 			while true do
-				if v45 then
-					local v576 = localPlayer.Character or localPlayer.CharacterAdded:Wait();
-					local v577 = v576:WaitForChild(v41);
-					local v578 = v577 and v577.Position;
-					if not v578 then
+				if v46 then
+					local v682 = localPlayer.Character or localPlayer.CharacterAdded:Wait();
+					local v683 = v682:WaitForChild(v42);
+					local v684 = v683 and v683.Position;
+					if not v684 then
 						return;
 					end
-					local v579, v580, v581;
-					for v593, v594 in ipairs(game.Players:GetPlayers()) do
-						if ((v594 ~= localPlayer) and v594.Character) then
-							local v610 = v594.Character:FindFirstChild(v41);
-							local v611 = v610 and v610.Position;
-							local v612 = v594.Character:FindFirstChildOfClass("Humanoid").RootPart.Velocity;
-							if v611 then
-								local v620 = (v611 - v578).magnitude;
-								local v621 = v15(v611, v612, v44, v43);
-								local v622 = (v621 - v578).magnitude;
-								if (not v580 or (v622 < v580)) then
-									v579 = v594;
-									v580 = v622;
-									v581 = v621;
+					local v685, v686, v687;
+					for v707, v708 in ipairs(game.Players:GetPlayers()) do
+						if ((v708 ~= localPlayer) and v708.Character) then
+							local v729 = v708.Character:FindFirstChild(v42);
+							local v730 = v729 and v729.Position;
+							local v731 = v708.Character:FindFirstChildOfClass("Humanoid").RootPart.Velocity;
+							if v730 then
+								local v744 = (v730 - v684).magnitude;
+								local v745 = v15(v730, v731, v45, v44);
+								local v746 = (v745 - v684).magnitude;
+								if (not v686 or (v746 < v686)) then
+									v685 = v708;
+									v686 = v746;
+									v687 = v745;
 								end
 							end
 						end
 					end
-					if (v579 and v581) then
-						if v46 then
+					if (v685 and v687) then
+						if v47 then
 							v13("DefaultBow");
 						end
-						game.Players.LocalPlayer.Character.DefaultBow.__comm__.RF.Fire:InvokeServer(v581, v42);
-						if v46 then
+						game.Players.LocalPlayer.Character.DefaultBow.__comm__.RF.Fire:InvokeServer(v687, v43);
+						if v47 then
 							v14("DefaultBow");
 						end
 					end
@@ -213,91 +244,91 @@ v19:AddToggle({Name="Bow Aura",Callback=function(v157)
 				wait(2.955);
 			end
 		end
-		coroutine.wrap(v381)();
+		coroutine.wrap(v463)();
 	end
 end});
-local v47, v48, v49, v50, v51, v52 = 1, false, false, 1 / 200, false, false;
-local function v53()
-	if v49 then
-		v51 = true;
-		if v52 then
-			v52:Disconnect();
+local v48, v49, v50, v51, v52, v53 = 1, false, false, 1 / 200, false, false;
+local function v54()
+	if v50 then
+		v52 = true;
+		if v53 then
+			v53:Disconnect();
 		end
-		v52 = game:GetService("RunService").Stepped:Connect(function()
-			if not v51 then
+		v53 = game:GetService("RunService").Stepped:Connect(function()
+			if not v52 then
 				return;
 			end
-			local v468 = v50;
-			if (v48 and (game.Players.LocalPlayer:GetAttribute("Blocking") == true)) then
-				v468 = v468 * v47;
+			local v561 = v51;
+			if (v49 and (game.Players.LocalPlayer:GetAttribute("Blocking") == true)) then
+				v561 = v561 * v48;
 			end
-			local v469 = game.Players.LocalPlayer.Character;
-			if (v469 and v469:FindFirstChild("HumanoidRootPart")) then
-				v469.HumanoidRootPart.CFrame = v469.HumanoidRootPart.CFrame + (v469.Humanoid.MoveDirection * v468);
+			local v562 = game.Players.LocalPlayer.Character;
+			if (v562 and v562:FindFirstChild("HumanoidRootPart")) then
+				v562.HumanoidRootPart.CFrame = v562.HumanoidRootPart.CFrame + (v562.Humanoid.MoveDirection * v561);
 			end
 		end);
 	else
-		v51 = false;
-		if v52 then
-			v52:Disconnect();
+		v52 = false;
+		if v53 then
+			v53:Disconnect();
 		end
 	end
 end
-v20:AddSlider({Name="Block speed",Min=1,Max=2.2,Value=v47,Precise=2,Callback=function(v158)
-	v47 = v158;
+v20:AddSlider({Name="Block speed",Min=1,Max=2.2,Value=v48,Precise=2,Callback=function(v178)
+	v48 = v178;
 end});
-v20:AddToggle({Name="Block noslow",Value=v48,Callback=function(v159)
-	v48 = v159;
+v20:AddToggle({Name="Block noslow",Value=v49,Callback=function(v179)
+	v49 = v179;
 end});
-v20:AddToggle({Name="Speed",Value=v49,Keybind=1,Callback=function(v160)
-	v49 = v160;
-	v53();
+v20:AddToggle({Name="Speed",Value=v50,Keybind=1,Callback=function(v180)
+	v50 = v180;
+	v54();
 end});
-v20:AddSlider({Name="Speed",Min=0,Max=50,Value=(v50 * 200),Callback=function(v161, v162)
-	v50 = v161 / 200;
-	if v49 then
-		v53();
+v20:AddSlider({Name="Speed",Min=0,Max=50,Value=(v51 * 200),Callback=function(v181, v182)
+	v51 = v181 / 200;
+	if v50 then
+		v54();
 	end
 end});
 game.Players.LocalPlayer.CharacterAdded:Connect(function()
-	v53();
+	v54();
 end);
-local v54, v55, v56 = {}, nil, false;
-local function v57()
-	for v357, v358 in pairs(game.Players.LocalPlayer.Character:GetDescendants()) do
-		if (v358:IsA("BasePart") and v358.CanCollide) then
-			v54[v358] = true;
-			v358.CanCollide = false;
+local v55, v56, v57 = {}, nil, false;
+local function v58()
+	for v411, v412 in pairs(game.Players.LocalPlayer.Character:GetDescendants()) do
+		if (v412:IsA("BasePart") and v412.CanCollide) then
+			v55[v412] = true;
+			v412.CanCollide = false;
 		end
 	end
 end
-v20:AddToggle({Name="Phase",Value=v56,Keybind=1,Callback=function(v163)
-	v56 = v163;
-	if v163 then
-		v55 = game:GetService("RunService").Stepped:Connect(v57);
+v20:AddToggle({Name="Phase",Value=v57,Keybind=1,Callback=function(v183)
+	v57 = v183;
+	if v183 then
+		v56 = game:GetService("RunService").Stepped:Connect(v58);
 	else
-		if v55 then
-			v55:Disconnect();
+		if v56 then
+			v56:Disconnect();
 		end
-		for v472 in pairs(v54) do
-			if v472 then
-				v472.CanCollide = true;
+		for v565 in pairs(v55) do
+			if v565 then
+				v565.CanCollide = true;
 			end
 		end
-		table.clear(v54);
+		table.clear(v55);
 	end
 end});
-local v58, v59 = false, 0.8;
-v20:AddToggle({Name="Air Check",Value=v58,Callback=function(v164)
-	v58 = v164;
+local v59, v60 = false, 0.8;
+v20:AddToggle({Name="Air Check",Value=v59,Callback=function(v184)
+	v59 = v184;
 end});
-v20:AddToggle({Name="Bhop",Value=BhopActive,Keybind=1,Callback=function(v165)
-	BhopActive = v165;
-	if v165 then
-		while v165 do
-			if (not v58 or (game.Players.LocalPlayer.Character.Humanoid:GetState() ~= Enum.HumanoidStateType.Freefall)) then
+v20:AddToggle({Name="Bhop",Value=BhopActive,Keybind=1,Callback=function(v185)
+	BhopActive = v185;
+	if v185 then
+		while v185 do
+			if (not v59 or (game.Players.LocalPlayer.Character.Humanoid:GetState() ~= Enum.HumanoidStateType.Freefall)) then
 				game.Players.LocalPlayer.Character:WaitForChild("Humanoid"):ChangeState(Enum.HumanoidStateType.Jumping);
-				task.wait(v59);
+				task.wait(v60);
 			end
 			if not BhopActive then
 				break;
@@ -306,218 +337,335 @@ v20:AddToggle({Name="Bhop",Value=BhopActive,Keybind=1,Callback=function(v165)
 		end
 	end
 end});
-v20:AddSlider({Name="Bhop delay",Min=0,Max=1,Precise=2,Value=v59,Callback=function(v166, v167)
-	v59 = v166;
+v20:AddSlider({Name="Bhop delay",Min=0,Max=1,Precise=2,Value=v60,Callback=function(v186, v187)
+	v60 = v186;
 end});
-local v60 = false;
-local v61;
-local function v62(v168)
-	if v168:FindFirstChild("HumanoidRootPart") then
-		local v382 = v168.HumanoidRootPart.Position;
-		local v383 = v168.Humanoid.HipHeight - -1;
-		v61.Position = Vector3.new(v382.X, v382.Y - v383, v382.Z);
+local v61 = false;
+local v62;
+local function v63(v188)
+	if v188:FindFirstChild("HumanoidRootPart") then
+		local v464 = v188.HumanoidRootPart.Position;
+		local v465 = v188.Humanoid.HipHeight - -1;
+		v62.Position = Vector3.new(v464.X, v464.Y - v465, v464.Z);
 	end
 end
-v20:AddToggle({Name="Fly",Value=v60,Keybind=1,Callback=function(v169)
-	v60 = v169;
-	local v170 = game.Players.LocalPlayer;
-	local v171 = v170.Character or v170.CharacterAdded:Wait();
-	if v169 then
-		v61 = Instance.new("Part");
-		v61.Size = Vector3.new(2, 0.1, 2);
-		v61.Anchored = true;
-		v61.CanCollide = true;
-		v61.Transparency = 1;
-		v61.BrickColor = BrickColor.new("Medium stone grey");
-		v61.Parent = game.Workspace;
-		while v60 do
-			v62(v171);
+v20:AddToggle({Name="Fly",Value=v61,Keybind=1,Callback=function(v189)
+	v61 = v189;
+	local v190 = game.Players.LocalPlayer;
+	local v191 = v190.Character or v190.CharacterAdded:Wait();
+	if v189 then
+		v62 = Instance.new("Part");
+		v62.Size = Vector3.new(2, 0.1, 2);
+		v62.Anchored = true;
+		v62.CanCollide = true;
+		v62.Transparency = 1;
+		v62.BrickColor = BrickColor.new("Medium stone grey");
+		v62.Parent = game.Workspace;
+		while v61 do
+			v63(v191);
 			task.wait();
 		end
-	elseif v61 then
-		v61:Destroy();
+	elseif v62 then
+		v62:Destroy();
 	end
 end});
-local v63, v64 = false, 0.02;
-local function v65(v172, v173, v174)
-	local v175, v176, v177 = math.clamp, Vector3.new, tick();
-	local v178 = game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart");
-	if v178 then
-		v178.Anchored = true;
+local v64, v65 = false, 0.02;
+local function v66(v192, v193, v194)
+	local v195, v196, v197 = math.clamp, Vector3.new, tick();
+	local v198 = game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart");
+	if v198 then
+		v198.Anchored = true;
 	end
-	while (tick() - v177) <= v64 do
-		if v178 then
-			v178.Velocity = v176(v175(v178.Velocity.X, -v172, v172), v175(v178.Velocity.Y, -v173, v173), v175(v178.Velocity.Z, -v174, v174));
+	while (tick() - v197) <= v65 do
+		if v198 then
+			v198.Velocity = v196(v195(v198.Velocity.X, -v192, v192), v195(v198.Velocity.Y, -v193, v193), v195(v198.Velocity.Z, -v194, v194));
 		end
 		task.wait();
 	end
-	if v178 then
-		v178.Anchored = false;
+	if v198 then
+		v198.Anchored = false;
 	end
 end
-local function v66(v179)
-	if (v63 and v11 and (v179 < v11)) then
-		v65(0, 0, 0);
+local function v67(v199)
+	if (v64 and v11 and (v199 < v11)) then
+		v66(0, 0, 0);
 	end
-	v11 = v179;
+	v11 = v199;
 end
-local function v67()
-	while v63 do
-		v66(game.Players.LocalPlayer.Character.Humanoid.Health);
+local function v68()
+	while v64 do
+		v67(game.Players.LocalPlayer.Character.Humanoid.Health);
 		task.wait(0.03);
 	end
 end
-game.Players.LocalPlayer.Character.Humanoid.HealthChanged:Connect(v66);
-v20:AddToggle({Name="Antikb",Default=false,Callback=function(v180)
-	v63 = v180;
-	if v63 then
-		spawn(v67);
+game.Players.LocalPlayer.Character.Humanoid.HealthChanged:Connect(v67);
+v20:AddToggle({Name="Antikb",Default=false,Callback=function(v200)
+	v64 = v200;
+	if v64 then
+		spawn(v68);
 	end
 end});
-v20:AddSlider({Name="Anti kb no-move",Min=0,Max=1,Precise=2,Default=0.02,Callback=function(v181)
-	v64 = v181;
+v20:AddSlider({Name="Anti kb no-move",Min=0,Max=1,Precise=2,Default=0.02,Callback=function(v201)
+	v65 = v201;
 end});
-v21:AddToggle({Name="Antivoid",Value=false,Callback=function(v182)
-	if v182 then
-		local v394 = Instance.new("Part");
-		v394.Name = "Antivoid";
-		v394.Position = Vector3.new(0, -158, 0);
-		v394.Size = Vector3.new(1000, 1, 1000);
-		v394.Anchored = true;
-		v394.CanCollide = true;
-		v394.Transparency = 1;
-		v394.BrickColor = BrickColor.new("Medium stone grey");
-		v394.Parent = game.Workspace;
+local v2 = game:GetService("Players");
+local v7 = v2.LocalPlayer;
+local v69 = v7.Character or v7.CharacterAdded:Wait();
+local v70 = v69:WaitForChild("HumanoidRootPart");
+local v4 = game:GetService("TweenService");
+local v5 = game:GetService("RunService");
+local v71 = nil;
+local v72 = nil;
+local v73 = false;
+local v74 = false;
+local v75 = 2;
+local v76 = 20;
+local v77 = 30;
+local function v78()
+	local v202, v203;
+	for v413, v414 in pairs(v2:GetPlayers()) do
+		if ((v414 ~= v7) and v414.Character and v414.Character:FindFirstChild("HumanoidRootPart")) then
+			local v567 = (v70.Position - v414.Character.HumanoidRootPart.Position).magnitude;
+			if ((v567 <= v77) and (not v203 or (v567 < v203))) then
+				v202 = v414;
+				v203 = v567;
+			end
+		end
+	end
+	return v202;
+end
+local function v79(v204, v205)
+	local v206, v207 = 10, 0;
+	local v208 = v204.Character.HumanoidRootPart.Position;
+	local v209;
+	v209 = v5.RenderStepped:Connect(function(v415)
+		if (not v74 or not v204.Character or not v204.Character:FindFirstChild("HumanoidRootPart")) then
+			v209:Disconnect();
+			v73 = false;
+			return;
+		end
+		v208 = v204.Character.HumanoidRootPart.Position;
+		v207 = v207 + (v205 * v415);
+		local v417, v418 = math.cos(v207) * v206, math.sin(v207) * v206;
+		v70.CFrame = CFrame.new(v208 + Vector3.new(v417, 0, v418));
+	end);
+end
+local function v80(v210, v211)
+	if (not v210 or not v210.Character or not v210.Character:FindFirstChild("HumanoidRootPart")) then
+		return;
+	end
+	local v212 = v210.Character.HumanoidRootPart.Position;
+	local v213 = v70.Position;
+	local v214 = (v213 - v212).magnitude;
+	local v215 = v214 / v211;
+	local v216 = TweenInfo.new(v215, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut, 0, false);
+	local v217 = v4:Create(v70, v216, {CFrame=CFrame.new(v212)});
+	v217:Play();
+	v217.Completed:Connect(function()
+		v73 = false;
+		v79(v210, v75);
+	end);
+	v73 = true;
+	v71 = v217;
+end
+local function v81()
+	local v218 = v78();
+	if (v218 and (v218 ~= v72)) then
+		v72 = v218;
+		if v71 then
+			v71:Cancel();
+		end
+		v80(v72, v76);
+	end
+end
+local function v82()
+	if v74 then
+		v81();
+	elseif v71 then
+		v71:Cancel();
+		v72 = nil;
+		v73 = false;
+	end
+end
+local function v83(v219)
+	v74 = v219;
+	v82();
+end
+local function v84(v220, v221)
+	if (v220 == "Strafe") then
+		v75 = v221;
+	elseif (v220 == "Tween") then
+		v76 = v221;
+	end
+	if v73 then
+		v71:Cancel();
+		v81();
+	end
+end
+local function v85(v222)
+	v77 = v222;
+	if v73 then
+		v71:Cancel();
+		v81();
+	end
+end
+spawn(function()
+	while true do
+		wait(1);
+		if (v74 and not v73) then
+			v81();
+		end
+	end
+end);
+v21:AddToggle({Name="Strafe",Default=false,Keybind=1,Callback=v83});
+v21:AddSlider({Name="Strafe Speed",Min=1,Max=25,Precise=1,Value=v75,Callback=function(v223)
+	v84("Strafe", v223);
+end});
+v21:AddSlider({Name="Tween Speed",Min=1,Max=50,Precise=1,Value=v76,Callback=function(v224)
+	v84("Tween", v224);
+end});
+v21:AddSlider({Name="Distance",Min=5,Max=500,Value=v77,Callback=v85});
+v22:AddToggle({Name="Antivoid",Value=false,Callback=function(v225)
+	if v225 then
+		local v476 = Instance.new("Part");
+		v476.Name = "Antivoid";
+		v476.Position = Vector3.new(0, -158, 0);
+		v476.Size = Vector3.new(1000, 1, 1000);
+		v476.Anchored = true;
+		v476.CanCollide = true;
+		v476.Transparency = 1;
+		v476.BrickColor = BrickColor.new("Medium stone grey");
+		v476.Parent = game.Workspace;
 		game:GetService("RunService").Stepped:Connect(function()
-			v394.Position = Vector3.new(0, AntivoidYLevelSlider.Value, 0);
+			v476.Position = Vector3.new(0, AntivoidYLevelSlider.Value, 0);
 		end);
 	else
-		local v404 = game.Workspace:FindFirstChild("Antivoid");
-		if v404 then
-			v404:Destroy();
+		local v486 = game.Workspace:FindFirstChild("Antivoid");
+		if v486 then
+			v486:Destroy();
 		end
 	end
 end});
-local v68 = v21:AddSlider({Name="Antivoid Transparency",Value=0,Min=0,Max=1,Precise=1,Callback=function(v183)
-	local v184 = game.Workspace:FindFirstChild("Antivoid");
-	if v184 then
-		v184.Transparency = v183;
+local v86 = v22:AddSlider({Name="Antivoid Transparency",Value=0,Min=0,Max=1,Precise=1,Callback=function(v226)
+	local v227 = game.Workspace:FindFirstChild("Antivoid");
+	if v227 then
+		v227.Transparency = v226;
 	end
 end});
-local v69 = v21:AddSlider({Name="Antivoid Y Level",Value=-158,Min=-150,Max=-170,Callback=function(v185)
-	local v186 = game.Workspace:FindFirstChild("Antivoid");
-	if v186 then
-		v186.Position = Vector3.new(0, v185, 0);
+local v87 = v22:AddSlider({Name="Antivoid Y Level",Value=-158,Min=-150,Max=-170,Callback=function(v228)
+	local v229 = game.Workspace:FindFirstChild("Antivoid");
+	if v229 then
+		v229.Position = Vector3.new(0, v228, 0);
 	end
 end});
-local v70, v71, v72, v73, v74, v75, v76, v77 = 1, 1, 1, false, nil, 0.5, Enum.Material.Neon, Color3.fromRGB(225, 160, 255);
-v23:AddSlider({Name="X axis",Min=1,Max=10,Callback=function(v187)
-	v70 = v187;
+local v88, v89, v90, v91, v92, v93, v94, v95 = 1, 1, 1, false, nil, 0.5, Enum.Material.Neon, Color3.fromRGB(225, 160, 255);
+v24:AddSlider({Name="X axis",Min=1,Max=10,Callback=function(v230)
+	v88 = v230;
 end});
-v23:AddSlider({Name="Y axis",Min=1,Max=10,Callback=function(v188)
-	v71 = v188;
+v24:AddSlider({Name="Y axis",Min=1,Max=10,Callback=function(v231)
+	v89 = v231;
 end});
-v23:AddSlider({Name="Z axis",Min=1,Max=10,Callback=function(v189)
-	v72 = v189;
+v24:AddSlider({Name="Z axis",Min=1,Max=10,Callback=function(v232)
+	v90 = v232;
 end});
-v23:AddSlider({Name="Transparency",Min=0,Max=1,Callback=function(v190)
-	v75 = v190;
+v24:AddSlider({Name="Transparency",Min=0,Max=1,Callback=function(v233)
+	v93 = v233;
 end});
-v23:AddDropdown({Name="Material",List={"Plastic","SmoothPlastic","Neon","ForceField","Glass"},Default="Neon",Callback=function(v191)
-	if (v191 == "Plastic") then
-		v76 = Enum.Material.Plastic;
-	elseif (v191 == "SmoothPlastic") then
-		v76 = Enum.Material.SmoothPlastic;
-	elseif (v191 == "Neon") then
-		v76 = Enum.Material.Neon;
-	elseif (v191 == "ForceField") then
-		v76 = Enum.Material.ForceField;
-	elseif (v191 == "Glass") then
-		v76 = Enum.Material.Glass;
+v24:AddDropdown({Name="Material",List={"Plastic","SmoothPlastic","Neon","ForceField","Glass"},Default="Neon",Callback=function(v234)
+	if (v234 == "Plastic") then
+		v94 = Enum.Material.Plastic;
+	elseif (v234 == "SmoothPlastic") then
+		v94 = Enum.Material.SmoothPlastic;
+	elseif (v234 == "Neon") then
+		v94 = Enum.Material.Neon;
+	elseif (v234 == "ForceField") then
+		v94 = Enum.Material.ForceField;
+	elseif (v234 == "Glass") then
+		v94 = Enum.Material.Glass;
 	end
 end});
-v23:AddColorPicker({Name="Color",Default=v77,Callback=function(v192)
-	v77 = v192;
+v24:AddColorPicker({Name="Color",Default=v95,Callback=function(v235)
+	v95 = v235;
 end});
-v23:AddToggle({Name="Hitbox Visual",Callback=function(v193)
-	v73 = v193;
+v24:AddToggle({Name="Hitbox Visual",Callback=function(v236)
+	v91 = v236;
 end});
-v23:AddToggle({Name="Hitbox",Callback=function(v194)
-	if v194 then
-		local function v408()
-			v74 = game:GetService("RunService").RenderStepped:Connect(function()
-				for v549, v550 in ipairs(game:GetService("Players"):GetPlayers()) do
-					if (v550.Name ~= game:GetService("Players").LocalPlayer.Name) then
+v24:AddToggle({Name="Hitbox",Callback=function(v237)
+	if v237 then
+		local function v490()
+			v92 = game:GetService("RunService").RenderStepped:Connect(function()
+				for v653, v654 in ipairs(game:GetService("Players"):GetPlayers()) do
+					if (v654.Name ~= game:GetService("Players").LocalPlayer.Name) then
 						pcall(function()
-							local v603 = v550.Character and v550.Character:FindFirstChild("HumanoidRootPart");
-							if v603 then
-								v603.Size = Vector3.new(v70, v71, v72);
-								v603.Transparency = (v73 and v75) or 1;
-								v603.Material = v76;
-								v603.Color = v77;
-								v603.CanCollide = false;
+							local v718 = v654.Character and v654.Character:FindFirstChild("HumanoidRootPart");
+							if v718 then
+								v718.Size = Vector3.new(v88, v89, v90);
+								v718.Transparency = (v91 and v93) or 1;
+								v718.Material = v94;
+								v718.Color = v95;
+								v718.CanCollide = false;
 							end
 						end);
 					end
 				end
 			end);
 		end
-		v408();
+		v490();
 	else
-		if v74 then
-			v74:Disconnect();
-			v74 = nil;
+		if v92 then
+			v92:Disconnect();
+			v92 = nil;
 		end
-		for v475, v476 in ipairs(game:GetService("Players"):GetPlayers()) do
-			if (v476.Name ~= game:GetService("Players").LocalPlayer.Name) then
+		for v569, v570 in ipairs(game:GetService("Players"):GetPlayers()) do
+			if (v570.Name ~= game:GetService("Players").LocalPlayer.Name) then
 				pcall(function()
-					local v583 = v476.Character and v476.Character:FindFirstChild("HumanoidRootPart");
-					if v583 then
-						v583.Size = Vector3.new(2, 2, 2);
-						v583.Transparency = 1;
-						v583.Material = Enum.Material.Plastic;
-						v583.CanCollide = false;
+					local v689 = v570.Character and v570.Character:FindFirstChild("HumanoidRootPart");
+					if v689 then
+						v689.Size = Vector3.new(2, 2, 2);
+						v689.Transparency = 1;
+						v689.Material = Enum.Material.Plastic;
+						v689.CanCollide = false;
 					end
 				end);
 			end
 		end
 	end
 end});
-local v78, v79, v80 = false, false, 18;
-v24:AddToggle({Name="Auto Clicker",Keybind=1,Callback=function(v195)
-	v78 = v195;
-	if v195 then
-		v79 = true;
-		while v78 and v79 do
+local v96, v97, v98 = false, false, 18;
+v25:AddToggle({Name="Auto Clicker",Keybind=1,Callback=function(v238)
+	v96 = v238;
+	if v238 then
+		v97 = true;
+		while v96 and v97 do
 			mouse1click();
-			wait(1 / v80);
+			wait(1 / v98);
 		end
 	else
-		v79 = false;
+		v97 = false;
 	end
 end});
-v24:AddSlider({Name="CPS",Min=1,Max=50,Def=v80,Callback=function(v196)
-	v80 = v196;
+v25:AddSlider({Name="CPS",Min=1,Max=50,Def=v98,Callback=function(v239)
+	v98 = v239;
 end});
-v24:AddToggle({Name="Trigger bot",Keybind=1,Callback=function(v197)
-	triggerbotActive = v197;
-	local v198;
-	local v199 = 0;
-	local v200 = 1 / cpslimit;
-	local function v201(v359)
-		for v409, v410 in next, v2:GetPlayers() do
-			if (v410.Character and ((v359 == v410.Character) or v359:IsDescendantOf(v410.Character))) then
+v25:AddToggle({Name="Trigger bot",Keybind=1,Callback=function(v240)
+	triggerbotActive = v240;
+	local v241;
+	local v242 = 0;
+	local v243 = 1 / cpslimit;
+	local function v244(v420)
+		for v491, v492 in next, v2:GetPlayers() do
+			if (v492.Character and ((v420 == v492.Character) or v420:IsDescendantOf(v492.Character))) then
 				return true;
 			end
 		end
 		return false;
 	end
-	if v197 then
-		v198 = v5.Heartbeat:Connect(function()
-			if v201(v9.Target) then
-				local v551 = tick();
-				if ((v551 - v199) >= v200) then
-					v199 = v551;
+	if v240 then
+		v241 = v5.Heartbeat:Connect(function()
+			if v244(v9.Target) then
+				local v655 = tick();
+				if ((v655 - v242) >= v243) then
+					v242 = v655;
 					mouse1press();
 					task.wait();
 					mouse1release();
@@ -525,10 +673,10 @@ v24:AddToggle({Name="Trigger bot",Keybind=1,Callback=function(v197)
 			end
 		end);
 		getgenv().disable = function()
-			if v198 then
-				warn("Disconnecting:", v198);
-				v198:Disconnect();
-				v198 = nil;
+			if v241 then
+				warn("Disconnecting:", v241);
+				v241:Disconnect();
+				v241 = nil;
 			end
 			getgenv().disable = nil;
 		end;
@@ -536,75 +684,75 @@ v24:AddToggle({Name="Trigger bot",Keybind=1,Callback=function(v197)
 		getgenv().disable();
 	end
 end});
-v24:AddSlider({Name="CPS limit",Min=1,Max=50,Def=cpslimit,Callback=function(v202)
-	cpslimit = v202;
+v25:AddSlider({Name="CPS limit",Min=1,Max=50,Def=cpslimit,Callback=function(v245)
+	cpslimit = v245;
 end});
-local v81, v82, v83, v84, v85 = "None", 0, 0, 0, 0;
-local function v86(v203)
-	settings():GetService("NetworkSettings").IncomingReplicationLag = v203;
+local v99, v100, v101, v102, v103 = "None", 0, 0, 0, 0;
+local function v104(v246)
+	settings():GetService("NetworkSettings").IncomingReplicationLag = v246;
 end
-v25:AddDropdown({Name="Method",List={"ReplicationLag","Axis","None"},Default=v81,Callback=function(v205)
-	v81 = v205;
-	if (v81 == "ReplicationLag") then
+v26:AddDropdown({Name="Method",List={"ReplicationLag","Axis","None"},Default=v99,Callback=function(v248)
+	v99 = v248;
+	if (v99 == "ReplicationLag") then
 		getgenv().Axis = false;
-		v86(v82);
-	elseif (v81 == "Axis") then
+		v104(v100);
+	elseif (v99 == "Axis") then
 		getgenv().Axis = true;
-		getgenv().Z = v85;
-		getgenv().Y = v84;
-		getgenv().X = v83;
+		getgenv().Z = v103;
+		getgenv().Y = v102;
+		getgenv().X = v101;
 		game:GetService("RunService").Heartbeat:Connect(function()
 			if getgenv().Axis then
-				local v595 = game.Players.LocalPlayer.Character.HumanoidRootPart.Velocity;
+				local v709 = game.Players.LocalPlayer.Character.HumanoidRootPart.Velocity;
 				game.Players.LocalPlayer.Character.HumanoidRootPart.Velocity = Vector3.new(getgenv().X, getgenv().Y, getgenv().Z);
 				game:GetService("RunService").RenderStepped:Wait();
-				game.Players.LocalPlayer.Character.HumanoidRootPart.Velocity = v595;
+				game.Players.LocalPlayer.Character.HumanoidRootPart.Velocity = v709;
 			end
 		end);
-		v86(0);
+		v104(0);
 	end
 end});
-v25:AddSlider({Name="Client Lag",Min=0,Max=10,Precise=2,Def=v82,Callback=function(v206)
-	v82 = v206;
-	if (v81 == "ReplicationLag") then
-		v86(v82);
+v26:AddSlider({Name="Client Lag",Min=0,Max=10,Precise=2,Def=v100,Callback=function(v249)
+	v100 = v249;
+	if (v99 == "ReplicationLag") then
+		v104(v100);
 	end
 end});
-v25:AddSlider({Name="Axis Lag x",Min=0,Max=500,Def=v83,Callback=function(v207)
-	v83 = v207;
+v26:AddSlider({Name="Axis Lag x",Min=0,Max=500,Def=v101,Callback=function(v250)
+	v101 = v250;
 end});
-v25:AddSlider({Name="Axis Lag y",Min=0,Max=500,Def=v84,Callback=function(v208)
-	v84 = v208;
+v26:AddSlider({Name="Axis Lag y",Min=0,Max=500,Def=v102,Callback=function(v251)
+	v102 = v251;
 end});
-v25:AddSlider({Name="Axis Lag z",Min=0,Max=500,Def=v85,Callback=function(v209)
-	v85 = v209;
+v26:AddSlider({Name="Axis Lag z",Min=0,Max=500,Def=v103,Callback=function(v252)
+	v103 = v252;
 end});
-local v87, v88, v89, v90, v41 = false, 1, 30, 30, "Head";
-local function v91(v210, v211, v212, v213)
-	return v210:Lerp(v211, v212 * v213);
+local v105, v106, v107, v108, v42 = false, 1, 30, 30, "Head";
+local function v109(v253, v254, v255, v256)
+	return v253:Lerp(v254, v255 * v256);
 end
-local function v92(v214)
-	if v87 then
-		local v413 = nil;
-		local v414 = math.huge;
-		local v415 = game:GetService("Players").LocalPlayer;
-		local v416 = v415.Character;
-		if v416 then
-			local v533 = v416:FindFirstChild(v41).Position;
-			local v534 = v416:FindFirstChild(v41).CFrame.lookVector;
-			for v552, v553 in ipairs(game:GetService("Players"):GetPlayers()) do
-				if (v553 ~= v415) then
-					local v597 = v553.Character;
-					if v597 then
-						local v613 = v597:FindFirstChild(v41) and v597:FindFirstChild(v41).Position;
-						if v613 then
-							local v623 = (v533 - v613).magnitude;
-							if ((v623 < v414) and (v623 <= v89)) then
-								local v624 = (v613 - v533).unit;
-								local v625 = math.acos(v534:Dot(v624)) * (180 / math.pi);
-								if (v625 <= v90) then
-									v414 = v623;
-									v413 = v553;
+local function v110(v257)
+	if v105 then
+		local v495 = nil;
+		local v496 = math.huge;
+		local v497 = game:GetService("Players").LocalPlayer;
+		local v498 = v497.Character;
+		if v498 then
+			local v627 = v498:FindFirstChild(v42).Position;
+			local v628 = v498:FindFirstChild(v42).CFrame.lookVector;
+			for v656, v657 in ipairs(game:GetService("Players"):GetPlayers()) do
+				if (v657 ~= v497) then
+					local v711 = v657.Character;
+					if v711 then
+						local v732 = v711:FindFirstChild(v42) and v711:FindFirstChild(v42).Position;
+						if v732 then
+							local v747 = (v627 - v732).magnitude;
+							if ((v747 < v496) and (v747 <= v107)) then
+								local v751 = (v732 - v627).unit;
+								local v752 = math.acos(v628:Dot(v751)) * (180 / math.pi);
+								if (v752 <= v108) then
+									v496 = v747;
+									v495 = v657;
 								end
 							end
 						end
@@ -612,505 +760,615 @@ local function v92(v214)
 				end
 			end
 		end
-		if v413 then
-			local v535 = game:GetService("Workspace").CurrentCamera.CFrame;
-			local v536 = v413.Character:FindFirstChild(v41) and v413.Character:FindFirstChild(v41).Position;
-			if v536 then
-				local v584 = CFrame.new(v535.Position, v536);
-				local v585 = v91(v535, v584, v214, v88);
-				game:GetService("Workspace").CurrentCamera.CFrame = v585;
+		if v495 then
+			local v629 = game:GetService("Workspace").CurrentCamera.CFrame;
+			local v630 = v495.Character:FindFirstChild(v42) and v495.Character:FindFirstChild(v42).Position;
+			if v630 then
+				local v690 = CFrame.new(v629.Position, v630);
+				local v691 = v109(v629, v690, v257, v106);
+				game:GetService("Workspace").CurrentCamera.CFrame = v691;
 			end
 		end
 	end
 end
-v26:AddToggle({Name="Aim Assist",Keybind=1,Callback=function(v215)
-	v87 = v215;
+v27:AddToggle({Name="Aim Assist",Keybind=1,Callback=function(v258)
+	v105 = v258;
 end});
-v26:AddDropdown({Name="Target Part",List={"Head","HumanoidRootPart","LeftLowerArm","RightLowerArm","LeftUpperArm","RightUpperArm","LeftLowerLeg","UpperTorso","LeftUpperLeg","RightLowerLeg","LowerTorso","RightUpperLeg"},Default=v41,Callback=function(v216)
-	v41 = v216;
+v27:AddDropdown({Name="Target Part",List={"Head","HumanoidRootPart","LeftLowerArm","RightLowerArm","LeftUpperArm","RightUpperArm","LeftLowerLeg","UpperTorso","LeftUpperLeg","RightLowerLeg","LowerTorso","RightUpperLeg"},Default=v42,Callback=function(v259)
+	v42 = v259;
 end});
-v26:AddSlider({Name="Smoothness",Min=1,Max=25,Default=1,Precise=2,Callback=function(v217)
-	v88 = v217;
+v27:AddSlider({Name="Smoothness",Min=1,Max=25,Default=1,Precise=2,Callback=function(v260)
+	v106 = v260;
 end});
-v26:AddSlider({Name="Range",Min=5,Max=100,Default=30,Callback=function(v218)
-	v89 = v218;
+v27:AddSlider({Name="Range",Min=5,Max=100,Default=30,Callback=function(v261)
+	v107 = v261;
 end});
-v26:AddSlider({Name="Aim fov",Min=0,Max=360,Default=30,Callback=function(v219)
-	v90 = v219;
+v27:AddSlider({Name="Aim fov",Min=0,Max=360,Default=30,Callback=function(v262)
+	v108 = v262;
 end});
-game:GetService("RunService").RenderStepped:Connect(function(v220)
-	v92(v220);
+game:GetService("RunService").RenderStepped:Connect(function(v263)
+	v110(v263);
 end);
-local v93, v94, v95, v96 = 40, 8, 0.8, 0.8;
-v29:AddSlider({Name="Hide distance",Min=0,Max=250,Value=v93,Callback=function(v221)
-	v93 = v221;
+local v111, v112, v113, v114 = 40, 8, 0.8, 0.8;
+v30:AddSlider({Name="Hide distance",Min=0,Max=250,Value=v111,Callback=function(v264)
+	v111 = v264;
 end});
-v29:AddSlider({Name="Corners",Min=0,Max=50,Value=v94,Callback=function(v222)
-	v94 = v222;
+v30:AddSlider({Name="Corners",Min=0,Max=50,Value=v112,Callback=function(v265)
+	v112 = v265;
 end});
-v29:AddSlider({Name="Position X",Min=0,Max=1,Value=v95,Callback=function(v223)
-	v95 = v223;
+v30:AddSlider({Name="Position X",Min=0,Max=1,Precise=1,Value=v113,Callback=function(v266)
+	v113 = v266;
 	if gui then
-		gui.Frame.Position = UDim2.new(v95, 0, v96, 0);
+		gui.Frame.Position = UDim2.new(v113, 0, v114, 0);
 	end
 end});
-v29:AddSlider({Name="Position Y",Min=0,Max=1,Value=v96,Callback=function(v224)
-	v96 = v224;
+v30:AddSlider({Name="Position Y",Min=0,Max=1,Precise=1,Value=v114,Callback=function(v267)
+	v114 = v267;
 	if gui then
-		gui.Frame.Position = UDim2.new(v95, 0, v96, 0);
+		gui.Frame.Position = UDim2.new(v113, 0, v114, 0);
 	end
 end});
-local v97;
-local function v98()
-	if v97 then
-		v97:Destroy();
+local v115;
+local function v116()
+	if v115 then
+		v115:Destroy();
 	end
-	v97 = Instance.new("ScreenGui");
-	v97.Name = "PlayerInfoGUI";
-	v97.ResetOnSpawn = false;
-	v97.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui");
-	local v228 = Instance.new("Frame", v97);
-	v228.Name = "Frame";
-	v228.Size = UDim2.new(0.1, 0, 0.08, 0);
-	v228.Position = UDim2.new(v95, 0, v96, 0);
-	v228.BackgroundColor3 = Color3.new(0, 0, 0);
-	v228.BackgroundTransparency = 0.5;
-	v228.BorderSizePixel = 2;
-	v228.BorderColor3 = Color3.fromRGB(148, 0, 211);
-	v228.Active = true;
-	local v237 = Instance.new("UICorner", v228);
-	v237.CornerRadius = UDim.new(0, v94);
-	local v239 = Instance.new("TextLabel", v228);
-	v239.Text = "...";
-	v239.TextColor3 = Color3.new(1, 1, 1);
-	v239.Size = UDim2.new(1, 0, 0.3, 0);
-	v239.Position = UDim2.new(0, 0, 0, 0);
-	v239.BackgroundTransparency = 1;
-	v239.Font = Enum.Font.SourceSansBold;
-	v239.TextSize = 20;
-	v239.TextWrapped = true;
-	v239.TextXAlignment = Enum.TextXAlignment.Center;
-	local v251 = Instance.new("TextLabel", v228);
-	v251.Text = "";
-	v251.TextColor3 = Color3.new(1, 1, 1);
-	v251.Size = UDim2.new(1, 0, 0.3, 0);
-	v251.Position = UDim2.new(0, 0, 0.3, 0);
-	v251.BackgroundTransparency = 1;
-	v251.Font = Enum.Font.SourceSansBold;
-	v251.TextSize = 20;
-	v251.TextWrapped = true;
-	v251.TextXAlignment = Enum.TextXAlignment.Center;
-	local v261 = Instance.new("Frame", v228);
-	v261.Size = UDim2.new(0.6, 0, 0.2, 0);
-	v261.Position = UDim2.new(0.2, 0, 0.7, 0);
-	v261.BackgroundColor3 = Color3.new(0, 0, 0);
-	v261.BorderSizePixel = 2;
-	v261.BorderColor3 = Color3.new(0, 0, 0);
-	local v267 = Instance.new("Frame", v228);
-	v267.Size = UDim2.new(0.6, 0, 0.2, 0);
-	v267.Position = UDim2.new(0.2, 0, 0.7, 0);
-	v267.BackgroundColor3 = Color3.fromRGB(0, 255, 0);
-	v267.BorderSizePixel = 0;
-	local v272 = Instance.new("TextLabel", v228);
-	v272.Text = "";
-	v272.TextColor3 = Color3.new(1, 0, 0);
-	v272.Size = UDim2.new(0.6, 0, 0.3, 0);
-	v272.Position = UDim2.new(0.615, 0, 0.7, 0);
-	v272.BackgroundTransparency = 1;
-	v272.Font = Enum.Font.SourceSansBold;
-	v272.TextSize = 16;
-	v272.TextWrapped = true;
-	v272.TextXAlignment = Enum.TextXAlignment.Center;
-	local v282 = Instance.new("Frame", v228);
-	v282.Size = UDim2.new(1, 0, 0, 2);
-	v282.Position = UDim2.new(0, 0, 0.3, 0);
-	v282.BorderSizePixel = 0;
-	v282.BackgroundColor3 = Color3.fromRGB(148, 0, 211);
-	v282.BackgroundTransparency = 0.5;
-	local v288 = Instance.new("Frame", v228);
-	v288.Size = UDim2.new(1, 4, 1, 4);
-	v288.Position = UDim2.new(-0.01, 0, -0.01, 0);
-	v288.BackgroundColor3 = Color3.fromRGB(100, 0, 150);
-	v288.BorderSizePixel = 0;
-	v288.ZIndex = -1;
-	local v294 = Instance.new("TextLabel", v228);
+	v115 = Instance.new("ScreenGui");
+	v115.Name = "PlayerInfoGUI";
+	v115.ResetOnSpawn = false;
+	v115.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui");
+	local v271 = Instance.new("Frame", v115);
+	v271.Name = "Frame";
+	v271.Size = UDim2.new(0.1, 0, 0.08, 0);
+	v271.Position = UDim2.new(v113, 0, v114, 0);
+	v271.BackgroundColor3 = Color3.new(0, 0, 0);
+	v271.BackgroundTransparency = 0.5;
+	v271.BorderSizePixel = 2;
+	v271.BorderColor3 = Color3.fromRGB(148, 0, 211);
+	v271.Active = true;
+	local v280 = Instance.new("UICorner", v271);
+	v280.CornerRadius = UDim.new(0, v112);
+	local v282 = Instance.new("TextLabel", v271);
+	v282.Text = "...";
+	v282.TextColor3 = Color3.new(1, 1, 1);
+	v282.Size = UDim2.new(1, 0, 0.3, 0);
+	v282.Position = UDim2.new(0, 0, 0, 0);
+	v282.BackgroundTransparency = 1;
+	v282.Font = Enum.Font.SourceSansBold;
+	v282.TextSize = 20;
+	v282.TextWrapped = true;
+	v282.TextXAlignment = Enum.TextXAlignment.Center;
+	local v294 = Instance.new("TextLabel", v271);
+	v294.Text = "";
 	v294.TextColor3 = Color3.new(1, 1, 1);
-	v294.Size = UDim2.new(1, 0, 0.1, 0);
-	v294.Position = UDim2.new(0.05, 0, v272.Position.Y.Scale, v272.Position.Y.Offset - -8);
+	v294.Size = UDim2.new(1, 0, 0.3, 0);
+	v294.Position = UDim2.new(0, 0, 0.3, 0);
 	v294.BackgroundTransparency = 1;
-	v294.Font = v272.Font;
-	v294.TextSize = v272.TextSize;
+	v294.Font = Enum.Font.SourceSansBold;
+	v294.TextSize = 20;
 	v294.TextWrapped = true;
-	v294.TextXAlignment = Enum.TextXAlignment.Left;
-	local function v304()
-		local v360, v361 = nil, math.huge;
-		local v362 = game.Players.LocalPlayer.Character.HumanoidRootPart.Position;
-		local v363 = false;
-		for v419, v420 in ipairs(game.Players:GetPlayers()) do
-			local v421 = v420.Character;
-			if ((v420 ~= game.Players.LocalPlayer) and v421 and v421:FindFirstChild("HumanoidRootPart")) then
-				local v537 = (v421.HumanoidRootPart.Position - v362).magnitude;
-				if (v537 < v93) then
-					v363 = true;
-					if (v537 < v361) then
-						v360, v361 = v420, v537;
+	v294.TextXAlignment = Enum.TextXAlignment.Center;
+	local v304 = Instance.new("Frame", v271);
+	v304.Size = UDim2.new(0.6, 0, 0.2, 0);
+	v304.Position = UDim2.new(0.2, 0, 0.7, 0);
+	v304.BackgroundColor3 = Color3.new(0, 0, 0);
+	v304.BorderSizePixel = 2;
+	v304.BorderColor3 = Color3.new(0, 0, 0);
+	local v310 = Instance.new("Frame", v271);
+	v310.Size = UDim2.new(0.6, 0, 0.2, 0);
+	v310.Position = UDim2.new(0.2, 0, 0.7, 0);
+	v310.BackgroundColor3 = Color3.fromRGB(0, 255, 0);
+	v310.BorderSizePixel = 0;
+	local v315 = Instance.new("TextLabel", v271);
+	v315.Text = "";
+	v315.TextColor3 = Color3.new(1, 0, 0);
+	v315.Size = UDim2.new(0.6, 0, 0.3, 0);
+	v315.Position = UDim2.new(0.615, 0, 0.7, 0);
+	v315.BackgroundTransparency = 1;
+	v315.Font = Enum.Font.SourceSansBold;
+	v315.TextSize = 16;
+	v315.TextWrapped = true;
+	v315.TextXAlignment = Enum.TextXAlignment.Center;
+	local v325 = Instance.new("Frame", v271);
+	v325.Size = UDim2.new(1, 0, 0, 2);
+	v325.Position = UDim2.new(0, 0, 0.3, 0);
+	v325.BorderSizePixel = 0;
+	v325.BackgroundColor3 = Color3.fromRGB(148, 0, 211);
+	v325.BackgroundTransparency = 0.5;
+	local v331 = Instance.new("Frame", v271);
+	v331.Size = UDim2.new(1, 4, 1, 4);
+	v331.Position = UDim2.new(-0.01, 0, -0.01, 0);
+	v331.BackgroundColor3 = Color3.fromRGB(100, 0, 150);
+	v331.BorderSizePixel = 0;
+	v331.ZIndex = -1;
+	local v337 = Instance.new("TextLabel", v271);
+	v337.TextColor3 = Color3.new(1, 1, 1);
+	v337.Size = UDim2.new(1, 0, 0.1, 0);
+	v337.Position = UDim2.new(0.05, 0, v315.Position.Y.Scale, v315.Position.Y.Offset - -8);
+	v337.BackgroundTransparency = 1;
+	v337.Font = v315.Font;
+	v337.TextSize = v315.TextSize;
+	v337.TextWrapped = true;
+	v337.TextXAlignment = Enum.TextXAlignment.Left;
+	local function v347()
+		local v421, v422 = nil, math.huge;
+		local v423 = game.Players.LocalPlayer.Character.HumanoidRootPart.Position;
+		local v424 = false;
+		for v501, v502 in ipairs(game.Players:GetPlayers()) do
+			local v503 = v502.Character;
+			if ((v502 ~= game.Players.LocalPlayer) and v503 and v503:FindFirstChild("HumanoidRootPart")) then
+				local v631 = (v503.HumanoidRootPart.Position - v423).magnitude;
+				if (v631 < v111) then
+					v424 = true;
+					if (v631 < v422) then
+						v421, v422 = v502, v631;
 					end
 				end
 			end
 		end
-		if v363 then
-			v239.Text = v360.Name;
-			local v480 = math.floor(v360.Character.Humanoid.Health);
-			local v481 = tostring(v480);
-			local v482 = v360.Character.Humanoid.MaxHealth;
-			local v483 = v480 / v482;
-			local v484 = UDim2.new(0.6 * v483, 0, 0.2, 0);
-			local v485 = TweenInfo.new(0.18, Enum.EasingStyle.Linear, Enum.EasingDirection.Out);
-			local v486 = v4:Create(v267, v485, {Size=v484});
-			v486:Play();
-			local v487 = Color3.fromRGB(255 * (1 - v483), 255 * v483, 0);
-			v267.BackgroundColor3 = v487;
-			local v489 = v251.Text;
-			local v490 = 1;
-			local v491 = math.max(#v489, #v481);
-			local v492 = 0.08;
-			local v493;
-			v493 = game:GetService("RunService").Heartbeat:Connect(function()
-				if (v490 <= v491) then
-					v251.Text = v481:sub(1, v490);
-					v490 = v490 + 1;
+		if v424 then
+			v282.Text = v421.Name;
+			local v574 = math.floor(v421.Character.Humanoid.Health);
+			local v575 = tostring(v574);
+			local v576 = v421.Character.Humanoid.MaxHealth;
+			local v577 = v574 / v576;
+			local v578 = UDim2.new(0.6 * v577, 0, 0.2, 0);
+			local v579 = TweenInfo.new(0.18, Enum.EasingStyle.Linear, Enum.EasingDirection.Out);
+			local v580 = v4:Create(v310, v579, {Size=v578});
+			v580:Play();
+			local v581 = Color3.fromRGB(255 * (1 - v577), 255 * v577, 0);
+			v310.BackgroundColor3 = v581;
+			local v583 = v294.Text;
+			local v584 = 1;
+			local v585 = math.max(#v583, #v575);
+			local v586 = 0.08;
+			local v587;
+			v587 = game:GetService("RunService").Heartbeat:Connect(function()
+				if (v584 <= v585) then
+					v294.Text = v575:sub(1, v584);
+					v584 = v584 + 1;
 				else
-					v493:Disconnect();
+					v587:Disconnect();
 				end
 			end);
-			v251.Visible = true;
-			v261.Visible = true;
-			v267.Visible = true;
-			local v497 = math.floor(game.Players.LocalPlayer.Character.Humanoid.Health);
-			if (v497 > v480) then
-				v272.Text = "winning";
-				v272.TextColor3 = Color3.new(0, 1, 0);
-			elseif (v497 < v480) then
-				v272.Text = "losing";
-				v272.TextColor3 = Color3.new(1, 0, 0);
+			v294.Visible = true;
+			v304.Visible = true;
+			v310.Visible = true;
+			local v591 = math.floor(game.Players.LocalPlayer.Character.Humanoid.Health);
+			if (v591 > v574) then
+				v315.Text = "winning";
+				v315.TextColor3 = Color3.new(0, 1, 0);
+			elseif (v591 < v574) then
+				v315.Text = "losing";
+				v315.TextColor3 = Color3.new(1, 0, 0);
 			else
-				v272.Text = "even";
-				v272.TextColor3 = Color3.fromRGB(44, 25, 239);
+				v315.Text = "even";
+				v315.TextColor3 = Color3.fromRGB(44, 25, 239);
 			end
-			v272.Font = Enum.Font.FredokaOne;
-			local v500 = string.format("%.1f", v361);
-			if (v294.Text ~= v500) then
-				local v556 = v294.Text;
-				local v557 = 1;
-				local v558 = math.max(#v556, #v500);
-				local v559 = 0.03;
-				local v560;
-				v560 = game:GetService("RunService").Heartbeat:Connect(function()
-					if (v557 <= v558) then
-						v294.Text = v500:sub(1, v557);
-						v557 = v557 + 1;
+			v315.Font = Enum.Font.FredokaOne;
+			local v594 = string.format("%.1f", v422);
+			if (v337.Text ~= v594) then
+				local v660 = v337.Text;
+				local v661 = 1;
+				local v662 = math.max(#v660, #v594);
+				local v663 = 0.03;
+				local v664;
+				v664 = game:GetService("RunService").Heartbeat:Connect(function()
+					if (v661 <= v662) then
+						v337.Text = v594:sub(1, v661);
+						v661 = v661 + 1;
 					else
-						v560:Disconnect();
+						v664:Disconnect();
 					end
 				end);
 			end
-			v294.Visible = true;
-			v272.Visible = true;
-			v228.Visible = true;
+			v337.Visible = true;
+			v315.Visible = true;
+			v271.Visible = true;
 		else
-			v239.Text = "";
-			v251.Visible = false;
-			v261.Visible = false;
-			v267.Visible = false;
-			v272.Visible = false;
+			v282.Text = "";
 			v294.Visible = false;
-			v228.Visible = false;
+			v304.Visible = false;
+			v310.Visible = false;
+			v315.Visible = false;
+			v337.Visible = false;
+			v271.Visible = false;
 		end
 	end
-	game:GetService("RunService").Heartbeat:Connect(v304);
+	game:GetService("RunService").Heartbeat:Connect(v347);
 end
-v29:AddToggle({Name="Target Hud",Callback=function(v305)
-	if v305 then
-		v98();
-	elseif v97 then
-		v97:Destroy();
-		v97 = nil;
+v30:AddToggle({Name="Target Hud",Callback=function(v348)
+	if v348 then
+		v116();
+	elseif v115 then
+		v115:Destroy();
+		v115 = nil;
 	end
 end});
-local v99 = {Ambient=nil,OutdoorAmbient=nil,FogColor=nil,FogStart=nil,FogEnd=nil,PartColors={}};
-local v100, v101, v102 = Color3.new(225, 160, 255), Color3.fromRGB(225, 160, 255), Vector3.new(2, 1, 3);
-local v103 = false;
-local function v104(v306)
-	local v307 = game:GetService("Lighting");
-	if v306 then
-		v99.Ambient = v307.Ambient;
-		v99.OutdoorAmbient = v307.OutdoorAmbient;
-		v99.FogColor = v307.FogColor;
-		v99.FogStart = v307.FogStart;
-		v99.FogEnd = v307.FogEnd;
-		for v511, v512 in ipairs(workspace:GetDescendants()) do
-			if v512:IsA("BasePart") then
-				v99.PartColors[v512] = v512.Color;
+local v117 = {Ambient=nil,OutdoorAmbient=nil,FogColor=nil,FogStart=nil,FogEnd=nil,PartColors={}};
+local v118, v119, v120 = Color3.new(225, 160, 255), Color3.fromRGB(225, 160, 255), Vector3.new(2, 1, 3);
+local v121 = false;
+local function v122(v349)
+	local v350 = game:GetService("Lighting");
+	if v349 then
+		v117.Ambient = v350.Ambient;
+		v117.OutdoorAmbient = v350.OutdoorAmbient;
+		v117.FogColor = v350.FogColor;
+		v117.FogStart = v350.FogStart;
+		v117.FogEnd = v350.FogEnd;
+		for v605, v606 in ipairs(workspace:GetDescendants()) do
+			if v606:IsA("BasePart") then
+				v117.PartColors[v606] = v606.Color;
 			end
 		end
-		v307.Ambient = v100;
-		v307.OutdoorAmbient = v100;
-		v307.FogColor = v100;
-		v307.FogStart = v99.FogStart or 0;
-		v307.FogEnd = v99.FogEnd or 100;
-		for v513, v514 in ipairs(workspace:GetDescendants()) do
-			if v514:IsA("BasePart") then
-				v514.Color = v100;
+		v350.Ambient = v118;
+		v350.OutdoorAmbient = v118;
+		v350.FogColor = v118;
+		v350.FogStart = v117.FogStart or 0;
+		v350.FogEnd = v117.FogEnd or 100;
+		for v607, v608 in ipairs(workspace:GetDescendants()) do
+			if v608:IsA("BasePart") then
+				v608.Color = v118;
 			end
 		end
 	else
-		v307.Ambient = v99.Ambient;
-		v307.OutdoorAmbient = v99.OutdoorAmbient;
-		v307.FogColor = v99.FogColor;
-		v307.FogStart = v99.FogStart;
-		v307.FogEnd = v99.FogEnd;
-		for v515, v516 in ipairs(workspace:GetDescendants()) do
-			if (v516:IsA("BasePart") and v99.PartColors[v516]) then
-				v516.Color = v99.PartColors[v516];
+		v350.Ambient = v117.Ambient;
+		v350.OutdoorAmbient = v117.OutdoorAmbient;
+		v350.FogColor = v117.FogColor;
+		v350.FogStart = v117.FogStart;
+		v350.FogEnd = v117.FogEnd;
+		for v609, v610 in ipairs(workspace:GetDescendants()) do
+			if (v610:IsA("BasePart") and v117.PartColors[v610]) then
+				v610.Color = v117.PartColors[v610];
 			end
 		end
 	end
 end
-v30:AddToggle({Name="Ambient",Callback=function(v308)
-	v104(v308);
+v31:AddToggle({Name="Ambient",Callback=function(v351)
+	v122(v351);
 end});
-local v105 = {};
-v30:AddToggle({Name="Low gfx",Callback=function(v309)
-	local v310 = game:GetService("Workspace");
-	for v364, v365 in ipairs(v310:GetDescendants()) do
-		if v365:IsA("BasePart") then
-			if v309 then
-				v105[v365] = v365.Material;
-				v365.Material = Enum.Material.Ice;
+local v123 = {};
+v31:AddToggle({Name="Low gfx",Callback=function(v352)
+	local v353 = game:GetService("Workspace");
+	for v425, v426 in ipairs(v353:GetDescendants()) do
+		if v426:IsA("BasePart") then
+			if v352 then
+				v123[v426] = v426.Material;
+				v426.Material = Enum.Material.Ice;
 			else
-				v365.Material = v105[v365] or v365.Material;
-				v105[v365] = nil;
+				v426.Material = v123[v426] or v426.Material;
+				v123[v426] = nil;
 			end
 		end
 	end
 end});
-v30:AddToggle({Name="Better sword",Callback=function(v311)
-	v103 = v311;
-	if not v103 then
-		local v442 = game:GetService("Workspace").Camera.Viewmodel.WoodenSword.MainPart.Mesh;
-		v442.VertexColor = Vector3.new(225 / 255, 160 / 255, 255 / 255);
-		v442.Offset = Vector3.new(0, 0, 0);
+v31:AddToggle({Name="Better sword",Callback=function(v354)
+	v121 = v354;
+	if not v121 then
+		local v524 = game:GetService("Workspace").Camera.Viewmodel.WoodenSword.MainPart.Mesh;
+		v524.VertexColor = Vector3.new(225 / 255, 160 / 255, 255 / 255);
+		v524.Offset = Vector3.new(0, 0, 0);
 	end
 end});
 game:GetService("RunService").Heartbeat:Connect(function()
-	if v103 then
-		local v445 = game:GetService("Workspace").Camera.Viewmodel.WoodenSword.MainPart.Mesh;
-		v445.VertexColor = Vector3.new(v101.r, v101.g, v101.b);
-		v445.Offset = v102;
+	if v121 then
+		local v527 = game:GetService("Workspace").Camera.Viewmodel.WoodenSword.MainPart.Mesh;
+		v527.VertexColor = Vector3.new(v119.r, v119.g, v119.b);
+		v527.Offset = v120;
 	end
 end);
-v30:AddSlider({Name="Sword front",Min=-10,Max=10,Value=v102.X,Callback=function(v312)
-	v102 = Vector3.new(v312, v102.Y, v102.Z);
-	if v45 then
-		game:GetService("Workspace").Camera.Viewmodel.WoodenSword.MainPart.Mesh.Offset = v102;
+v31:AddSlider({Name="Sword front",Min=-10,Max=10,Value=v120.X,Callback=function(v355)
+	v120 = Vector3.new(v355, v120.Y, v120.Z);
+	if v46 then
+		game:GetService("Workspace").Camera.Viewmodel.WoodenSword.MainPart.Mesh.Offset = v120;
 	end
 end});
-v30:AddSlider({Name="Sword vertical",Min=-10,Max=10,Value=v102.Y,Callback=function(v313)
-	v102 = Vector3.new(v102.X, v313, v102.Z);
-	if v45 then
-		game:GetService("Workspace").Camera.Viewmodel.WoodenSword.MainPart.Mesh.Offset = v102;
+v31:AddSlider({Name="Sword vertical",Min=-10,Max=10,Value=v120.Y,Callback=function(v356)
+	v120 = Vector3.new(v120.X, v356, v120.Z);
+	if v46 then
+		game:GetService("Workspace").Camera.Viewmodel.WoodenSword.MainPart.Mesh.Offset = v120;
 	end
 end});
-v30:AddSlider({Name="Sword side",Min=-10,Max=10,Value=v102.Z,Callback=function(v314)
-	v102 = Vector3.new(v102.X, v102.Y, v314);
-	if v45 then
-		game:GetService("Workspace").Camera.Viewmodel.WoodenSword.MainPart.Mesh.Offset = v102;
+v31:AddSlider({Name="Sword side",Min=-10,Max=10,Value=v120.Z,Callback=function(v357)
+	v120 = Vector3.new(v120.X, v120.Y, v357);
+	if v46 then
+		game:GetService("Workspace").Camera.Viewmodel.WoodenSword.MainPart.Mesh.Offset = v120;
 	end
 end});
-v30:AddSlider({Name="Fog Start",Min=0,Max=1000,Value=(v99.FogStart or 0),Callback=function(v315)
-	v99.FogStart = v315;
-	if v103 then
-		game:GetService("Lighting").FogStart = v315;
+v31:AddSlider({Name="Fog Start",Min=0,Max=1000,Value=(v117.FogStart or 0),Callback=function(v358)
+	v117.FogStart = v358;
+	if v121 then
+		game:GetService("Lighting").FogStart = v358;
 	end
 end});
-v30:AddSlider({Name="Fog End",Min=0,Max=1000,Value=(v99.FogEnd or 100),Callback=function(v317)
-	v99.FogEnd = v317;
-	if v103 then
-		game:GetService("Lighting").FogEnd = v317;
+v31:AddSlider({Name="Fog End",Min=0,Max=1000,Value=(v117.FogEnd or 100),Callback=function(v360)
+	v117.FogEnd = v360;
+	if v121 then
+		game:GetService("Lighting").FogEnd = v360;
 	end
 end});
-v30:AddColorpicker({Name="Atmo color",Value=v100,Callback=function(v319, v320)
-	v100 = v319;
-	if v45 then
-		local v453 = game:GetService("Lighting");
-		v453.Ambient = v100;
-		v453.OutdoorAmbient = v100;
-		v453.FogColor = v100;
-		for v517, v518 in ipairs(workspace:GetDescendants()) do
-			if v518:IsA("BasePart") then
-				v518.Color = v100;
+v31:AddColorpicker({Name="Atmo color",Value=v118,Callback=function(v362, v363)
+	v118 = v362;
+	if v46 then
+		local v535 = game:GetService("Lighting");
+		v535.Ambient = v118;
+		v535.OutdoorAmbient = v118;
+		v535.FogColor = v118;
+		for v611, v612 in ipairs(workspace:GetDescendants()) do
+			if v612:IsA("BasePart") then
+				v612.Color = v118;
 			end
 		end
 	end
 end});
-v30:AddColorpicker({Name="Sword color",Value=v101,Callback=function(v321, v322)
-	v101 = v321;
-	if v45 then
-		game:GetService("Workspace").Camera.Viewmodel.WoodenSword.MainPart.Mesh.VertexColor = Vector3.new(v101.r, v101.g, v101.b);
+v31:AddColorpicker({Name="Sword color",Value=v119,Callback=function(v364, v365)
+	v119 = v364;
+	if v46 then
+		game:GetService("Workspace").Camera.Viewmodel.WoodenSword.MainPart.Mesh.VertexColor = Vector3.new(v119.r, v119.g, v119.b);
 	end
 end});
-local v106, v107 = 1, false;
-getgenv().res = v106;
-v30:AddToggle({Name="ress",Callback=function(v323)
-	v107 = v323;
-	if v323 then
-		while v107 do
+local v124, v125 = 1, false;
+getgenv().res = v124;
+v31:AddToggle({Name="ress",Callback=function(v366)
+	v125 = v366;
+	if v366 then
+		while v125 do
 			game:GetService("RunService").RenderStepped:Wait();
 			v10.CFrame = v10.CFrame * CFrame.new(0, 0, 0, 1, 0, 0, 0, getgenv().res, 0, 0, 0, 1);
 		end
 	end
 end});
-v30:AddSlider({Name="Resolution",Min=0,Max=1.2,Precise=2,Value=v106,Callback=function(v324)
-	getgenv().res = v324;
+v31:AddSlider({Name="Resolution",Min=0,Max=1.2,Precise=2,Value=v124,Callback=function(v367)
+	getgenv().res = v367;
 end});
-local v109, v110, v111, v112, v113 = 0.5, Color3.fromRGB(200, 150, 255), false, false, false;
-local function v114(v326)
-	return Color3.new(v326.r, v326.g, v326.b);
+local v127, v128, v129, v130, v131 = 0.5, Color3.fromRGB(200, 150, 255), false, false, false;
+local function v132(v369)
+	return Color3.new(v369.r, v369.g, v369.b);
 end
-local function v115(v327)
-	local v328 = v327.TeamColor;
-	local v329 = Instance.new("Highlight");
-	v329.Name = v327.Name;
-	v329.FillColor = v110;
-	v329.DepthMode = "AlwaysOnTop";
-	v329.FillTransparency = v109;
-	v329.OutlineTransparency = v109;
-	v329.Parent = Storage;
-	local v337 = v327.Character;
-	if v337 then
-		v329.Adornee = v337;
+local function v133(v370)
+	local v371 = v370.TeamColor;
+	local v372 = Instance.new("Highlight");
+	v372.Name = v370.Name;
+	v372.FillColor = v128;
+	v372.DepthMode = "AlwaysOnTop";
+	v372.FillTransparency = v127;
+	v372.OutlineTransparency = v127;
+	v372.Parent = Storage;
+	local v380 = v370.Character;
+	if v380 then
+		v372.Adornee = v380;
 	end
-	v327.CharacterAdded:Connect(function(v366)
-		v329.Adornee = v366;
+	v370.CharacterAdded:Connect(function(v427)
+		v372.Adornee = v427;
 	end);
-	v327:GetPropertyChangedSignal("Team"):Connect(function()
-		local v368 = v327.TeamColor;
-		v329.FillColor = v114(v368);
+	v370:GetPropertyChangedSignal("Team"):Connect(function()
+		local v429 = v370.TeamColor;
+		v372.FillColor = v132(v429);
 	end);
 end
-local function v116()
-	for v370, v371 in ipairs(game.Players:GetPlayers()) do
-		if (v371 == game.Players.LocalPlayer) then
-			if v111 then
-				if not Storage:FindFirstChild(v371.Name) then
-					v115(v371);
+local function v134()
+	for v431, v432 in ipairs(game.Players:GetPlayers()) do
+		if (v432 == game.Players.LocalPlayer) then
+			if v129 then
+				if not Storage:FindFirstChild(v432.Name) then
+					v133(v432);
 				end
 			else
-				local v572 = Storage:FindFirstChild(v371.Name);
-				if v572 then
-					v572:Destroy();
+				local v676 = Storage:FindFirstChild(v432.Name);
+				if v676 then
+					v676:Destroy();
 				end
 			end
-		elseif not Storage:FindFirstChild(v371.Name) then
-			v115(v371);
+		elseif not Storage:FindFirstChild(v432.Name) then
+			v133(v432);
 		end
 	end
 end
-local function v117(v338)
-	if v338 then
-		v113 = true;
-		local v459 = game:GetService("CoreGui");
-		local v460 = game:GetService("Players");
+local function v135(v381)
+	if v381 then
+		v131 = true;
+		local v541 = game:GetService("CoreGui");
+		local v542 = game:GetService("Players");
 		Storage = Instance.new("Folder");
-		Storage.Parent = v459;
+		Storage.Parent = v541;
 		Storage.Name = "Highlight_Storage";
-		v116();
+		v134();
 		coroutine.wrap(function()
-			while v113 do
+			while v131 do
 				wait(0.15);
-				v116();
+				v134();
 			end
 		end)();
 	else
-		v113 = false;
-		local v463 = game.CoreGui:FindFirstChild("Highlight_Storage");
-		if v463 then
-			for v573, v574 in ipairs(v463:GetChildren()) do
-				v574:Destroy();
+		v131 = false;
+		local v545 = game.CoreGui:FindFirstChild("Highlight_Storage");
+		if v545 then
+			for v677, v678 in ipairs(v545:GetChildren()) do
+				v678:Destroy();
 			end
-			v463:Destroy();
+			v545:Destroy();
 		end
 	end
 end
-local function v118(v339)
-	v111 = v339;
-	v116();
+local function v136(v382)
+	v129 = v382;
+	v134();
 end
-local function v119(v340)
-	v112 = v340;
-	v116();
+local function v137(v383)
+	v130 = v383;
+	v134();
 end
-local function v120(v341)
-	v110 = v341;
-	local v342 = game.CoreGui:FindFirstChild("Highlight_Storage");
-	if v342 then
-		for v520, v521 in ipairs(v342:GetChildren()) do
-			v521.FillColor = v341;
+local function v138(v384)
+	v128 = v384;
+	local v385 = game.CoreGui:FindFirstChild("Highlight_Storage");
+	if v385 then
+		for v614, v615 in ipairs(v385:GetChildren()) do
+			v615.FillColor = v384;
 		end
 	end
 end
-v28:AddToggle({Name="Esp",Value=false,Callback=function(v343)
-	v117(v343);
+v29:AddToggle({Name="chams",Value=false,Callback=function(v386)
+	v135(v386);
 end});
-v28:AddColorpicker({Name="Color",Value=v110,Callback=function(v344, v345)
-	v120(v344);
+v29:AddColorpicker({Name="Color",Value=v128,Callback=function(v387, v388)
+	v138(v387);
 end});
-v28:AddToggle({Name="Self",Value=false,Callback=v118});
-v28:AddSlider({Name="Transparency",Min=0,Max=1,Value=v109,Callback=function(v346)
-	v109 = v346;
-	local v347 = game.CoreGui:FindFirstChild("Highlight_Storage");
-	if v347 then
-		for v523, v524 in ipairs(v347:GetChildren()) do
-			v524.FillTransparency = v346;
-			v524.OutlineTransparency = v346;
+v29:AddToggle({Name="Self",Value=false,Callback=v136});
+v29:AddSlider({Name="Transparency",Min=0,Max=1,Value=v127,Callback=function(v389)
+	v127 = v389;
+	local v390 = game.CoreGui:FindFirstChild("Highlight_Storage");
+	if v390 then
+		for v617, v618 in ipairs(v390:GetChildren()) do
+			v618.FillTransparency = v389;
+			v618.OutlineTransparency = v389;
 		end
 	end
 end});
-local v121, v122 = game.Players.LocalPlayer, false;
-local function v123(v348)
-	local v349 = v348:FindFirstChild("Head");
-	if v349 then
-		local v464 = v349:FindFirstChild("face");
-		if v464 then
-			v464:Destroy();
+local v139 = {{Name="Mouse",Value="Mouse"},{Name="Bottom Center",Value="BottomCenter"},{Name="Top Center",Value="TopCenter"},{Name="Left Center",Value="LeftCenter"},{Name="Right Center",Value="RightCenter"}};
+local v140 = 1;
+v29:AddDropdown({Name="Tracer Source",Default=v139[v140].Name,List={v139[1].Name,v139[2].Name,v139[3].Name,v139[4].Name,v139[5].Name},Callback=function(v391)
+	for v433, v434 in ipairs(v139) do
+		if (v434.Name == v391) then
+			v140 = v433;
+			break;
+		end
+	end
+end});
+v29:AddToggle({Name="Tracer",Value=false,Callback=function(v392)
+	Tracer = v392;
+	local v393 = game:GetService("RunService");
+	local v394 = game:GetService("Players");
+	local v395 = game:GetService("Workspace");
+	local v396 = game:GetService("UserInputService");
+	local v397 = v395.CurrentCamera;
+	local v398 = {DefaultSettings=false,TeamCheck=false,TracersVisible=true,TracerColor=Color3.fromRGB(128, 0, 128),TracerThickness=1.8,TracerTransparency=0.8};
+	local v399 = {};
+	local function v400(v435)
+		local v436 = Drawing.new("Line");
+		v436.Thickness = v398.TracerThickness;
+		v436.Transparency = v398.TracerTransparency;
+		v436.Visible = false;
+		v436.Color = v398.TracerColor;
+		local function v444()
+			if (not v435:IsDescendantOf(v395) or not v435:FindFirstChild("HumanoidRootPart")) then
+				v436.Visible = false;
+				return;
+			end
+			local v546 = v435:FindFirstChild("Head") or v435:FindFirstChild("HumanoidRootPart");
+			if not v546 then
+				v436.Visible = false;
+				return;
+			end
+			local v547 = v546.Position;
+			local v548, v549 = v397:WorldToViewportPoint(v547);
+			local v550 = v139[v140];
+			if (v550.Value == "Mouse") then
+				v436.From = Vector2.new(v396:GetMouseLocation().X, v396:GetMouseLocation().Y);
+			elseif (v550.Value == "BottomCenter") then
+				v436.From = Vector2.new(v397.ViewportSize.X / 2, v397.ViewportSize.Y);
+			elseif (v550.Value == "TopCenter") then
+				v436.From = Vector2.new(v397.ViewportSize.X / 2, 0);
+			elseif (v550.Value == "LeftCenter") then
+				v436.From = Vector2.new(0, v397.ViewportSize.Y / 2);
+			elseif (v550.Value == "RightCenter") then
+				v436.From = Vector2.new(v397.ViewportSize.X, v397.ViewportSize.Y / 2);
+			end
+			if v549 then
+				v436.To = Vector2.new(v548.X, v548.Y);
+				if v398.TeamCheck then
+					v436.Visible = v394.LocalPlayer.Team ~= v435.Team;
+				else
+					v436.Visible = Tracer;
+				end
+			else
+				v436.Visible = false;
+			end
+		end
+		v399[v435] = v436;
+		return v436, v444;
+	end
+	local function v401(v446, v447)
+		if (v446 == v394.LocalPlayer) then
+			return;
+		end
+		if (not v447 or not v447:IsDescendantOf(v395) or not v447:FindFirstChild("HumanoidRootPart")) then
+			return;
+		end
+		local v448, v449 = v400(v447);
+		v393.RenderStepped:Connect(function()
+			v449();
+		end);
+		v447.AncestryChanged:Connect(function()
+			if not v447:IsDescendantOf(v395) then
+				v448.Visible = false;
+				v399[v447] = nil;
+			end
+		end);
+	end
+	v394.PlayerAdded:Connect(function(v450)
+		v450.CharacterAdded:Connect(function(v551)
+			v401(v450, v551);
+		end);
+	end);
+	for v451, v452 in ipairs(v394:GetPlayers()) do
+		v401(v452, v452.Character);
+	end
+	v396.InputBegan:Connect(function(v453)
+		if ((v453.KeyCode == v398.ModeSkipKey) and not v396:GetFocusedTextBox()) then
+			v140 = (v140 % #v139) + 1;
+			for v639, v640 in pairs(v399) do
+				v640.Visible = v398.TracersVisible and Tracer;
+			end
+		elseif ((v453.KeyCode == v398.DisableKey) and not v396:GetFocusedTextBox()) then
+			v398.TracersVisible = not v398.TracersVisible;
+			for v697, v698 in pairs(v399) do
+				v698.Visible = v398.TracersVisible and Tracer;
+			end
+		end
+	end);
+	if v398.DefaultSettings then
+		v398.TeamCheck = false;
+		v398.TracersVisible = true;
+		v398.TracerColor = Color3.fromRGB(128, 0, 128);
+		v398.TracerThickness = 1.8;
+		v398.TracerTransparency = 0.8;
+	end
+end});
+local v141, v142 = game.Players.LocalPlayer, false;
+local function v143(v402)
+	local v403 = v402:FindFirstChild("Head");
+	if v403 then
+		local v557 = v403:FindFirstChild("face");
+		if v557 then
+			v557:Destroy();
 		end
 	end
 end
-local function v124(v350)
-	if (v350:IsA("Accessory") or v350:IsA("Shirt") or v350:IsA("Pants") or (v350.Name == "Face")) then
-		v350:Destroy();
-	elseif v350:IsA("BasePart") then
-		v350.Material = Enum.Material.ForceField;
-		v350.Color = Color3.fromRGB(225, 160, 255);
+local function v144(v404)
+	if (v404:IsA("Accessory") or v404:IsA("Shirt") or v404:IsA("Pants") or (v404.Name == "Face")) then
+		v404:Destroy();
+	elseif v404:IsA("BasePart") then
+		v404.Material = Enum.Material.ForceField;
+		v404.Color = Color3.fromRGB(225, 160, 255);
 	end
 end
-local function v125(v351)
-	v123(v351);
-	for v372, v373 in ipairs(v351:GetChildren()) do
-		v124(v373);
+local function v145(v405)
+	v143(v405);
+	for v454, v455 in ipairs(v405:GetChildren()) do
+		v144(v455);
 	end
-	v351.ChildAdded:Connect(v124);
+	v405.ChildAdded:Connect(v144);
 end
-local function v126(v352)
+local function v146(v406)
 	wait(0.14);
-	if v122 then
-		v125(v352);
+	if v142 then
+		v145(v406);
 	end
 end
-v28:AddToggle({Name="Self visual",Value=false,Callback=function(v353)
-	v122 = v353;
-	if v353 then
-		v126(v121.Character or v121.CharacterAdded:Wait());
+v29:AddToggle({Name="Self visual",Value=false,Callback=function(v407)
+	v142 = v407;
+	if v407 then
+		v146(v141.Character or v141.CharacterAdded:Wait());
 	end
 end});
-v121.CharacterAdded:Connect(v126);
+v141.CharacterAdded:Connect(v146);
