@@ -1,3 +1,14 @@
+--[[
+ .____                  ________ ___.    _____                           __                
+ |    |    __ _______   \_____  \\_ |___/ ____\_ __  ______ ____ _____ _/  |_  ___________ 
+ |    |   |  |  \__  \   /   |   \| __ \   __\  |  \/  ___// ___\\__  \\   __\/  _ \_  __ \
+ |    |___|  |  // __ \_/    |    \ \_\ \  | |  |  /\___ \\  \___ / __ \|  | (  <_> )  | \/
+ |_______ \____/(____  /\_______  /___  /__| |____//____  >\___  >____  /__|  \____/|__|   
+         \/          \/         \/    \/                \/     \/     \/                   
+          \_Welcome to LuaObfuscator.com   (Alpha 0.10.5) ~  Much Love, Ferib 
+
+]]--
+
 local v0 = loadstring(game:GetObjects("rbxassetid://7657867786")[1].Source)();
 v0.UnloadCallback = function()
 	getgenv().Galley = nil;
@@ -663,16 +674,16 @@ v25:AddToggle({Name="Trigger bot",Keybind=1,Callback=function(v241)
 	local v243 = 0;
 	local v244 = 1 / cpslimit;
 	local function v245(v421)
-		for v492, v493 in next, v2:GetPlayers() do
-			if (v493.Character and ((v421 == v493.Character) or v421:IsDescendantOf(v493.Character))) then
+		for v492, v493 in pairs(game.Players:GetPlayers()) do
+			if (v493.Character and v421 and v421:IsDescendantOf(v493.Character)) then
 				return true;
 			end
 		end
 		return false;
 	end
 	if v241 then
-		v242 = v5.Heartbeat:Connect(function()
-			if v245(v9.Target) then
+		v242 = game:GetService("RunService").Heartbeat:Connect(function()
+			if v245(game.Players.LocalPlayer:GetMouse().Target) then
 				local v659 = tick();
 				if ((v659 - v243) >= v244) then
 					v243 = v659;
@@ -696,6 +707,7 @@ v25:AddToggle({Name="Trigger bot",Keybind=1,Callback=function(v241)
 end});
 v25:AddSlider({Name="CPS limit",Min=1,Max=50,Def=cpslimit,Callback=function(v246)
 	cpslimit = v246;
+	minInterval = 1 / cpslimit;
 end});
 local v101, v102, v103, v104, v105 = "None", 0, 0, 0, 0;
 local function v106(v247)
@@ -806,13 +818,13 @@ end});
 v30:AddSlider({Name="Corners",Min=0,Max=50,Value=v114,Callback=function(v266)
 	v114 = v266;
 end});
-v30:AddSlider({Name="Position X",Min=0,Max=1,Precise=1,Value=v115,Callback=function(v267)
+v30:AddSlider({Name="Position X",Min=0,Max=1,Precise=2,Value=v115,Callback=function(v267)
 	v115 = v267;
 	if gui then
 		gui.Frame.Position = UDim2.new(v115, 0, v116, 0);
 	end
 end});
-v30:AddSlider({Name="Position Y",Min=0,Max=1,Precise=1,Value=v116,Callback=function(v268)
+v30:AddSlider({Name="Position Y",Min=0,Max=1,Precise=2,Value=v116,Callback=function(v268)
 	v116 = v268;
 	if gui then
 		gui.Frame.Position = UDim2.new(v115, 0, v116, 0);
