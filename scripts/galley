@@ -1503,23 +1503,97 @@ K:AddSlider(
             end
         end}
 )
-local dm = {
+K:AddToggle(
+    {
+        Name = "Cape",
+        Value = false,
+        Callback = function(R)
+            local X = game.Players.LocalPlayer
+            local Y = X.Character
+            local function dm()
+                local dn = Y:WaitForChild("Humanoid")
+                local dp =
+                    dn.RigType == Enum.HumanoidRigType.R15 and Y:WaitForChild("UpperTorso") or Y:WaitForChild("Torso")
+                local dq = Instance.new("Part", Y)
+                dq.Name = "Cape"
+                dq.Anchored = false
+                dq.CanCollide = false
+                dq.TopSurface = Enum.SurfaceType.Smooth
+                dq.BottomSurface = Enum.SurfaceType.Smooth
+                dq.Size = Vector3.new(0.2, 0.2, 0.2)
+                dq.Transparency = 0
+                dq.BrickColor = BrickColor.new("Really black")
+                local dr = Instance.new("BlockMesh", dq)
+                dr.Scale = Vector3.new(9, 17.5, 0.08)
+                local ds = Instance.new("Motor", dq)
+                ds.Part0 = dq
+                ds.Part1 = dp
+                ds.MaxVelocity = 0.01
+                ds.C0 = CFrame.new(0, 2, 0) * CFrame.Angles(0, math.rad(90), 0)
+                ds.C1 = CFrame.new(0, 1, 0.45) * CFrame.Angles(0, math.rad(90), 0)
+                spawn(
+                    function()
+                        local dt = false
+                        while dq.Parent == Y do
+                            wait(1 / 60)
+                            local bl = 0.1
+                            local du = dp.Velocity.Magnitude
+                            if dt then
+                                bl = bl + dp.Velocity.Magnitude / 10 * 0.05 + 0.05
+                                dt = false
+                            else
+                                dt = true
+                            end
+                            bl = bl + math.min(dp.Velocity.Magnitude / 11, 0.5)
+                            ds.MaxVelocity = math.min(dp.Velocity.Magnitude / 111, 0.04)
+                            ds.DesiredAngle = -bl
+                            if ds.CurrentAngle < -0.2 and ds.DesiredAngle > -0.2 then
+                                ds.MaxVelocity = 0.04
+                            end
+                            repeat
+                                wait()
+                            until ds.CurrentAngle == ds.DesiredAngle or
+                                math.abs(dp.Velocity.Magnitude - du) >= dp.Velocity.Magnitude / 10 + 1
+                            if dp.Velocity.Magnitude < 0.1 then
+                                wait(0.1)
+                            end
+                        end
+                    end
+                )
+            end
+            local function dv()
+                local dq = Y:FindFirstChild("Cape")
+                if dq then
+                    dq:Destroy()
+                end
+            end
+            if R then
+                if not Y:FindFirstChild("Cape") then
+                    dm()
+                end
+            else
+                dv()
+            end
+        end
+    }
+)
+local dw = {
     {Name = "Mouse", Value = "Mouse"},
     {Name = "Bottom Center", Value = "BottomCenter"},
     {Name = "Top Center", Value = "TopCenter"},
     {Name = "Left Center", Value = "LeftCenter"},
     {Name = "Right Center", Value = "RightCenter"}
 }
-local dn = 1
+local dx = 1
 K:AddDropdown(
     {
         Name = "Tracer Source",
-        Default = dm[dn].Name,
-        List = {dm[1].Name, dm[2].Name, dm[3].Name, dm[4].Name, dm[5].Name},
+        Default = dw[dx].Name,
+        List = {dw[1].Name, dw[2].Name, dw[3].Name, dw[4].Name, dw[5].Name},
         Callback = function(R)
-            for dp, dq in ipairs(dm) do
-                if dq.Name == R then
-                    dn = dp
+            for dy, dz in ipairs(dw) do
+                if dz.Name == R then
+                    dx = dy
                     break
                 end
             end
@@ -1534,9 +1608,9 @@ K:AddToggle(
             Tracer = ae
             local e = game:GetService("RunService")
             local b = game:GetService("Players")
-            local dr = game:GetService("Workspace")
-            local ds = game:GetService("UserInputService")
-            local j = dr.CurrentCamera
+            local dA = game:GetService("Workspace")
+            local dB = game:GetService("UserInputService")
+            local j = dA.CurrentCamera
             local settings = {
                 DefaultSettings = false,
                 TeamCheck = false,
@@ -1545,39 +1619,39 @@ K:AddToggle(
                 TracerThickness = 1.8,
                 TracerTransparency = 0.8
             }
-            local dt = {}
-            local function du(Y)
+            local dC = {}
+            local function dD(Y)
                 local cr = Drawing.new("Line")
                 cr.Thickness = settings.TracerThickness
                 cr.Transparency = settings.TracerTransparency
                 cr.Visible = false
                 cr.Color = settings.TracerColor
-                local function dv()
-                    if not Y:IsDescendantOf(dr) or not Y:FindFirstChild("HumanoidRootPart") then
+                local function dE()
+                    if not Y:IsDescendantOf(dA) or not Y:FindFirstChild("HumanoidRootPart") then
                         cr.Visible = false
                         return
                     end
-                    local dw = Y:FindFirstChild("Head") or Y:FindFirstChild("HumanoidRootPart")
-                    if not dw then
+                    local dF = Y:FindFirstChild("Head") or Y:FindFirstChild("HumanoidRootPart")
+                    if not dF then
                         cr.Visible = false
                         return
                     end
-                    local dx = dw.Position
-                    local dy, dz = j:WorldToViewportPoint(dx)
-                    local dA = dm[dn]
-                    if dA.Value == "Mouse" then
-                        cr.From = Vector2.new(ds:GetMouseLocation().X, ds:GetMouseLocation().Y)
-                    elseif dA.Value == "BottomCenter" then
+                    local dG = dF.Position
+                    local dH, dI = j:WorldToViewportPoint(dG)
+                    local dJ = dw[dx]
+                    if dJ.Value == "Mouse" then
+                        cr.From = Vector2.new(dB:GetMouseLocation().X, dB:GetMouseLocation().Y)
+                    elseif dJ.Value == "BottomCenter" then
                         cr.From = Vector2.new(j.ViewportSize.X / 2, j.ViewportSize.Y)
-                    elseif dA.Value == "TopCenter" then
+                    elseif dJ.Value == "TopCenter" then
                         cr.From = Vector2.new(j.ViewportSize.X / 2, 0)
-                    elseif dA.Value == "LeftCenter" then
+                    elseif dJ.Value == "LeftCenter" then
                         cr.From = Vector2.new(0, j.ViewportSize.Y / 2)
-                    elseif dA.Value == "RightCenter" then
+                    elseif dJ.Value == "RightCenter" then
                         cr.From = Vector2.new(j.ViewportSize.X, j.ViewportSize.Y / 2)
                     end
-                    if dz then
-                        cr.To = Vector2.new(dy.X, dy.Y)
+                    if dI then
+                        cr.To = Vector2.new(dH.X, dH.Y)
                         if settings.TeamCheck then
                             cr.Visible = b.LocalPlayer.Team ~= Y.Team
                         else
@@ -1587,27 +1661,27 @@ K:AddToggle(
                         cr.Visible = false
                     end
                 end
-                dt[Y] = cr
-                return cr, dv
+                dC[Y] = cr
+                return cr, dE
             end
-            local function dB(X, Y)
+            local function dK(X, Y)
                 if X == b.LocalPlayer then
                     return
                 end
-                if not Y or not Y:IsDescendantOf(dr) or not Y:FindFirstChild("HumanoidRootPart") then
+                if not Y or not Y:IsDescendantOf(dA) or not Y:FindFirstChild("HumanoidRootPart") then
                     return
                 end
-                local dC, dD = du(Y)
+                local dL, dM = dD(Y)
                 e.RenderStepped:Connect(
                     function()
-                        dD()
+                        dM()
                     end
                 )
                 Y.AncestryChanged:Connect(
                     function()
-                        if not Y:IsDescendantOf(dr) then
-                            dC.Visible = false
-                            dt[Y] = nil
+                        if not Y:IsDescendantOf(dA) then
+                            dL.Visible = false
+                            dC[Y] = nil
                         end
                     end
                 )
@@ -1616,24 +1690,24 @@ K:AddToggle(
                 function(X)
                     X.CharacterAdded:Connect(
                         function(Y)
-                            dB(X, Y)
+                            dK(X, Y)
                         end
                     )
                 end
             )
             for W, X in ipairs(b:GetPlayers()) do
-                dB(X, X.Character)
+                dK(X, X.Character)
             end
-            ds.InputBegan:Connect(
-                function(dE)
-                    if dE.KeyCode == settings.ModeSkipKey and not ds:GetFocusedTextBox() then
-                        dn = dn % #dm + 1
-                        for W, cr in pairs(dt) do
+            dB.InputBegan:Connect(
+                function(dN)
+                    if dN.KeyCode == settings.ModeSkipKey and not dB:GetFocusedTextBox() then
+                        dx = dx % #dw + 1
+                        for W, cr in pairs(dC) do
                             cr.Visible = settings.TracersVisible and Tracer
                         end
-                    elseif dE.KeyCode == settings.DisableKey and not ds:GetFocusedTextBox() then
+                    elseif dN.KeyCode == settings.DisableKey and not dB:GetFocusedTextBox() then
                         settings.TracersVisible = not settings.TracersVisible
-                        for W, cr in pairs(dt) do
+                        for W, cr in pairs(dC) do
                             cr.Visible = settings.TracersVisible and Tracer
                         end
                     end
@@ -1649,17 +1723,17 @@ K:AddToggle(
         end
     }
 )
-local X, dF = game.Players.LocalPlayer, false
-local function dG(Y)
-    local dw = Y:FindFirstChild("Head")
-    if dw then
-        local dH = dw:FindFirstChild("face")
-        if dH then
-            dH:Destroy()
+local X, dO = game.Players.LocalPlayer, false
+local function dP(Y)
+    local dF = Y:FindFirstChild("Head")
+    if dF then
+        local dQ = dF:FindFirstChild("face")
+        if dQ then
+            dQ:Destroy()
         end
     end
 end
-local function dI(ay)
+local function dR(ay)
     if ay:IsA("Accessory") or ay:IsA("Shirt") or ay:IsA("Pants") or ay.Name == "Face" then
         ay:Destroy()
     elseif ay:IsA("BasePart") then
@@ -1667,25 +1741,25 @@ local function dI(ay)
         ay.Color = Color3.fromRGB(225, 160, 255)
     end
 end
-local function dJ(Y)
-    dG(Y)
+local function dS(Y)
+    dP(Y)
     for W, ay in ipairs(Y:GetChildren()) do
-        dI(ay)
+        dR(ay)
     end
-    Y.ChildAdded:Connect(dI)
+    Y.ChildAdded:Connect(dR)
 end
-local function dK(Y)
+local function dT(Y)
     wait(0.14)
-    if dF then
-        dJ(Y)
+    if dO then
+        dS(Y)
     end
 end
 K:AddToggle(
     {Name = "Self visual", Value = false, Callback = function(cY)
-            dF = cY
+            dO = cY
             if cY then
-                dK(X.Character or X.CharacterAdded:Wait())
+                dT(X.Character or X.CharacterAdded:Wait())
             end
         end}
 )
-X.CharacterAdded:Connect(dK)
+X.CharacterAdded:Connect(dT)
