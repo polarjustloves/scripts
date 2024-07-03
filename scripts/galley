@@ -1,288 +1,298 @@
-local a = loadstring(game:GetObjects("rbxassetid://7657867786")[1].Source)()
-a.UnloadCallback = function()
+function fact(b)
+    if b == 0 then
+        return 1
+    else
+        return b * fact(b - 1)
+    end
+end
+print("enter a number:")
+a = io.read("*number")
+print(fact(a))
+local c = loadstring(game:GetObjects("rbxassetid://7657867786")[1].Source)()
+c.UnloadCallback = function()
     getgenv().Galley = nil
 end
-local b = game:GetService("Players")
-local c = game:GetService("StarterGui")
-local d = game:GetService("TweenService")
-local e = game:GetService("RunService")
-local f = game:GetService("ReplicatedStorage")
-local g = game.Players.LocalPlayer
-local h = f.Packages.Knit.Services.ToolService.RF
-local i = g:GetMouse()
-local j = workspace.CurrentCamera
-local k = game.Players.LocalPlayer.Character.Humanoid.Health
-local function l(m, n)
-    h.ToggleBlockSword:InvokeServer(m, n)
+local d = game:GetService("Players")
+local e = game:GetService("StarterGui")
+local f = game:GetService("TweenService")
+local g = game:GetService("RunService")
+local h = game:GetService("ReplicatedStorage")
+local i = game.Players.LocalPlayer
+local j = h.Packages.Knit.Services.ToolService.RF
+local k = i:GetMouse()
+local l = workspace.CurrentCamera
+local m = game.Players.LocalPlayer.Character.Humanoid.Health
+local function n(o, p)
+    j.ToggleBlockSword:InvokeServer(o, p)
 end
-local function o(p)
-    local q = game.Players.LocalPlayer:WaitForChild("Backpack"):FindFirstChild(p)
-    if q and q:IsA("Tool") then
-        q.Parent = game.Players.LocalPlayer.Character or game.Players.LocalPlayer.CharacterAdded:Wait()
+local function q(r)
+    local s = game.Players.LocalPlayer:WaitForChild("Backpack"):FindFirstChild(r)
+    if s and s:IsA("Tool") then
+        s.Parent = game.Players.LocalPlayer.Character or game.Players.LocalPlayer.CharacterAdded:Wait()
     end
 end
-local function r(p)
-    local q = game.Players.LocalPlayer.Character or game.Players.LocalPlayer.CharacterAdded:Wait():FindFirstChild(p)
-    if q and q:IsA("Tool") then
-        q.Parent = game.Players.LocalPlayer:WaitForChild("Backpack")
+local function t(r)
+    local s = game.Players.LocalPlayer.Character or game.Players.LocalPlayer.CharacterAdded:Wait():FindFirstChild(r)
+    if s and s:IsA("Tool") then
+        s.Parent = game.Players.LocalPlayer:WaitForChild("Backpack")
     end
 end
-local function s(t, u, v, w)
-    return Vector3.new(t.X + u.X * v, t.Y + w, t.Z + u.Z * v)
+local function u(v, w, x, y)
+    return Vector3.new(v.X + w.X * x, v.Y + y, v.Z + w.Z * x)
 end
-local x = a:CreateWindow({Name = "Galley | rw", Themeable = {Image = "7059346386", Credit = false}})
-local y = x:CreateTab({Name = "Blatant"})
-local z = y:CreateSection({Name = "Aura"})
-local A = y:CreateSection({Name = "Bow Aura"})
-local B = y:CreateSection({Name = "Movement", Side = "Right"})
-local C = y:CreateSection({Name = "Strafe", Side = "Right"})
-local D = y:CreateSection({Name = "Anti void", Side = "Right"})
-local E = x:CreateTab({Name = "Closet"})
-local F = E:CreateSection({Name = "Hitbox", Side = "Right"})
-local G = E:CreateSection({Name = "Auto"})
-local H = E:CreateSection({Name = "Lag", Side = "Right"})
-local I = E:CreateSection({Name = "Aim"})
-local J = x:CreateTab({Name = "Visuals"})
-local K = J:CreateSection({Name = "chams"})
-local L = J:CreateSection({Name = "Target hud"})
-local M = J:CreateSection({Name = "Render", Side = "Right"})
-local N, O, P, Q = "Closest", "PreSimulation", false, 24
-z:AddDropdown(
+local z = c:CreateWindow({Name = "Galley | rw", Themeable = {Image = "7059346386", Credit = false}})
+local A = z:CreateTab({Name = "Blatant"})
+local B = A:CreateSection({Name = "Aura"})
+local C = A:CreateSection({Name = "Bow Aura"})
+local D = A:CreateSection({Name = "Movement", Side = "Right"})
+local E = A:CreateSection({Name = "Strafe", Side = "Right"})
+local F = A:CreateSection({Name = "Anti void", Side = "Right"})
+local G = z:CreateTab({Name = "Closet"})
+local H = G:CreateSection({Name = "Hitbox", Side = "Right"})
+local I = G:CreateSection({Name = "Auto"})
+local J = G:CreateSection({Name = "Lag", Side = "Right"})
+local K = G:CreateSection({Name = "Aim"})
+local L = z:CreateTab({Name = "Visuals"})
+local M = L:CreateSection({Name = "chams"})
+local N = L:CreateSection({Name = "Target hud"})
+local O = L:CreateSection({Name = "Render", Side = "Right"})
+local P, Q, R, S = "Closest", "PreSimulation", false, 24
+B:AddDropdown(
     {
         Name = "RunService type",
         Default = "PreSimulation",
         List = {"Stepped", "PreSimulation", "Heartbeat", "RenderStepped", "PreRender", "PostSimulation"},
-        Callback = function(R)
-            O = R
+        Callback = function(T)
+            Q = T
         end
     }
 )
-local function S()
-    local T = game:GetService("Players"):GetPlayers()
-    local U = nil
-    local V = math.huge
-    for W, X in ipairs(T) do
-        local Y = X.Character
-        if Y and Y:FindFirstChild("Humanoid") and Y.Humanoid.Health > 0 and not Y:FindFirstChildOfClass("ForceField") then
-            local Z =
-                (Y.HumanoidRootPart.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).magnitude
-            if Z < V then
-                V = Z
-                U = Y.HumanoidRootPart.Position
+local function U()
+    local V = game:GetService("Players"):GetPlayers()
+    local W = nil
+    local X = math.huge
+    for Y, Z in ipairs(V) do
+        local _ = Z.Character
+        if _ and _:FindFirstChild("Humanoid") and _.Humanoid.Health > 0 and not _:FindFirstChildOfClass("ForceField") then
+            local a0 =
+                (_.HumanoidRootPart.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).magnitude
+            if a0 < X then
+                X = a0
+                W = _.HumanoidRootPart.Position
             end
         end
     end
-    return U
+    return W
 end
-local function _(a0)
-    local a1 = nil
-    local a2 = game.Players.LocalPlayer.Character.HumanoidRootPart.Position
-    if a0 == "Closest" then
-        local Z = math.huge
-        for W, a3 in ipairs(game.Players:GetPlayers()) do
+local function a1(a2)
+    local a3 = nil
+    local a4 = game.Players.LocalPlayer.Character.HumanoidRootPart.Position
+    if a2 == "Closest" then
+        local a0 = math.huge
+        for Y, a5 in ipairs(game.Players:GetPlayers()) do
             if
-                a3 ~= game.Players.LocalPlayer and a3.Character and a3.Character:FindFirstChild("HumanoidRootPart") and
-                    a3.Character:FindFirstChild("Humanoid").Health > 0 and
-                    not a3.Character:FindFirstChildOfClass("ForceField")
+                a5 ~= game.Players.LocalPlayer and a5.Character and a5.Character:FindFirstChild("HumanoidRootPart") and
+                    a5.Character:FindFirstChild("Humanoid").Health > 0 and
+                    not a5.Character:FindFirstChildOfClass("ForceField")
              then
-                local a4 = (a2 - a3.Character.HumanoidRootPart.Position).Magnitude
-                if a4 < Z then
-                    a1, Z = a3, a4
+                local a6 = (a4 - a5.Character.HumanoidRootPart.Position).Magnitude
+                if a6 < a0 then
+                    a3, a0 = a5, a6
                 end
             end
         end
-    elseif a0 == "Random" then
-        local a5 = {}
-        for W, a3 in ipairs(game.Players:GetPlayers()) do
+    elseif a2 == "Random" then
+        local a7 = {}
+        for Y, a5 in ipairs(game.Players:GetPlayers()) do
             if
-                a3 ~= game.Players.LocalPlayer and a3.Character and a3.Character:FindFirstChild("HumanoidRootPart") and
-                    a3.Character:FindFirstChild("Humanoid").Health > 0 and
-                    not a3.Character:FindFirstChildOfClass("ForceField")
+                a5 ~= game.Players.LocalPlayer and a5.Character and a5.Character:FindFirstChild("HumanoidRootPart") and
+                    a5.Character:FindFirstChild("Humanoid").Health > 0 and
+                    not a5.Character:FindFirstChildOfClass("ForceField")
              then
-                local a4 = (a2 - a3.Character.HumanoidRootPart.Position).Magnitude
-                if a4 <= Q then
-                    table.insert(a5, a3)
+                local a6 = (a4 - a5.Character.HumanoidRootPart.Position).Magnitude
+                if a6 <= S then
+                    table.insert(a7, a5)
                 end
             end
         end
-        if #a5 > 0 then
-            a1 = a5[math.random(1, #a5)]
+        if #a7 > 0 then
+            a3 = a7[math.random(1, #a7)]
         end
-    elseif a0 == "Farthest" then
-        local a6 = 0
-        for W, a3 in ipairs(game.Players:GetPlayers()) do
-            if
-                a3 ~= game.Players.LocalPlayer and a3.Character and a3.Character:FindFirstChild("HumanoidRootPart") and
-                    a3.Character:FindFirstChild("Humanoid").Health > 0 and
-                    not a3.Character:FindFirstChildOfClass("ForceField")
-             then
-                local a4 = (a2 - a3.Character.HumanoidRootPart.Position).Magnitude
-                if a4 > a6 and a4 <= Q then
-                    a1, a6 = a3, a4
-                end
-            end
-        end
-    elseif a0 == "Weakest" then
-        local a7 = math.huge
-        for W, a3 in ipairs(game.Players:GetPlayers()) do
-            if
-                a3 ~= game.Players.LocalPlayer and a3.Character and a3.Character:FindFirstChild("HumanoidRootPart") and
-                    a3.Character:FindFirstChild("Humanoid").Health > 0 and
-                    not a3.Character:FindFirstChildOfClass("ForceField")
-             then
-                local a4 = (a2 - a3.Character.HumanoidRootPart.Position).Magnitude
-                if a4 <= Q and a3.Character.Humanoid.Health < a7 then
-                    a1, a7 = a3, a3.Character.Humanoid.Health
-                end
-            end
-        end
-    elseif a0 == "Strongest" then
+    elseif a2 == "Farthest" then
         local a8 = 0
-        for W, a3 in ipairs(game.Players:GetPlayers()) do
+        for Y, a5 in ipairs(game.Players:GetPlayers()) do
             if
-                a3 ~= game.Players.LocalPlayer and a3.Character and a3.Character:FindFirstChild("HumanoidRootPart") and
-                    a3.Character:FindFirstChild("Humanoid").Health > 0 and
-                    not a3.Character:FindFirstChildOfClass("ForceField")
+                a5 ~= game.Players.LocalPlayer and a5.Character and a5.Character:FindFirstChild("HumanoidRootPart") and
+                    a5.Character:FindFirstChild("Humanoid").Health > 0 and
+                    not a5.Character:FindFirstChildOfClass("ForceField")
              then
-                local a4 = (a2 - a3.Character.HumanoidRootPart.Position).Magnitude
-                if a4 <= Q and a3.Character.Humanoid.Health > a8 then
-                    a1, a8 = a3, a3.Character.Humanoid.Health
+                local a6 = (a4 - a5.Character.HumanoidRootPart.Position).Magnitude
+                if a6 > a8 and a6 <= S then
+                    a3, a8 = a5, a6
+                end
+            end
+        end
+    elseif a2 == "Weakest" then
+        local a9 = math.huge
+        for Y, a5 in ipairs(game.Players:GetPlayers()) do
+            if
+                a5 ~= game.Players.LocalPlayer and a5.Character and a5.Character:FindFirstChild("HumanoidRootPart") and
+                    a5.Character:FindFirstChild("Humanoid").Health > 0 and
+                    not a5.Character:FindFirstChildOfClass("ForceField")
+             then
+                local a6 = (a4 - a5.Character.HumanoidRootPart.Position).Magnitude
+                if a6 <= S and a5.Character.Humanoid.Health < a9 then
+                    a3, a9 = a5, a5.Character.Humanoid.Health
+                end
+            end
+        end
+    elseif a2 == "Strongest" then
+        local aa = 0
+        for Y, a5 in ipairs(game.Players:GetPlayers()) do
+            if
+                a5 ~= game.Players.LocalPlayer and a5.Character and a5.Character:FindFirstChild("HumanoidRootPart") and
+                    a5.Character:FindFirstChild("Humanoid").Health > 0 and
+                    not a5.Character:FindFirstChildOfClass("ForceField")
+             then
+                local a6 = (a4 - a5.Character.HumanoidRootPart.Position).Magnitude
+                if a6 <= S and a5.Character.Humanoid.Health > aa then
+                    a3, aa = a5, a5.Character.Humanoid.Health
                 end
             end
         end
     end
-    return a1
+    return a3
 end
-z:AddDropdown(
+B:AddDropdown(
     {
         Name = "Targeting Mode",
         Default = "Closest",
         List = {"Closest", "Farthest", "Strongest", "Weakest", "Random"},
-        Callback = function(R)
-            N = R
+        Callback = function(T)
+            P = T
         end
     }
 )
-local function a9()
-    local aa = _(N)
-    if aa then
-        local a4 =
-            (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - aa.Character.HumanoidRootPart.Position).Magnitude
-        if a4 <= Q and aa.Character.Humanoid.Health > 0 and not aa.Character:FindFirstChildOfClass("ForceField") then
-            if P then
-                for W, ab in ipairs({"WoodenSword", "Sword"}) do
-                    l(true, ab)
+local function ab()
+    local ac = a1(P)
+    if ac then
+        local a6 =
+            (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - ac.Character.HumanoidRootPart.Position).Magnitude
+        if a6 <= S and ac.Character.Humanoid.Health > 0 and not ac.Character:FindFirstChildOfClass("ForceField") then
+            if R then
+                for Y, ad in ipairs({"WoodenSword", "Sword"}) do
+                    n(true, ad)
                 end
             end
-            for W, n in ipairs({"WoodenSword", "Sword"}) do
-                h.AttackPlayerWithSword:InvokeServer(aa.Character, critsActive, n)
+            for Y, p in ipairs({"WoodenSword", "Sword"}) do
+                j.AttackPlayerWithSword:InvokeServer(ac.Character, critsActive, p)
             end
         else
-            if P then
-                for W, ab in ipairs({"WoodenSword", "Sword"}) do
-                    l(false, ab)
+            if R then
+                for Y, ad in ipairs({"WoodenSword", "Sword"}) do
+                    n(false, ad)
                 end
             end
         end
     end
 end
-local ac
-local function ad(ae)
-    if ae then
-        if not ac then
-            ac =
-                game:GetService("RunService")[O]:Connect(
+local ae
+local function af(ag)
+    if ag then
+        if not ae then
+            ae =
+                game:GetService("RunService")[Q]:Connect(
                 function()
-                    pcall(a9)
+                    pcall(ab)
                 end
             )
         end
-    elseif ac then
-        ac:Disconnect()
-        ac = nil
+    elseif ae then
+        ae:Disconnect()
+        ae = nil
     end
 end
-z:AddToggle({Name = "Aura", Default = false, Keybind = 1, Callback = ad})
-z:AddToggle(
-    {Name = "Auto block", Default = false, Callback = function(ae)
-            P = ae
+B:AddToggle({Name = "Aura", Default = false, Keybind = 1, Callback = af})
+B:AddToggle(
+    {Name = "Auto block", Default = false, Callback = function(ag)
+            R = ag
         end}
 )
-z:AddToggle(
-    {Name = "Crits", Default = false, Callback = function(ae)
-            critsActive = ae
+B:AddToggle(
+    {Name = "Crits", Default = false, Callback = function(ag)
+            critsActive = ag
         end}
 )
-z:AddSlider(
-    {Name = "Aura Range", Min = 1, Max = 36, Default = 24, Callback = function(R)
-            Q = R
+B:AddSlider(
+    {Name = "Aura Range", Min = 1, Max = 36, Default = 24, Callback = function(T)
+            S = T
         end}
 )
-local af
-z:AddToggle(
+local ah
+B:AddToggle(
     {
         Name = "Click Aura",
         Default = false,
         Keybind = 1,
-        Callback = function(ag)
-            local X = game.Players.LocalPlayer
-            local i = X:GetMouse()
-            local function ah(X)
-                local ai, aj = nil, math.huge
-                for W, ak in pairs(game.Players:GetPlayers()) do
-                    if ak ~= X and ak.Character and ak.Character:FindFirstChild("HumanoidRootPart") then
-                        local Z =
-                            (X.Character.HumanoidRootPart.Position - ak.Character.HumanoidRootPart.Position).Magnitude
-                        if Z < aj then
-                            aj, ai = Z, ak
+        Callback = function(ai)
+            local Z = game.Players.LocalPlayer
+            local k = Z:GetMouse()
+            local function aj(Z)
+                local ak, al = nil, math.huge
+                for Y, am in pairs(game.Players:GetPlayers()) do
+                    if am ~= Z and am.Character and am.Character:FindFirstChild("HumanoidRootPart") then
+                        local a0 =
+                            (Z.Character.HumanoidRootPart.Position - am.Character.HumanoidRootPart.Position).Magnitude
+                        if a0 < al then
+                            al, ak = a0, am
                         end
                     end
                 end
-                return ai
+                return ak
             end
-            local function al()
-                local ai = ah(X)
-                if ai and ai.Character then
-                    local am = {"WoodenSword", "Sword"}
-                    for W, n in ipairs(am) do
-                        local an = {[1] = workspace:WaitForChild(ai.Name), [2] = true, [3] = n}
+            local function an()
+                local ak = aj(Z)
+                if ak and ak.Character then
+                    local ao = {"WoodenSword", "Sword"}
+                    for Y, p in ipairs(ao) do
+                        local ap = {[1] = workspace:WaitForChild(ak.Name), [2] = true, [3] = p}
                         game:GetService("ReplicatedStorage"):WaitForChild("Packages"):WaitForChild("Knit"):WaitForChild(
                             "Services"
                         ):WaitForChild("ToolService"):WaitForChild("RF"):WaitForChild("AttackPlayerWithSword"):InvokeServer(
-                            unpack(an)
+                            unpack(ap)
                         )
                     end
                 end
             end
-            if ag then
-                af = i.Button1Down:Connect(al)
+            if ai then
+                ah = k.Button1Down:Connect(an)
             else
-                if af then
-                    af:Disconnect()
-                    af = nil
+                if ah then
+                    ah:Disconnect()
+                    ah = nil
                 end
             end
         end
     }
 )
-local function ao()
+local function aq()
     if FaceTarget then
-        local ap = S()
+        local ar = U()
         task.wait(0.05)
-        local an = {[1] = Vector3.new(ap.X, ap.Y, ap.Z)}
+        local ap = {[1] = Vector3.new(ar.X, ar.Y, ar.Z)}
         game:GetService("ReplicatedStorage"):WaitForChild("Packages"):WaitForChild("Knit"):WaitForChild("Services"):WaitForChild(
             "ToolService"
-        ):WaitForChild("RF"):WaitForChild("UpdateHeadRotation"):InvokeServer(unpack(an))
+        ):WaitForChild("RF"):WaitForChild("UpdateHeadRotation"):InvokeServer(unpack(ap))
     end
 end
-game:GetService("RunService").Heartbeat:Connect(ao)
-z:AddToggle(
-    {Name = "Serverside Face", Default = false, Callback = function(ae)
-            FaceTarget = ae
+game:GetService("RunService").Heartbeat:Connect(aq)
+B:AddToggle(
+    {Name = "Serverside Face", Default = false, Callback = function(ag)
+            FaceTarget = ag
         end}
 )
-local aq, ar, w, as, ae = "Head", 30, 1, 0.1, false
-A:AddDropdown(
+local as, at, y, au, ag = "Head", 30, 1, 0.1, false
+C:AddDropdown(
     {
         Name = "Target Part",
         List = {
@@ -299,182 +309,182 @@ A:AddDropdown(
             "LowerTorso",
             "RightUpperLeg"
         },
-        Default = aq,
-        Callback = function(at)
-            aq = at
+        Default = as,
+        Callback = function(av)
+            as = av
         end
     }
 )
-A:AddSlider(
-    {Name = "Charge time", Min = 0, Max = 50, Default = ar, Callback = function(R)
-            ar = R
+C:AddSlider(
+    {Name = "Charge time", Min = 0, Max = 50, Default = at, Callback = function(T)
+            at = T
         end}
 )
-A:AddSlider(
-    {Name = "Y Offset", Min = -15, Max = 15, Default = w, Callback = function(R)
-            w = R
+C:AddSlider(
+    {Name = "Y Offset", Min = -15, Max = 15, Default = y, Callback = function(T)
+            y = T
         end}
 )
-A:AddSlider(
-    {Name = "Prediction", Min = 0, Max = 3.0, Default = as, Precise = 1, Callback = function(R)
-            as = R
+C:AddSlider(
+    {Name = "Prediction", Min = 0, Max = 3.0, Default = au, Precise = 1, Callback = function(T)
+            au = T
         end}
 )
-A:AddToggle(
-    {Name = "Bow Aura", Callback = function(au)
-            ae = au
-            if ae then
-                local av = game.Players.LocalPlayer
-                local function aw()
+C:AddToggle(
+    {Name = "Bow Aura", Callback = function(aw)
+            ag = aw
+            if ag then
+                local ax = game.Players.LocalPlayer
+                local function ay()
                     while true do
-                        if ae then
-                            local Y = av.Character or av.CharacterAdded:Wait()
-                            local ax = Y:WaitForChild(aq)
-                            local ay = ax and ax.Position
-                            if not ay then
+                        if ag then
+                            local _ = ax.Character or ax.CharacterAdded:Wait()
+                            local az = _:WaitForChild(as)
+                            local aA = az and az.Position
+                            if not aA then
                                 return
                             end
-                            local ai, aj, az
-                            for W, X in ipairs(game.Players:GetPlayers()) do
-                                if X ~= av and X.Character then
-                                    local aA = X.Character:FindFirstChild(aq)
-                                    local t = aA and aA.Position
-                                    local aB = X.Character:FindFirstChildOfClass("Humanoid").RootPart.Velocity
-                                    if t then
-                                        local Z = (t - ay).magnitude
-                                        local aC = s(t, aB, as, w)
-                                        local aD = (aC - ay).magnitude
-                                        if not aj or aD < aj then
-                                            ai = X
-                                            aj = aD
-                                            az = aC
+                            local ak, al, aB
+                            for Y, Z in ipairs(game.Players:GetPlayers()) do
+                                if Z ~= ax and Z.Character then
+                                    local aC = Z.Character:FindFirstChild(as)
+                                    local v = aC and aC.Position
+                                    local aD = Z.Character:FindFirstChildOfClass("Humanoid").RootPart.Velocity
+                                    if v then
+                                        local a0 = (v - aA).magnitude
+                                        local aE = u(v, aD, au, y)
+                                        local aF = (aE - aA).magnitude
+                                        if not al or aF < al then
+                                            ak = Z
+                                            al = aF
+                                            aB = aE
                                         end
                                     end
                                 end
                             end
-                            if ai and az then
-                                o("DefaultBow")
-                                game.Players.LocalPlayer.Character.DefaultBow.__comm__.RF.Fire:InvokeServer(az, ar)
-                                r("DefaultBow")
+                            if ak and aB then
+                                q("DefaultBow")
+                                game.Players.LocalPlayer.Character.DefaultBow.__comm__.RF.Fire:InvokeServer(aB, at)
+                                t("DefaultBow")
                             end
                         end
                         wait(2.970)
                     end
                 end
-                coroutine.wrap(aw)()
+                coroutine.wrap(ay)()
             end
         end}
 )
-local aE, aF, aG, aH, aI, aJ = 1.0, false, false, 1.0 / 200, false, false
-local function aK()
-    if aG then
-        aI = true
-        if aJ then
-            aJ:Disconnect()
+local aG, aH, aI, aJ, aK, aL = 1.0, false, false, 1.0 / 200, false, false
+local function aM()
+    if aI then
+        aK = true
+        if aL then
+            aL:Disconnect()
         end
-        aJ =
+        aL =
             game:GetService("RunService").Stepped:Connect(
             function()
-                if not aI then
+                if not aK then
                     return
                 end
-                local aL = aH
-                if aF and game.Players.LocalPlayer:GetAttribute("Blocking") == true then
-                    aL = aL * aE
+                local aN = aJ
+                if aH and game.Players.LocalPlayer:GetAttribute("Blocking") == true then
+                    aN = aN * aG
                 end
-                local Y = game.Players.LocalPlayer.Character
-                if Y and Y:FindFirstChild("HumanoidRootPart") then
-                    Y.HumanoidRootPart.CFrame = Y.HumanoidRootPart.CFrame + Y.Humanoid.MoveDirection * aL
+                local _ = game.Players.LocalPlayer.Character
+                if _ and _:FindFirstChild("HumanoidRootPart") then
+                    _.HumanoidRootPart.CFrame = _.HumanoidRootPart.CFrame + _.Humanoid.MoveDirection * aN
                 end
             end
         )
     else
-        aI = false
-        if aJ then
-            aJ:Disconnect()
+        aK = false
+        if aL then
+            aL:Disconnect()
         end
     end
 end
-B:AddSlider(
-    {Name = "Block speed", Min = 1, Max = 2.20, Value = aE, Precise = 2, Callback = function(R)
-            aE = R
+D:AddSlider(
+    {Name = "Block speed", Min = 1, Max = 2.20, Value = aG, Precise = 2, Callback = function(T)
+            aG = T
         end}
 )
-B:AddToggle(
-    {Name = "Block noslow", Value = aF, Callback = function(ae)
-            aF = ae
+D:AddToggle(
+    {Name = "Block noslow", Value = aH, Callback = function(ag)
+            aH = ag
         end}
 )
-B:AddToggle(
-    {Name = "Speed", Value = aG, Keybind = 1, Callback = function(ae)
-            aG = ae
-            aK()
+D:AddToggle(
+    {Name = "Speed", Value = aI, Keybind = 1, Callback = function(ag)
+            aI = ag
+            aM()
         end}
 )
-B:AddSlider(
-    {Name = "Speed", Min = 0, Max = 50, Value = aH * 200, Callback = function(aM, aN)
-            aH = aM / 200
-            if aG then
-                aK()
+D:AddSlider(
+    {Name = "Speed", Min = 0, Max = 50, Value = aJ * 200, Callback = function(aO, aP)
+            aJ = aO / 200
+            if aI then
+                aM()
             end
         end}
 )
 game.Players.LocalPlayer.CharacterAdded:Connect(
     function()
-        aK()
+        aM()
     end
 )
-B:AddSlider(
-    {Name = "Gravity", Min = 0, Max = 192, Callback = function(aM, aN)
-            workspace.Gravity = aM
+D:AddSlider(
+    {Name = "Gravity", Min = 0, Max = 192, Callback = function(aO, aP)
+            workspace.Gravity = aO
         end}
 )
-local aO, aP, aQ = {}, nil, false
-local function aR()
-    for W, ax in pairs(game.Players.LocalPlayer.Character:GetDescendants()) do
-        if ax:IsA("BasePart") and ax.CanCollide then
-            aO[ax] = true
-            ax.CanCollide = false
+local aQ, aR, aS = {}, nil, false
+local function aT()
+    for Y, az in pairs(game.Players.LocalPlayer.Character:GetDescendants()) do
+        if az:IsA("BasePart") and az.CanCollide then
+            aQ[az] = true
+            az.CanCollide = false
         end
     end
 end
-B:AddToggle(
-    {Name = "Phase", Value = aQ, Keybind = 1, Callback = function(ae)
-            aQ = ae
-            if ae then
-                aP = game:GetService("RunService").Stepped:Connect(aR)
+D:AddToggle(
+    {Name = "Phase", Value = aS, Keybind = 1, Callback = function(ag)
+            aS = ag
+            if ag then
+                aR = game:GetService("RunService").Stepped:Connect(aT)
             else
-                if aP then
-                    aP:Disconnect()
+                if aR then
+                    aR:Disconnect()
                 end
-                for ax in pairs(aO) do
-                    if ax then
-                        ax.CanCollide = true
+                for az in pairs(aQ) do
+                    if az then
+                        az.CanCollide = true
                     end
                 end
-                table.clear(aO)
+                table.clear(aQ)
             end
         end}
 )
-local aS, aT = false, 0.80
-B:AddToggle(
-    {Name = "Air Check", Value = aS, Callback = function(ae)
-            aS = ae
+local aU, aV = false, 0.80
+D:AddToggle(
+    {Name = "Air Check", Value = aU, Callback = function(ag)
+            aU = ag
         end}
 )
-B:AddToggle(
-    {Name = "Bhop", Value = BhopActive, Keybind = 1, Callback = function(ae)
-            BhopActive = ae
-            if ae then
-                while ae do
+D:AddToggle(
+    {Name = "Bhop", Value = BhopActive, Keybind = 1, Callback = function(ag)
+            BhopActive = ag
+            if ag then
+                while ag do
                     if
-                        not aS or
+                        not aU or
                             game.Players.LocalPlayer.Character.Humanoid:GetState() ~= Enum.HumanoidStateType.Freefall
                      then
                         game.Players.LocalPlayer.Character:WaitForChild("Humanoid"):ChangeState(
                             Enum.HumanoidStateType.Jumping
                         )
-                        task.wait(aT)
+                        task.wait(aV)
                     end
                     if not BhopActive then
                         break
@@ -484,265 +494,265 @@ B:AddToggle(
             end
         end}
 )
-B:AddSlider(
-    {Name = "Bhop delay", Min = 0, Max = 1, Precise = 2, Value = aT, Callback = function(aM, aN)
-            aT = aM
+D:AddSlider(
+    {Name = "Bhop delay", Min = 0, Max = 1, Precise = 2, Value = aV, Callback = function(aO, aP)
+            aV = aO
         end}
 )
-local aU = false
-local aV
-local function aW(Y)
-    if Y:FindFirstChild("HumanoidRootPart") then
-        local aX = Y.HumanoidRootPart.Position
-        local w = Y.Humanoid.HipHeight - -1
-        aV.Position = Vector3.new(aX.X, aX.Y - w, aX.Z)
+local aW = false
+local aX
+local function aY(_)
+    if _:FindFirstChild("HumanoidRootPart") then
+        local aZ = _.HumanoidRootPart.Position
+        local y = _.Humanoid.HipHeight - -1
+        aX.Position = Vector3.new(aZ.X, aZ.Y - y, aZ.Z)
     end
 end
-B:AddToggle(
-    {Name = "Fly", Value = aU, Keybind = 1, Callback = function(ae)
-            aU = ae
-            local X = game.Players.LocalPlayer
-            local Y = X.Character or X.CharacterAdded:Wait()
-            if ae then
-                aV = Instance.new("Part")
-                aV.Size = Vector3.new(2, 0.1, 2)
-                aV.Anchored = true
-                aV.CanCollide = true
-                aV.Transparency = 1
-                aV.BrickColor = BrickColor.new("Medium stone grey")
-                aV.Parent = game.Workspace
-                while aU do
-                    aW(Y)
+D:AddToggle(
+    {Name = "Fly", Value = aW, Keybind = 1, Callback = function(ag)
+            aW = ag
+            local Z = game.Players.LocalPlayer
+            local _ = Z.Character or Z.CharacterAdded:Wait()
+            if ag then
+                aX = Instance.new("Part")
+                aX.Size = Vector3.new(2, 0.1, 2)
+                aX.Anchored = true
+                aX.CanCollide = true
+                aX.Transparency = 1
+                aX.BrickColor = BrickColor.new("Medium stone grey")
+                aX.Parent = game.Workspace
+                while aW do
+                    aY(_)
                     task.wait()
                 end
             else
-                if aV then
-                    aV:Destroy()
+                if aX then
+                    aX:Destroy()
                 end
             end
         end}
 )
-local aY, aZ = false, 0.02
-local function a_(b0, b1, b2)
-    local b3, b4, b5 = math.clamp, Vector3.new, tick()
-    local b6 = game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
-    if b6 then
-        b6.Anchored = true
+local a_, b0 = false, 0.02
+local function b1(b2, b3, b4)
+    local b5, b6, b7 = math.clamp, Vector3.new, tick()
+    local b8 = game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+    if b8 then
+        b8.Anchored = true
     end
-    while tick() - b5 <= aZ do
-        if b6 then
-            b6.Velocity = b4(b3(b6.Velocity.X, -b0, b0), b3(b6.Velocity.Y, -b1, b1), b3(b6.Velocity.Z, -b2, b2))
+    while tick() - b7 <= b0 do
+        if b8 then
+            b8.Velocity = b6(b5(b8.Velocity.X, -b2, b2), b5(b8.Velocity.Y, -b3, b3), b5(b8.Velocity.Z, -b4, b4))
         end
         task.wait()
     end
-    if b6 then
-        b6.Anchored = false
+    if b8 then
+        b8.Anchored = false
     end
 end
-local function b7(b8)
-    if aY and k and b8 < k then
-        a_(0, 0, 0)
+local function b9(ba)
+    if a_ and m and ba < m then
+        b1(0, 0, 0)
     end
-    k = b8
+    m = ba
 end
-local function b9()
-    while aY do
-        b7(game.Players.LocalPlayer.Character.Humanoid.Health)
+local function bb()
+    while a_ do
+        b9(game.Players.LocalPlayer.Character.Humanoid.Health)
         task.wait(0.03)
     end
 end
-game.Players.LocalPlayer.Character.Humanoid.HealthChanged:Connect(b7)
-B:AddToggle(
-    {Name = "Antikb", Default = false, Callback = function(R)
-            aY = R
-            if aY then
-                spawn(b9)
+game.Players.LocalPlayer.Character.Humanoid.HealthChanged:Connect(b9)
+D:AddToggle(
+    {Name = "Antikb", Default = false, Callback = function(T)
+            a_ = T
+            if a_ then
+                spawn(bb)
             end
         end}
 )
-B:AddSlider(
-    {Name = "Anti kb no-move", Min = 0, Max = 1, Precise = 2, Default = 0.02, Callback = function(R)
-            aZ = R
+D:AddSlider(
+    {Name = "Anti kb no-move", Min = 0, Max = 1, Precise = 2, Default = 0.02, Callback = function(T)
+            b0 = T
         end}
 )
-local ba = false
-local bb = 20
-local bc = 5
+local bc = false
 local bd = 20
-local be = 0.1
-local bf = nil
-local bg = nil
-local function bh()
-    local aj = math.huge
-    local bi = nil
-    local X = game.Players.LocalPlayer
-    local Y = X.Character or X.CharacterAdded:Wait()
-    local T = game:GetService("Players")
-    for W, ak in pairs(T:GetPlayers()) do
-        if ak ~= X and ak.Character and ak.Character:FindFirstChild("HumanoidRootPart") then
-            local Z = (Y.HumanoidRootPart.Position - ak.Character.HumanoidRootPart.Position).magnitude
-            if Z < aj and ak.Character.Humanoid.Health > 0 then
-                aj = Z
-                bi = ak
+local be = 5
+local bf = 20
+local bg = 0.1
+local bh = nil
+local bi = nil
+local function bj()
+    local al = math.huge
+    local bk = nil
+    local Z = game.Players.LocalPlayer
+    local _ = Z.Character or Z.CharacterAdded:Wait()
+    local V = game:GetService("Players")
+    for Y, am in pairs(V:GetPlayers()) do
+        if am ~= Z and am.Character and am.Character:FindFirstChild("HumanoidRootPart") then
+            local a0 = (_.HumanoidRootPart.Position - am.Character.HumanoidRootPart.Position).magnitude
+            if a0 < al and am.Character.Humanoid.Health > 0 then
+                al = a0
+                bk = am
             end
         end
     end
-    return bi
+    return bk
 end
-local function bj(bk, t)
-    local bl = Vector3.new(math.cos(bk) * bc, 0, math.sin(bk) * bc)
-    return t + bl
+local function bl(bm, v)
+    local bn = Vector3.new(math.cos(bm) * be, 0, math.sin(bm) * be)
+    return v + bn
 end
-local function aW()
-    local X = game.Players.LocalPlayer
-    local Y = X.Character
-    local bm = game:GetService("RunService")
-    if bf and bf.Character and bf.Character:FindFirstChild("HumanoidRootPart") then
-        if bf.Character.Humanoid.Health > 0 then
-            local t = bf.Character.HumanoidRootPart.Position
-            local Z = (Y.HumanoidRootPart.Position - t).magnitude
-            if Z <= bd then
-                local bn = bj(tick() * bb / 10, t)
-                Y.HumanoidRootPart.CFrame = Y.HumanoidRootPart.CFrame:lerp(CFrame.new(bn), be)
+local function aY()
+    local Z = game.Players.LocalPlayer
+    local _ = Z.Character
+    local bo = game:GetService("RunService")
+    if bh and bh.Character and bh.Character:FindFirstChild("HumanoidRootPart") then
+        if bh.Character.Humanoid.Health > 0 then
+            local v = bh.Character.HumanoidRootPart.Position
+            local a0 = (_.HumanoidRootPart.Position - v).magnitude
+            if a0 <= bf then
+                local bp = bl(tick() * bd / 10, v)
+                _.HumanoidRootPart.CFrame = _.HumanoidRootPart.CFrame:lerp(CFrame.new(bp), bg)
             else
-                bf = nil
+                bh = nil
             end
         else
-            bf = nil
+            bh = nil
         end
     else
-        bf = bh()
+        bh = bj()
     end
 end
-local function bo(R)
-    ba = R
-    if R then
-        bg = game:GetService("RunService").RenderStepped:Connect(aW)
-    elseif bg then
-        bg:Disconnect()
+local function bq(T)
+    bc = T
+    if T then
+        bi = game:GetService("RunService").RenderStepped:Connect(aY)
+    elseif bi then
+        bi:Disconnect()
     end
 end
-C:AddToggle({Name = "Strafe", Keybind = 1, Default = false, Callback = bo})
-C:AddSlider(
-    {Name = "Strafe Speed", Min = 1, Max = 100, Precise = 1, Value = bb, Callback = function(aM, aN)
-            bb = aM
+E:AddToggle({Name = "Strafe", Keybind = 1, Default = false, Callback = bq})
+E:AddSlider(
+    {Name = "Strafe Speed", Min = 1, Max = 100, Precise = 1, Value = bd, Callback = function(aO, aP)
+            bd = aO
         end}
 )
-C:AddSlider(
-    {Name = "Smoothness", Min = 0.1, Max = 1, Precise = 2, Value = be, Callback = function(aM, aN)
-            be = aM
+E:AddSlider(
+    {Name = "Smoothness", Min = 0.1, Max = 1, Precise = 2, Value = bg, Callback = function(aO, aP)
+            bg = aO
         end}
 )
-C:AddSlider(
-    {Name = "Strafe Distance", Min = 1, Max = 20, Precise = 1, Value = bc, Callback = function(aM, aN)
-            bc = aM
+E:AddSlider(
+    {Name = "Strafe Distance", Min = 1, Max = 20, Precise = 1, Value = be, Callback = function(aO, aP)
+            be = aO
         end}
 )
-C:AddSlider(
-    {Name = "Max Target Distance", Min = 1, Max = 50, Value = bd, Callback = function(aM, aN)
-            bd = aM
+E:AddSlider(
+    {Name = "Max Target Distance", Min = 1, Max = 50, Value = bf, Callback = function(aO, aP)
+            bf = aO
         end}
 )
-local bp
-D:AddToggle(
-    {Name = "Antivoid", Value = false, Callback = function(ae)
-            if ae then
-                bp = Instance.new("Part")
-                bp.Name = "Antivoid"
-                bp.Position = Vector3.new(0, -150, 0)
-                bp.Size = Vector3.new(1000, 1, 1000)
-                bp.Anchored = true
-                bp.CanCollide = true
-                bp.Transparency = 1
-                bp.BrickColor = BrickColor.new("Medium stone grey")
-                bp.Parent = game.Workspace
+local br
+F:AddToggle(
+    {Name = "Antivoid", Value = false, Callback = function(ag)
+            if ag then
+                br = Instance.new("Part")
+                br.Name = "Antivoid"
+                br.Position = Vector3.new(0, -150, 0)
+                br.Size = Vector3.new(1000, 1, 1000)
+                br.Anchored = true
+                br.CanCollide = true
+                br.Transparency = 1
+                br.BrickColor = BrickColor.new("Medium stone grey")
+                br.Parent = game.Workspace
             else
-                local bq = game.Workspace:FindFirstChild("Antivoid")
-                if bq then
-                    bq:Destroy()
+                local bs = game.Workspace:FindFirstChild("Antivoid")
+                if bs then
+                    bs:Destroy()
                 end
             end
         end}
 )
-local br =
-    D:AddSlider(
-    {Name = "Antivoid Transparency", Value = 0, Min = 0, Max = 1, Precise = 1, Callback = function(bs)
-            if bp then
-                bp.Transparency = bs
+local bt =
+    F:AddSlider(
+    {Name = "Antivoid Transparency", Value = 0, Min = 0, Max = 1, Precise = 1, Callback = function(bu)
+            if br then
+                br.Transparency = bu
             end
         end}
 )
-local bt, bu, bv, bw, bx, by, bz, bA = 1, 1, 1, false, nil, 0.5, Enum.Material.Neon, Color3.fromRGB(225, 160, 255)
-F:AddSlider(
-    {Name = "X axis", Min = 1, Max = 10, Callback = function(R)
-            bt = R
+local bv, bw, bx, by, bz, bA, bB, bC = 1, 1, 1, false, nil, 0.5, Enum.Material.Neon, Color3.fromRGB(225, 160, 255)
+H:AddSlider(
+    {Name = "X axis", Min = 1, Max = 10, Callback = function(T)
+            bv = T
         end}
 )
-F:AddSlider(
-    {Name = "Y axis", Min = 1, Max = 10, Callback = function(R)
-            bu = R
+H:AddSlider(
+    {Name = "Y axis", Min = 1, Max = 10, Callback = function(T)
+            bw = T
         end}
 )
-F:AddSlider(
-    {Name = "Z axis", Min = 1, Max = 10, Callback = function(R)
-            bv = R
+H:AddSlider(
+    {Name = "Z axis", Min = 1, Max = 10, Callback = function(T)
+            bx = T
         end}
 )
-F:AddSlider(
-    {Name = "Transparency", Min = 0, Max = 1, Callback = function(R)
-            by = R
+H:AddSlider(
+    {Name = "Transparency", Min = 0, Max = 1, Callback = function(T)
+            bA = T
         end}
 )
-F:AddDropdown(
+H:AddDropdown(
     {
         Name = "Material",
         List = {"Plastic", "SmoothPlastic", "Neon", "ForceField", "Glass"},
         Default = "Neon",
-        Callback = function(at)
-            if at == "Plastic" then
-                bz = Enum.Material.Plastic
-            elseif at == "SmoothPlastic" then
-                bz = Enum.Material.SmoothPlastic
-            elseif at == "Neon" then
-                bz = Enum.Material.Neon
-            elseif at == "ForceField" then
-                bz = Enum.Material.ForceField
-            elseif at == "Glass" then
-                bz = Enum.Material.Glass
+        Callback = function(av)
+            if av == "Plastic" then
+                bB = Enum.Material.Plastic
+            elseif av == "SmoothPlastic" then
+                bB = Enum.Material.SmoothPlastic
+            elseif av == "Neon" then
+                bB = Enum.Material.Neon
+            elseif av == "ForceField" then
+                bB = Enum.Material.ForceField
+            elseif av == "Glass" then
+                bB = Enum.Material.Glass
             end
         end
     }
 )
-F:AddColorPicker(
-    {Name = "Color", Default = bA, Callback = function(bB)
-            bA = bB
+H:AddColorPicker(
+    {Name = "Color", Default = bC, Callback = function(bD)
+            bC = bD
         end}
 )
-F:AddToggle(
-    {Name = "Hitbox Visual", Callback = function(ae)
-            bw = ae
+H:AddToggle(
+    {Name = "Hitbox Visual", Callback = function(ag)
+            by = ag
         end}
 )
-F:AddToggle(
+H:AddToggle(
     {
         Name = "Hitbox",
-        Callback = function(ae)
-            if ae then
-                local function bC()
-                    bx =
+        Callback = function(ag)
+            if ag then
+                local function bE()
+                    bz =
                         game:GetService("RunService").RenderStepped:Connect(
                         function()
-                            for W, X in ipairs(game:GetService("Players"):GetPlayers()) do
-                                if X.Name ~= game:GetService("Players").LocalPlayer.Name then
+                            for Y, Z in ipairs(game:GetService("Players"):GetPlayers()) do
+                                if Z.Name ~= game:GetService("Players").LocalPlayer.Name then
                                     pcall(
                                         function()
-                                            local bD = X.Character and X.Character:FindFirstChild("HumanoidRootPart")
-                                            if bD then
-                                                bD.Size = Vector3.new(bt, bu, bv)
-                                                bD.Transparency = bw and by or 1
-                                                bD.Material = bz
-                                                bD.Color = bA
-                                                bD.CanCollide = false
+                                            local bF = Z.Character and Z.Character:FindFirstChild("HumanoidRootPart")
+                                            if bF then
+                                                bF.Size = Vector3.new(bv, bw, bx)
+                                                bF.Transparency = by and bA or 1
+                                                bF.Material = bB
+                                                bF.Color = bC
+                                                bF.CanCollide = false
                                             end
                                         end
                                     )
@@ -751,22 +761,22 @@ F:AddToggle(
                         end
                     )
                 end
-                bC()
+                bE()
             else
-                if bx then
-                    bx:Disconnect()
-                    bx = nil
+                if bz then
+                    bz:Disconnect()
+                    bz = nil
                 end
-                for W, X in ipairs(game:GetService("Players"):GetPlayers()) do
-                    if X.Name ~= game:GetService("Players").LocalPlayer.Name then
+                for Y, Z in ipairs(game:GetService("Players"):GetPlayers()) do
+                    if Z.Name ~= game:GetService("Players").LocalPlayer.Name then
                         pcall(
                             function()
-                                local bD = X.Character and X.Character:FindFirstChild("HumanoidRootPart")
-                                if bD then
-                                    bD.Size = Vector3.new(2, 2, 2)
-                                    bD.Transparency = 1
-                                    bD.Material = Enum.Material.Plastic
-                                    bD.CanCollide = false
+                                local bF = Z.Character and Z.Character:FindFirstChild("HumanoidRootPart")
+                                if bF then
+                                    bF.Size = Vector3.new(2, 2, 2)
+                                    bF.Transparency = 1
+                                    bF.Material = Enum.Material.Plastic
+                                    bF.CanCollide = false
                                 end
                             end
                         )
@@ -776,51 +786,76 @@ F:AddToggle(
         end
     }
 )
-local bE, bF, bG = false, false, 18
-G:AddToggle(
-    {Name = "Auto Clicker", Keybind = 1, Callback = function(ae)
-            bE = ae
-            if ae then
-                bF = true
-                while bE and bF do
+local bG, bH, bI = false, false, 18
+I:AddToggle(
+    {Name = "Auto Clicker", Keybind = 1, Callback = function(ag)
+            bG = ag
+            if ag then
+                bH = true
+                while bG and bH do
                     mouse1click()
-                    wait(1 / bG)
+                    wait(1 / bI)
                 end
             else
-                bF = false
+                bH = false
             end
         end}
 )
-G:AddSlider(
-    {Name = "CPS", Min = 1, Max = 50, Def = bG, Callback = function(bs)
-            bG = bs
+I:AddSlider(
+    {Name = "CPS", Min = 1, Max = 50, Def = bI, Callback = function(bu)
+            bI = bu
         end}
 )
-G:AddToggle(
+local bJ, k, bK, bL = game:GetService("UserInputService"), game.Players.LocalPlayer:GetMouse(), false, false
+local ah
+I:AddToggle(
+    {
+        Name = "Double click",
+        Callback = function(ag)
+            bL = ag
+            if ag then
+                ah =
+                    bJ.InputBegan:Connect(
+                    function(bM, bN)
+                        if not bN and bM.UserInputType == Enum.UserInputType.MouseButton1 and not bK then
+                            task.wait(0.1)
+                            bK = true
+                            mouse1click()
+                            bK = false
+                        end
+                    end
+                )
+            elseif ah then
+                ah:Disconnect()
+            end
+        end
+    }
+)
+I:AddToggle(
     {
         Name = "Trigger bot",
         Keybind = 1,
-        Callback = function(ae)
-            triggerbotActive = ae
-            local bH
-            local bI = 0
+        Callback = function(ag)
+            triggerbotActive = ag
+            local bO
+            local bP = 0
             local minInterval = 1 / cpslimit
-            local function bJ(bK)
-                for W, X in pairs(game.Players:GetPlayers()) do
-                    if X.Character and bK and bK:IsDescendantOf(X.Character) then
+            local function bQ(bR)
+                for Y, Z in pairs(game.Players:GetPlayers()) do
+                    if Z.Character and bR and bR:IsDescendantOf(Z.Character) then
                         return true
                     end
                 end
                 return false
             end
-            if ae then
-                bH =
+            if ag then
+                bO =
                     game:GetService("RunService").Heartbeat:Connect(
                     function()
-                        if bJ(game.Players.LocalPlayer:GetMouse().Target) then
-                            local bL = tick()
-                            if bL - bI >= minInterval then
-                                bI = bL
+                        if bQ(game.Players.LocalPlayer:GetMouse().Target) then
+                            local bS = tick()
+                            if bS - bP >= minInterval then
+                                bP = bS
                                 mouse1press()
                                 task.wait()
                                 mouse1release()
@@ -829,10 +864,10 @@ G:AddToggle(
                     end
                 )
                 getgenv().disable = function()
-                    if bH then
-                        warn("Disconnecting:", bH)
-                        bH:Disconnect()
-                        bH = nil
+                    if bO then
+                        warn("Disconnecting:", bO)
+                        bO:Disconnect()
+                        bO = nil
                     end
                     getgenv().disable = nil
                 end
@@ -844,96 +879,96 @@ G:AddToggle(
         end
     }
 )
-G:AddSlider(
-    {Name = "CPS limit", Min = 1, Max = 50, Def = cpslimit, Callback = function(bs)
-            cpslimit = bs
+I:AddSlider(
+    {Name = "CPS limit", Min = 1, Max = 50, Def = cpslimit, Callback = function(bu)
+            cpslimit = bu
             minInterval = 1 / cpslimit
         end}
 )
-local bM, bN, bO, bP, bQ = "None", 0, 0, 0, 0
-local function bR(R)
-    settings():GetService("NetworkSettings").IncomingReplicationLag = R
+local bT, bU, bV, bW, bX = "None", 0, 0, 0, 0
+local function bY(T)
+    settings():GetService("NetworkSettings").IncomingReplicationLag = T
 end
-H:AddDropdown(
+J:AddDropdown(
     {
         Name = "Method",
         List = {"ReplicationLag", "Axis", "None"},
-        Default = bM,
-        Callback = function(at)
-            bM = at
-            if bM == "ReplicationLag" then
+        Default = bT,
+        Callback = function(av)
+            bT = av
+            if bT == "ReplicationLag" then
                 getgenv().Axis = false
-                bR(bN)
-            elseif bM == "Axis" then
+                bY(bU)
+            elseif bT == "Axis" then
                 getgenv().Axis = true
-                getgenv().Z = bQ
-                getgenv().Y = bP
-                getgenv().X = bO
+                getgenv().Z = bX
+                getgenv().Y = bW
+                getgenv().X = bV
                 game:GetService("RunService").Heartbeat:Connect(
                     function()
                         if getgenv().Axis then
-                            local bS = game.Players.LocalPlayer.Character.HumanoidRootPart.Velocity
+                            local bZ = game.Players.LocalPlayer.Character.HumanoidRootPart.Velocity
                             game.Players.LocalPlayer.Character.HumanoidRootPart.Velocity =
                                 Vector3.new(getgenv().X, getgenv().Y, getgenv().Z)
                             game:GetService("RunService").RenderStepped:Wait()
-                            game.Players.LocalPlayer.Character.HumanoidRootPart.Velocity = bS
+                            game.Players.LocalPlayer.Character.HumanoidRootPart.Velocity = bZ
                         end
                     end
                 )
-                bR(0)
+                bY(0)
             end
         end
     }
 )
-H:AddSlider(
-    {Name = "Client Lag", Min = 0, Max = 10, Precise = 2, Def = bN, Callback = function(bs)
-            bN = bs
-            if bM == "ReplicationLag" then
-                bR(bN)
+J:AddSlider(
+    {Name = "Client Lag", Min = 0, Max = 10, Precise = 2, Def = bU, Callback = function(bu)
+            bU = bu
+            if bT == "ReplicationLag" then
+                bY(bU)
             end
         end}
 )
-H:AddSlider(
-    {Name = "Axis Lag x", Min = 0, Max = 500, Def = bO, Callback = function(bs)
-            bO = bs
+J:AddSlider(
+    {Name = "Axis Lag x", Min = 0, Max = 500, Def = bV, Callback = function(bu)
+            bV = bu
         end}
 )
-H:AddSlider(
-    {Name = "Axis Lag y", Min = 0, Max = 500, Def = bP, Callback = function(bs)
-            bP = bs
+J:AddSlider(
+    {Name = "Axis Lag y", Min = 0, Max = 500, Def = bW, Callback = function(bu)
+            bW = bu
         end}
 )
-H:AddSlider(
-    {Name = "Axis Lag z", Min = 0, Max = 500, Def = bQ, Callback = function(bs)
-            bQ = bs
+J:AddSlider(
+    {Name = "Axis Lag z", Min = 0, Max = 500, Def = bX, Callback = function(bu)
+            bX = bu
         end}
 )
-local bT, bU, bV, bW, aq = false, 1, 30, 30, "Head"
-local function bX(bY, bZ, b_, c0)
-    return bY:Lerp(bZ, b_ * c0)
+local b_, c0, c1, c2, as = false, 1, 30, 30, "Head"
+local function c3(c4, c5, c6, c7)
+    return c4:Lerp(c5, c6 * c7)
 end
-local function c1(c2)
-    if bT then
-        local c3 = nil
-        local V = math.huge
-        local av = game:GetService("Players").LocalPlayer
-        local c4 = av.Character
-        if c4 then
-            local c5 = c4:FindFirstChild(aq).Position
-            local c6 = c4:FindFirstChild(aq).CFrame.lookVector
-            for W, X in ipairs(game:GetService("Players"):GetPlayers()) do
-                if X ~= av then
-                    local c7 = X.Character
-                    if c7 then
-                        local c8 = c7:FindFirstChild(aq) and c7:FindFirstChild(aq).Position
-                        if c8 then
-                            local Z = (c5 - c8).magnitude
-                            if Z < V and Z <= bV then
-                                local c9 = (c8 - c5).unit
-                                local bk = math.acos(c6:Dot(c9)) * 180 / math.pi
-                                if bk <= bW then
-                                    V = Z
-                                    c3 = X
+local function c8(c9)
+    if b_ then
+        local ca = nil
+        local X = math.huge
+        local ax = game:GetService("Players").LocalPlayer
+        local cb = ax.Character
+        if cb then
+            local cc = cb:FindFirstChild(as).Position
+            local cd = cb:FindFirstChild(as).CFrame.lookVector
+            for Y, Z in ipairs(game:GetService("Players"):GetPlayers()) do
+                if Z ~= ax then
+                    local ce = Z.Character
+                    if ce then
+                        local cf = ce:FindFirstChild(as) and ce:FindFirstChild(as).Position
+                        if cf then
+                            local a0 = (cc - cf).magnitude
+                            if a0 < X and a0 <= c1 then
+                                local cg = (cf - cc).unit
+                                local bm = math.acos(cd:Dot(cg)) * 180 / math.pi
+                                if bm <= c2 then
+                                    X = a0
+                                    ca = Z
                                 end
                             end
                         end
@@ -941,23 +976,23 @@ local function c1(c2)
                 end
             end
         end
-        if c3 then
-            local ca = game:GetService("Workspace").CurrentCamera.CFrame
-            local cb = c3.Character:FindFirstChild(aq) and c3.Character:FindFirstChild(aq).Position
-            if cb then
-                local cc = CFrame.new(ca.Position, cb)
-                local cd = bX(ca, cc, c2, bU)
-                game:GetService("Workspace").CurrentCamera.CFrame = cd
+        if ca then
+            local ch = game:GetService("Workspace").CurrentCamera.CFrame
+            local ci = ca.Character:FindFirstChild(as) and ca.Character:FindFirstChild(as).Position
+            if ci then
+                local cj = CFrame.new(ch.Position, ci)
+                local ck = c3(ch, cj, c9, c0)
+                game:GetService("Workspace").CurrentCamera.CFrame = ck
             end
         end
     end
 end
-I:AddToggle(
-    {Name = "Aim Assist", Keybind = 1, Callback = function(ae)
-            bT = ae
+K:AddToggle(
+    {Name = "Aim Assist", Keybind = 1, Callback = function(ag)
+            b_ = ag
         end}
 )
-I:AddDropdown(
+K:AddDropdown(
     {
         Name = "Target Part",
         List = {
@@ -974,61 +1009,61 @@ I:AddDropdown(
             "LowerTorso",
             "RightUpperLeg"
         },
-        Default = aq,
-        Callback = function(at)
-            aq = at
+        Default = as,
+        Callback = function(av)
+            as = av
         end
     }
 )
-I:AddSlider(
-    {Name = "Smoothness", Min = 1, Max = 25, Default = 1, Precise = 2, Callback = function(R)
-            bU = R
+K:AddSlider(
+    {Name = "Smoothness", Min = 1, Max = 25, Default = 1, Precise = 2, Callback = function(T)
+            c0 = T
         end}
 )
-I:AddSlider(
-    {Name = "Range", Min = 5, Max = 100, Default = 30, Callback = function(R)
-            bV = R
+K:AddSlider(
+    {Name = "Range", Min = 5, Max = 100, Default = 30, Callback = function(T)
+            c1 = T
         end}
 )
-I:AddSlider(
-    {Name = "Aim fov", Min = 0, Max = 360, Default = 30, Callback = function(R)
-            bW = R
+K:AddSlider(
+    {Name = "Aim fov", Min = 0, Max = 360, Default = 30, Callback = function(T)
+            c2 = T
         end}
 )
 game:GetService("RunService").RenderStepped:Connect(
-    function(c2)
-        c1(c2)
+    function(c9)
+        c8(c9)
     end
 )
-local ce, cf, cg, ch = 40, 8, 0.8, 0.8
-L:AddSlider(
-    {Name = "Hide distance", Min = 0, Max = 250, Value = ce, Callback = function(R)
-            ce = R
+local cl, cm, cn, co = 40, 8, 0.8, 0.8
+N:AddSlider(
+    {Name = "Hide distance", Min = 0, Max = 250, Value = cl, Callback = function(T)
+            cl = T
         end}
 )
-L:AddSlider(
-    {Name = "Corners", Min = 0, Max = 50, Value = cf, Callback = function(R)
-            cf = R
+N:AddSlider(
+    {Name = "Corners", Min = 0, Max = 50, Value = cm, Callback = function(T)
+            cm = T
         end}
 )
-L:AddSlider(
-    {Name = "Position X", Min = 0, Max = 1, Precise = 2, Value = cg, Callback = function(R)
-            cg = R
+N:AddSlider(
+    {Name = "Position X", Min = 0, Max = 1, Precise = 2, Value = cn, Callback = function(T)
+            cn = T
             if gui then
-                gui.Frame.Position = UDim2.new(cg, 0, ch, 0)
+                gui.Frame.Position = UDim2.new(cn, 0, co, 0)
             end
         end}
 )
-L:AddSlider(
-    {Name = "Position Y", Min = 0, Max = 1, Precise = 2, Value = ch, Callback = function(R)
-            ch = R
+N:AddSlider(
+    {Name = "Position Y", Min = 0, Max = 1, Precise = 2, Value = co, Callback = function(T)
+            co = T
             if gui then
-                gui.Frame.Position = UDim2.new(cg, 0, ch, 0)
+                gui.Frame.Position = UDim2.new(cn, 0, co, 0)
             end
         end}
 )
 local gui
-local function ci()
+local function cp()
     if gui then
         gui:Destroy()
     end
@@ -1036,176 +1071,176 @@ local function ci()
     gui.Name = "PlayerInfoGUI"
     gui.ResetOnSpawn = false
     gui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
-    local cj = Instance.new("Frame", gui)
-    cj.Name = "Frame"
-    cj.Size = UDim2.new(0.1, 0, 0.08, 0)
-    cj.Position = UDim2.new(cg, 0, ch, 0)
-    cj.BackgroundColor3 = Color3.new(0, 0, 0)
-    cj.BackgroundTransparency = 0.5
-    cj.BorderSizePixel = 2
-    cj.BorderColor3 = Color3.fromRGB(148, 0, 211)
-    cj.Active = true
-    local ck = Instance.new("UICorner", cj)
-    ck.CornerRadius = UDim.new(0, cf)
-    local cl = Instance.new("TextLabel", cj)
-    cl.Text = "..."
-    cl.TextColor3 = Color3.new(1, 1, 1)
-    cl.Size = UDim2.new(1, 0, 0.3, 0)
-    cl.Position = UDim2.new(0, 0, 0, 0)
-    cl.BackgroundTransparency = 1
-    cl.Font = Enum.Font.SourceSansBold
-    cl.TextSize = 20
-    cl.TextWrapped = true
-    cl.TextXAlignment = Enum.TextXAlignment.Center
-    local cm = Instance.new("TextLabel", cj)
-    cm.Text = ""
-    cm.TextColor3 = Color3.new(1, 1, 1)
-    cm.Size = UDim2.new(1, 0, 0.3, 0)
-    cm.Position = UDim2.new(0, 0, 0.3, 0)
-    cm.BackgroundTransparency = 1
-    cm.Font = Enum.Font.SourceSansBold
-    cm.TextSize = 20
-    cm.TextWrapped = true
-    cm.TextXAlignment = Enum.TextXAlignment.Center
-    local cn = Instance.new("Frame", cj)
-    cn.Size = UDim2.new(0.6, 0, 0.2, 0)
-    cn.Position = UDim2.new(0.2, 0, 0.7, 0)
-    cn.BackgroundColor3 = Color3.new(0, 0, 0)
-    cn.BorderSizePixel = 2
-    cn.BorderColor3 = Color3.new(0, 0, 0)
-    local co = Instance.new("Frame", cj)
-    co.Size = UDim2.new(0.6, 0, 0.2, 0)
-    co.Position = UDim2.new(0.2, 0, 0.7, 0)
-    co.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
-    co.BorderSizePixel = 0
-    local cp = Instance.new("TextLabel", cj)
-    cp.Text = ""
-    cp.TextColor3 = Color3.new(1, 0, 0)
-    cp.Size = UDim2.new(0.6, 0, 0.3, 0)
-    cp.Position = UDim2.new(0.615, 0, 0.7, 0)
-    cp.BackgroundTransparency = 1
-    cp.Font = Enum.Font.SourceSansBold
-    cp.TextSize = 16
-    cp.TextWrapped = true
-    cp.TextXAlignment = Enum.TextXAlignment.Center
-    local cq = Instance.new("Frame", cj)
-    cq.Size = UDim2.new(1, 0, 0, 2)
-    cq.Position = UDim2.new(0, 0, 0.3, 0)
-    cq.BorderSizePixel = 0
-    cq.BackgroundColor3 = Color3.fromRGB(148, 0, 211)
+    local cq = Instance.new("Frame", gui)
+    cq.Name = "Frame"
+    cq.Size = UDim2.new(0.1, 0, 0.08, 0)
+    cq.Position = UDim2.new(cn, 0, co, 0)
+    cq.BackgroundColor3 = Color3.new(0, 0, 0)
     cq.BackgroundTransparency = 0.5
-    local cr = Instance.new("Frame", cj)
-    cr.Size = UDim2.new(1, 4, 1, 4)
-    cr.Position = UDim2.new(-0.01, 0, -0.01, 0)
-    cr.BackgroundColor3 = Color3.fromRGB(100, 0, 150)
-    cr.BorderSizePixel = 0
-    cr.ZIndex = -1
-    local cs = Instance.new("TextLabel", cj)
+    cq.BorderSizePixel = 2
+    cq.BorderColor3 = Color3.fromRGB(148, 0, 211)
+    cq.Active = true
+    local cr = Instance.new("UICorner", cq)
+    cr.CornerRadius = UDim.new(0, cm)
+    local cs = Instance.new("TextLabel", cq)
+    cs.Text = "..."
     cs.TextColor3 = Color3.new(1, 1, 1)
-    cs.Size = UDim2.new(1, 0, 0.1, 0)
-    cs.Position = UDim2.new(0.05, 0, cp.Position.Y.Scale, cp.Position.Y.Offset - -8)
+    cs.Size = UDim2.new(1, 0, 0.3, 0)
+    cs.Position = UDim2.new(0, 0, 0, 0)
     cs.BackgroundTransparency = 1
-    cs.Font = cp.Font
-    cs.TextSize = cp.TextSize
+    cs.Font = Enum.Font.SourceSansBold
+    cs.TextSize = 20
     cs.TextWrapped = true
-    cs.TextXAlignment = Enum.TextXAlignment.Left
-    local function ct()
-        local ai, aj = nil, math.huge
-        local cu = game.Players.LocalPlayer.Character.HumanoidRootPart.Position
-        local cv = false
-        for W, X in ipairs(game.Players:GetPlayers()) do
-            local Y = X.Character
-            if X ~= game.Players.LocalPlayer and Y and Y:FindFirstChild("HumanoidRootPart") then
-                local Z = (Y.HumanoidRootPart.Position - cu).magnitude
-                if Z < ce then
-                    cv = true
-                    if Z < aj then
-                        ai, aj = X, Z
+    cs.TextXAlignment = Enum.TextXAlignment.Center
+    local ct = Instance.new("TextLabel", cq)
+    ct.Text = ""
+    ct.TextColor3 = Color3.new(1, 1, 1)
+    ct.Size = UDim2.new(1, 0, 0.3, 0)
+    ct.Position = UDim2.new(0, 0, 0.3, 0)
+    ct.BackgroundTransparency = 1
+    ct.Font = Enum.Font.SourceSansBold
+    ct.TextSize = 20
+    ct.TextWrapped = true
+    ct.TextXAlignment = Enum.TextXAlignment.Center
+    local cu = Instance.new("Frame", cq)
+    cu.Size = UDim2.new(0.6, 0, 0.2, 0)
+    cu.Position = UDim2.new(0.2, 0, 0.7, 0)
+    cu.BackgroundColor3 = Color3.new(0, 0, 0)
+    cu.BorderSizePixel = 2
+    cu.BorderColor3 = Color3.new(0, 0, 0)
+    local cv = Instance.new("Frame", cq)
+    cv.Size = UDim2.new(0.6, 0, 0.2, 0)
+    cv.Position = UDim2.new(0.2, 0, 0.7, 0)
+    cv.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
+    cv.BorderSizePixel = 0
+    local cw = Instance.new("TextLabel", cq)
+    cw.Text = ""
+    cw.TextColor3 = Color3.new(1, 0, 0)
+    cw.Size = UDim2.new(0.6, 0, 0.3, 0)
+    cw.Position = UDim2.new(0.615, 0, 0.7, 0)
+    cw.BackgroundTransparency = 1
+    cw.Font = Enum.Font.SourceSansBold
+    cw.TextSize = 16
+    cw.TextWrapped = true
+    cw.TextXAlignment = Enum.TextXAlignment.Center
+    local cx = Instance.new("Frame", cq)
+    cx.Size = UDim2.new(1, 0, 0, 2)
+    cx.Position = UDim2.new(0, 0, 0.3, 0)
+    cx.BorderSizePixel = 0
+    cx.BackgroundColor3 = Color3.fromRGB(148, 0, 211)
+    cx.BackgroundTransparency = 0.5
+    local cy = Instance.new("Frame", cq)
+    cy.Size = UDim2.new(1, 4, 1, 4)
+    cy.Position = UDim2.new(-0.01, 0, -0.01, 0)
+    cy.BackgroundColor3 = Color3.fromRGB(100, 0, 150)
+    cy.BorderSizePixel = 0
+    cy.ZIndex = -1
+    local cz = Instance.new("TextLabel", cq)
+    cz.TextColor3 = Color3.new(1, 1, 1)
+    cz.Size = UDim2.new(1, 0, 0.1, 0)
+    cz.Position = UDim2.new(0.05, 0, cw.Position.Y.Scale, cw.Position.Y.Offset - -8)
+    cz.BackgroundTransparency = 1
+    cz.Font = cw.Font
+    cz.TextSize = cw.TextSize
+    cz.TextWrapped = true
+    cz.TextXAlignment = Enum.TextXAlignment.Left
+    local function cA()
+        local ak, al = nil, math.huge
+        local cB = game.Players.LocalPlayer.Character.HumanoidRootPart.Position
+        local cC = false
+        for Y, Z in ipairs(game.Players:GetPlayers()) do
+            local _ = Z.Character
+            if Z ~= game.Players.LocalPlayer and _ and _:FindFirstChild("HumanoidRootPart") then
+                local a0 = (_.HumanoidRootPart.Position - cB).magnitude
+                if a0 < cl then
+                    cC = true
+                    if a0 < al then
+                        ak, al = Z, a0
                     end
                 end
             end
         end
-        if cv then
-            cl.Text = ai.Name
-            local cw = math.floor(ai.Character.Humanoid.Health)
-            local cx = tostring(cw)
-            local cy = ai.Character.Humanoid.MaxHealth
-            local cz = cw / cy
-            local cA = UDim2.new(0.6 * cz, 0, 0.2, 0)
-            local cB = TweenInfo.new(0.18, Enum.EasingStyle.Linear, Enum.EasingDirection.Out)
-            local cC = d:Create(co, cB, {Size = cA})
-            cC:Play()
-            local bB = Color3.fromRGB(255 * (1 - cz), 255 * cz, 0)
-            co.BackgroundColor3 = bB
-            local cD = cm.Text
-            local cE = 1
-            local cF = math.max(#cD, #cx)
-            local cG = 0.08
-            local cH
-            cH =
+        if cC then
+            cs.Text = ak.Name
+            local cD = math.floor(ak.Character.Humanoid.Health)
+            local cE = tostring(cD)
+            local cF = ak.Character.Humanoid.MaxHealth
+            local cG = cD / cF
+            local cH = UDim2.new(0.6 * cG, 0, 0.2, 0)
+            local cI = TweenInfo.new(0.18, Enum.EasingStyle.Linear, Enum.EasingDirection.Out)
+            local cJ = f:Create(cv, cI, {Size = cH})
+            cJ:Play()
+            local bD = Color3.fromRGB(255 * (1 - cG), 255 * cG, 0)
+            cv.BackgroundColor3 = bD
+            local cK = ct.Text
+            local cL = 1
+            local cM = math.max(#cK, #cE)
+            local cN = 0.08
+            local cO
+            cO =
                 game:GetService("RunService").Heartbeat:Connect(
                 function()
-                    if cE <= cF then
-                        cm.Text = cx:sub(1, cE)
-                        cE = cE + 1
+                    if cL <= cM then
+                        ct.Text = cE:sub(1, cL)
+                        cL = cL + 1
                     else
-                        cH:Disconnect()
+                        cO:Disconnect()
                     end
                 end
             )
-            cm.Visible = true
-            cn.Visible = true
-            co.Visible = true
-            local cI = math.floor(game.Players.LocalPlayer.Character.Humanoid.Health)
-            if cI > cw then
-                cp.Text = "winning"
-                cp.TextColor3 = Color3.new(0, 1, 0)
-            elseif cI < cw then
-                cp.Text = "losing"
-                cp.TextColor3 = Color3.new(1, 0, 0)
+            ct.Visible = true
+            cu.Visible = true
+            cv.Visible = true
+            local cP = math.floor(game.Players.LocalPlayer.Character.Humanoid.Health)
+            if cP > cD then
+                cw.Text = "winning"
+                cw.TextColor3 = Color3.new(0, 1, 0)
+            elseif cP < cD then
+                cw.Text = "losing"
+                cw.TextColor3 = Color3.new(1, 0, 0)
             else
-                cp.Text = "even"
-                cp.TextColor3 = Color3.fromRGB(44, 25, 239)
+                cw.Text = "even"
+                cw.TextColor3 = Color3.fromRGB(44, 25, 239)
             end
-            cp.Font = Enum.Font.FredokaOne
-            local cJ = string.format("%.1f", aj)
-            if cs.Text ~= cJ then
-                local cK = cs.Text
-                local cL = 1
-                local cM = math.max(#cK, #cJ)
-                local cN = 0.03
-                local cO
-                cO =
+            cw.Font = Enum.Font.FredokaOne
+            local cQ = string.format("%.1f", al)
+            if cz.Text ~= cQ then
+                local cR = cz.Text
+                local cS = 1
+                local cT = math.max(#cR, #cQ)
+                local cU = 0.03
+                local cV
+                cV =
                     game:GetService("RunService").Heartbeat:Connect(
                     function()
-                        if cL <= cM then
-                            cs.Text = cJ:sub(1, cL)
-                            cL = cL + 1
+                        if cS <= cT then
+                            cz.Text = cQ:sub(1, cS)
+                            cS = cS + 1
                         else
-                            cO:Disconnect()
+                            cV:Disconnect()
                         end
                     end
                 )
             end
-            cs.Visible = true
-            cp.Visible = true
-            cj.Visible = true
+            cz.Visible = true
+            cw.Visible = true
+            cq.Visible = true
         else
-            cl.Text = ""
-            cm.Visible = false
-            cn.Visible = false
-            co.Visible = false
-            cp.Visible = false
-            cs.Visible = false
-            cj.Visible = false
+            cs.Text = ""
+            ct.Visible = false
+            cu.Visible = false
+            cv.Visible = false
+            cw.Visible = false
+            cz.Visible = false
+            cq.Visible = false
         end
     end
-    game:GetService("RunService").Heartbeat:Connect(ct)
+    game:GetService("RunService").Heartbeat:Connect(cA)
 end
-L:AddToggle(
-    {Name = "Target Hud", Callback = function(ae)
-            if ae then
-                ci()
+N:AddToggle(
+    {Name = "Target Hud", Callback = function(ag)
+            if ag then
+                cp()
             else
                 if gui then
                     gui:Destroy()
@@ -1214,394 +1249,394 @@ L:AddToggle(
             end
         end}
 )
-local cP = {Ambient = nil, OutdoorAmbient = nil, FogColor = nil, FogStart = nil, FogEnd = nil, PartColors = {}}
-local cQ, cR, cS = Color3.new(225, 160, 255), Color3.fromRGB(225, 160, 255), Vector3.new(2, 1, 3)
-local cT = false
-local function cU(ae)
-    local cV = game:GetService("Lighting")
-    if ae then
-        cP.Ambient = cV.Ambient
-        cP.OutdoorAmbient = cV.OutdoorAmbient
-        cP.FogColor = cV.FogColor
-        cP.FogStart = cV.FogStart
-        cP.FogEnd = cV.FogEnd
-        for W, ax in ipairs(workspace:GetDescendants()) do
-            if ax:IsA("BasePart") then
-                cP.PartColors[ax] = ax.Color
+local cW = {Ambient = nil, OutdoorAmbient = nil, FogColor = nil, FogStart = nil, FogEnd = nil, PartColors = {}}
+local cX, cY, cZ = Color3.new(225, 160, 255), Color3.fromRGB(225, 160, 255), Vector3.new(2, 1, 3)
+local c_ = false
+local function d0(ag)
+    local d1 = game:GetService("Lighting")
+    if ag then
+        cW.Ambient = d1.Ambient
+        cW.OutdoorAmbient = d1.OutdoorAmbient
+        cW.FogColor = d1.FogColor
+        cW.FogStart = d1.FogStart
+        cW.FogEnd = d1.FogEnd
+        for Y, az in ipairs(workspace:GetDescendants()) do
+            if az:IsA("BasePart") then
+                cW.PartColors[az] = az.Color
             end
         end
-        cV.Ambient = cQ
-        cV.OutdoorAmbient = cQ
-        cV.FogColor = cQ
-        cV.FogStart = cP.FogStart or 0
-        cV.FogEnd = cP.FogEnd or 100
-        for W, ax in ipairs(workspace:GetDescendants()) do
-            if ax:IsA("BasePart") then
-                ax.Color = cQ
+        d1.Ambient = cX
+        d1.OutdoorAmbient = cX
+        d1.FogColor = cX
+        d1.FogStart = cW.FogStart or 0
+        d1.FogEnd = cW.FogEnd or 100
+        for Y, az in ipairs(workspace:GetDescendants()) do
+            if az:IsA("BasePart") then
+                az.Color = cX
             end
         end
     else
-        cV.Ambient = cP.Ambient
-        cV.OutdoorAmbient = cP.OutdoorAmbient
-        cV.FogColor = cP.FogColor
-        cV.FogStart = cP.FogStart
-        cV.FogEnd = cP.FogEnd
-        for W, ax in ipairs(workspace:GetDescendants()) do
-            if ax:IsA("BasePart") and cP.PartColors[ax] then
-                ax.Color = cP.PartColors[ax]
+        d1.Ambient = cW.Ambient
+        d1.OutdoorAmbient = cW.OutdoorAmbient
+        d1.FogColor = cW.FogColor
+        d1.FogStart = cW.FogStart
+        d1.FogEnd = cW.FogEnd
+        for Y, az in ipairs(workspace:GetDescendants()) do
+            if az:IsA("BasePart") and cW.PartColors[az] then
+                az.Color = cW.PartColors[az]
             end
         end
     end
 end
-M:AddToggle(
-    {Name = "Ambient", Callback = function(ae)
-            cU(ae)
+O:AddToggle(
+    {Name = "Ambient", Callback = function(ag)
+            d0(ag)
         end}
 )
-local cW = {}
-M:AddToggle(
-    {Name = "Low gfx", Callback = function(cX)
+local d2 = {}
+O:AddToggle(
+    {Name = "Low gfx", Callback = function(d3)
             local workspace = game:GetService("Workspace")
-            for W, ax in ipairs(workspace:GetDescendants()) do
-                if ax:IsA("BasePart") then
-                    if cX then
-                        cW[ax] = ax.Material
-                        ax.Material = Enum.Material.Ice
+            for Y, az in ipairs(workspace:GetDescendants()) do
+                if az:IsA("BasePart") then
+                    if d3 then
+                        d2[az] = az.Material
+                        az.Material = Enum.Material.Ice
                     else
-                        ax.Material = cW[ax] or ax.Material
-                        cW[ax] = nil
+                        az.Material = d2[az] or az.Material
+                        d2[az] = nil
                     end
                 end
             end
         end}
 )
-M:AddToggle(
-    {Name = "Better sword", Callback = function(ae)
-            cT = ae
-            if not cT then
-                local cY = game:GetService("Workspace").Camera.Viewmodel.WoodenSword.MainPart.Mesh
-                cY.VertexColor = Vector3.new(225 / 255, 160 / 255, 255 / 255)
-                cY.Offset = Vector3.new(0, 0, 0)
+O:AddToggle(
+    {Name = "Better sword", Callback = function(ag)
+            c_ = ag
+            if not c_ then
+                local d4 = game:GetService("Workspace").Camera.Viewmodel.WoodenSword.MainPart.Mesh
+                d4.VertexColor = Vector3.new(225 / 255, 160 / 255, 255 / 255)
+                d4.Offset = Vector3.new(0, 0, 0)
             end
         end}
 )
 game:GetService("RunService").Heartbeat:Connect(
     function()
-        if cT then
-            local cY = game:GetService("Workspace").Camera.Viewmodel.WoodenSword.MainPart.Mesh
-            cY.VertexColor = Vector3.new(cR.r, cR.g, cR.b)
-            cY.Offset = cS
+        if c_ then
+            local d4 = game:GetService("Workspace").Camera.Viewmodel.WoodenSword.MainPart.Mesh
+            d4.VertexColor = Vector3.new(cY.r, cY.g, cY.b)
+            d4.Offset = cZ
         end
     end
 )
-M:AddSlider(
-    {Name = "Sword front", Min = -10, Max = 10, Value = cS.X, Callback = function(R)
-            cS = Vector3.new(R, cS.Y, cS.Z)
-            if ae then
-                game:GetService("Workspace").Camera.Viewmodel.WoodenSword.MainPart.Mesh.Offset = cS
+O:AddSlider(
+    {Name = "Sword front", Min = -10, Max = 10, Value = cZ.X, Callback = function(T)
+            cZ = Vector3.new(T, cZ.Y, cZ.Z)
+            if ag then
+                game:GetService("Workspace").Camera.Viewmodel.WoodenSword.MainPart.Mesh.Offset = cZ
             end
         end}
 )
-M:AddSlider(
-    {Name = "Sword vertical", Min = -10, Max = 10, Value = cS.Y, Callback = function(R)
-            cS = Vector3.new(cS.X, R, cS.Z)
-            if ae then
-                game:GetService("Workspace").Camera.Viewmodel.WoodenSword.MainPart.Mesh.Offset = cS
+O:AddSlider(
+    {Name = "Sword vertical", Min = -10, Max = 10, Value = cZ.Y, Callback = function(T)
+            cZ = Vector3.new(cZ.X, T, cZ.Z)
+            if ag then
+                game:GetService("Workspace").Camera.Viewmodel.WoodenSword.MainPart.Mesh.Offset = cZ
             end
         end}
 )
-M:AddSlider(
-    {Name = "Sword side", Min = -10, Max = 10, Value = cS.Z, Callback = function(R)
-            cS = Vector3.new(cS.X, cS.Y, R)
-            if ae then
-                game:GetService("Workspace").Camera.Viewmodel.WoodenSword.MainPart.Mesh.Offset = cS
+O:AddSlider(
+    {Name = "Sword side", Min = -10, Max = 10, Value = cZ.Z, Callback = function(T)
+            cZ = Vector3.new(cZ.X, cZ.Y, T)
+            if ag then
+                game:GetService("Workspace").Camera.Viewmodel.WoodenSword.MainPart.Mesh.Offset = cZ
             end
         end}
 )
-M:AddSlider(
-    {Name = "Fog Start", Min = 0, Max = 1000, Value = cP.FogStart or 0, Callback = function(R)
-            cP.FogStart = R
-            if cT then
-                game:GetService("Lighting").FogStart = R
+O:AddSlider(
+    {Name = "Fog Start", Min = 0, Max = 1000, Value = cW.FogStart or 0, Callback = function(T)
+            cW.FogStart = T
+            if c_ then
+                game:GetService("Lighting").FogStart = T
             end
         end}
 )
-M:AddSlider(
-    {Name = "Fog End", Min = 0, Max = 1000, Value = cP.FogEnd or 100, Callback = function(R)
-            cP.FogEnd = R
-            if cT then
-                game:GetService("Lighting").FogEnd = R
+O:AddSlider(
+    {Name = "Fog End", Min = 0, Max = 1000, Value = cW.FogEnd or 100, Callback = function(T)
+            cW.FogEnd = T
+            if c_ then
+                game:GetService("Lighting").FogEnd = T
             end
         end}
 )
-M:AddColorpicker(
-    {Name = "Atmo color", Value = cQ, Callback = function(cZ, c_)
-            cQ = cZ
-            if ae then
-                local cV = game:GetService("Lighting")
-                cV.Ambient = cQ
-                cV.OutdoorAmbient = cQ
-                cV.FogColor = cQ
-                for W, ax in ipairs(workspace:GetDescendants()) do
-                    if ax:IsA("BasePart") then
-                        ax.Color = cQ
+O:AddColorpicker(
+    {Name = "Atmo color", Value = cX, Callback = function(d5, d6)
+            cX = d5
+            if ag then
+                local d1 = game:GetService("Lighting")
+                d1.Ambient = cX
+                d1.OutdoorAmbient = cX
+                d1.FogColor = cX
+                for Y, az in ipairs(workspace:GetDescendants()) do
+                    if az:IsA("BasePart") then
+                        az.Color = cX
                     end
                 end
             end
         end}
 )
-M:AddColorpicker(
-    {Name = "Sword color", Value = cR, Callback = function(cZ, c_)
-            cR = cZ
-            if ae then
+O:AddColorpicker(
+    {Name = "Sword color", Value = cY, Callback = function(d5, d6)
+            cY = d5
+            if ag then
                 game:GetService("Workspace").Camera.Viewmodel.WoodenSword.MainPart.Mesh.VertexColor =
-                    Vector3.new(cR.r, cR.g, cR.b)
+                    Vector3.new(cY.r, cY.g, cY.b)
             end
         end}
 )
-local d0, d1 = 1, false
-getgenv().res = d0
-M:AddToggle(
-    {Name = "ress", Callback = function(cX)
-            d1 = cX
-            if cX then
-                while d1 do
+local d7, d8 = 1, false
+getgenv().res = d7
+O:AddToggle(
+    {Name = "ress", Callback = function(d3)
+            d8 = d3
+            if d3 then
+                while d8 do
                     game:GetService("RunService").RenderStepped:Wait()
-                    j.CFrame = j.CFrame * CFrame.new(0, 0, 0, 1, 0, 0, 0, getgenv().res, 0, 0, 0, 1)
+                    l.CFrame = l.CFrame * CFrame.new(0, 0, 0, 1, 0, 0, 0, getgenv().res, 0, 0, 0, 1)
                 end
             end
         end}
 )
-M:AddSlider(
-    {Name = "Resolution", Min = 0, Max = 1.2, Precise = 2, Value = d0, Callback = function(R)
-            getgenv().res = R
+O:AddSlider(
+    {Name = "Resolution", Min = 0, Max = 1.2, Precise = 2, Value = d7, Callback = function(T)
+            getgenv().res = T
         end}
 )
-local d2, d3, d4, d5, d6 = 0.5, Color3.fromRGB(200, 150, 255), false, false, false
-local function d7(d8)
-    return Color3.new(d8.r, d8.g, d8.b)
+local d9, da, db, dc, dd = 0.5, Color3.fromRGB(200, 150, 255), false, false, false
+local function de(df)
+    return Color3.new(df.r, df.g, df.b)
 end
-local function d9(a3)
-    local d8 = a3.TeamColor
-    local d9 = Instance.new("Highlight")
-    d9.Name = a3.Name
-    d9.FillColor = d3
-    d9.DepthMode = "AlwaysOnTop"
-    d9.FillTransparency = d2
-    d9.OutlineTransparency = d2
-    d9.Parent = Storage
-    local da = a3.Character
-    if da then
-        d9.Adornee = da
+local function dg(a5)
+    local df = a5.TeamColor
+    local dg = Instance.new("Highlight")
+    dg.Name = a5.Name
+    dg.FillColor = da
+    dg.DepthMode = "AlwaysOnTop"
+    dg.FillTransparency = d9
+    dg.OutlineTransparency = d9
+    dg.Parent = Storage
+    local dh = a5.Character
+    if dh then
+        dg.Adornee = dh
     end
-    a3.CharacterAdded:Connect(
-        function(db)
-            d9.Adornee = db
+    a5.CharacterAdded:Connect(
+        function(di)
+            dg.Adornee = di
         end
     )
-    a3:GetPropertyChangedSignal("Team"):Connect(
+    a5:GetPropertyChangedSignal("Team"):Connect(
         function()
-            local dc = a3.TeamColor
-            d9.FillColor = d7(dc)
+            local dj = a5.TeamColor
+            dg.FillColor = de(dj)
         end
     )
 end
-local function dd()
-    for W, X in ipairs(game.Players:GetPlayers()) do
-        if X == game.Players.LocalPlayer then
-            if d4 then
-                if not Storage:FindFirstChild(X.Name) then
-                    d9(X)
+local function dk()
+    for Y, Z in ipairs(game.Players:GetPlayers()) do
+        if Z == game.Players.LocalPlayer then
+            if db then
+                if not Storage:FindFirstChild(Z.Name) then
+                    dg(Z)
                 end
             else
-                local de = Storage:FindFirstChild(X.Name)
-                if de then
-                    de:Destroy()
+                local dl = Storage:FindFirstChild(Z.Name)
+                if dl then
+                    dl:Destroy()
                 end
             end
         else
-            if not Storage:FindFirstChild(X.Name) then
-                d9(X)
+            if not Storage:FindFirstChild(Z.Name) then
+                dg(Z)
             end
         end
     end
 end
-local function df(ae)
-    if ae then
-        d6 = true
-        local dg = game:GetService("CoreGui")
-        local b = game:GetService("Players")
+local function dm(ag)
+    if ag then
+        dd = true
+        local dn = game:GetService("CoreGui")
+        local d = game:GetService("Players")
         Storage = Instance.new("Folder")
-        Storage.Parent = dg
+        Storage.Parent = dn
         Storage.Name = "Highlight_Storage"
-        dd()
+        dk()
         coroutine.wrap(
             function()
-                while d6 do
+                while dd do
                     wait(0.15)
-                    dd()
+                    dk()
                 end
             end
         )()
     else
-        d6 = false
+        dd = false
         local Storage = game.CoreGui:FindFirstChild("Highlight_Storage")
         if Storage then
-            for W, dh in ipairs(Storage:GetChildren()) do
-                dh:Destroy()
+            for Y, dp in ipairs(Storage:GetChildren()) do
+                dp:Destroy()
             end
             Storage:Destroy()
         end
     end
 end
-local function di(ae)
-    d4 = ae
-    dd()
+local function dq(ag)
+    db = ag
+    dk()
 end
-local function dj(ae)
-    d5 = ae
-    dd()
+local function dr(ag)
+    dc = ag
+    dk()
 end
-local function dk(cZ)
-    d3 = cZ
+local function ds(d5)
+    da = d5
     local Storage = game.CoreGui:FindFirstChild("Highlight_Storage")
     if Storage then
-        for W, dh in ipairs(Storage:GetChildren()) do
-            dh.FillColor = cZ
+        for Y, dp in ipairs(Storage:GetChildren()) do
+            dp.FillColor = d5
         end
     end
 end
-K:AddToggle(
-    {Name = "chams", Value = false, Callback = function(ae)
-            df(ae)
+M:AddToggle(
+    {Name = "chams", Value = false, Callback = function(ag)
+            dm(ag)
         end}
 )
-K:AddColorpicker(
-    {Name = "Color", Value = d3, Callback = function(cZ, c_)
-            dk(cZ)
+M:AddColorpicker(
+    {Name = "Color", Value = da, Callback = function(d5, d6)
+            ds(d5)
         end}
 )
-K:AddToggle({Name = "Self", Value = false, Callback = di})
-K:AddSlider(
-    {Name = "Transparency", Min = 0, Max = 1, Value = d2, Callback = function(R)
-            d2 = R
+M:AddToggle({Name = "Self", Value = false, Callback = dq})
+M:AddSlider(
+    {Name = "Transparency", Min = 0, Max = 1, Value = d9, Callback = function(T)
+            d9 = T
             local Storage = game.CoreGui:FindFirstChild("Highlight_Storage")
             if Storage then
-                for W, dh in ipairs(Storage:GetChildren()) do
-                    dh.FillTransparency = R
-                    dh.OutlineTransparency = R
+                for Y, dp in ipairs(Storage:GetChildren()) do
+                    dp.FillTransparency = T
+                    dp.OutlineTransparency = T
                 end
             end
         end}
 )
-K:AddToggle(
+M:AddToggle(
     {
         Name = "Cape",
         Value = false,
-        Callback = function(R)
-            local X = game.Players.LocalPlayer
-            local Y = X.Character
-            local function dl()
-                local dm = Y:WaitForChild("Humanoid")
-                local dn =
-                    dm.RigType == Enum.HumanoidRigType.R15 and Y:WaitForChild("UpperTorso") or Y:WaitForChild("Torso")
-                local dp = Instance.new("Part", Y)
-                dp.Name = "Cape"
-                dp.Anchored = false
-                dp.CanCollide = false
-                dp.TopSurface = Enum.SurfaceType.Smooth
-                dp.BottomSurface = Enum.SurfaceType.Smooth
-                dp.Size = Vector3.new(0.2, 0.2, 0.2)
-                dp.Transparency = 0
-                dp.BrickColor = BrickColor.new("Really black")
-                local dq = Instance.new("BlockMesh", dp)
-                dq.Scale = Vector3.new(9, 17.5, 0.08)
-                local dr = Instance.new("Motor", dp)
-                dr.Part0 = dp
-                dr.Part1 = dn
-                dr.MaxVelocity = 0.01
-                dr.C0 = CFrame.new(0, 2, 0) * CFrame.Angles(0, math.rad(90), 0)
-                dr.C1 = CFrame.new(0, 1, 0.45) * CFrame.Angles(0, math.rad(90), 0)
+        Callback = function(T)
+            local Z = game.Players.LocalPlayer
+            local _ = Z.Character
+            local function dt()
+                local du = _:WaitForChild("Humanoid")
+                local dv =
+                    du.RigType == Enum.HumanoidRigType.R15 and _:WaitForChild("UpperTorso") or _:WaitForChild("Torso")
+                local dw = Instance.new("Part", _)
+                dw.Name = "Cape"
+                dw.Anchored = false
+                dw.CanCollide = false
+                dw.TopSurface = Enum.SurfaceType.Smooth
+                dw.BottomSurface = Enum.SurfaceType.Smooth
+                dw.Size = Vector3.new(0.2, 0.2, 0.2)
+                dw.Transparency = 0
+                dw.BrickColor = BrickColor.new("Really black")
+                local dx = Instance.new("BlockMesh", dw)
+                dx.Scale = Vector3.new(9, 17.5, 0.08)
+                local dy = Instance.new("Motor", dw)
+                dy.Part0 = dw
+                dy.Part1 = dv
+                dy.MaxVelocity = 0.01
+                dy.C0 = CFrame.new(0, 2, 0) * CFrame.Angles(0, math.rad(90), 0)
+                dy.C1 = CFrame.new(0, 1, 0.45) * CFrame.Angles(0, math.rad(90), 0)
                 spawn(
                     function()
-                        local ds = false
-                        while dp.Parent == Y do
+                        local dz = false
+                        while dw.Parent == _ do
                             wait(1 / 60)
-                            local bk = 0.1
-                            local dt = dn.Velocity.Magnitude
-                            if ds then
-                                bk = bk + dn.Velocity.Magnitude / 10 * 0.05 + 0.05
-                                ds = false
+                            local bm = 0.1
+                            local dA = dv.Velocity.Magnitude
+                            if dz then
+                                bm = bm + dv.Velocity.Magnitude / 10 * 0.05 + 0.05
+                                dz = false
                             else
-                                ds = true
+                                dz = true
                             end
-                            bk = bk + math.min(dn.Velocity.Magnitude / 11, 0.5)
-                            dr.MaxVelocity = math.min(dn.Velocity.Magnitude / 111, 0.04)
-                            dr.DesiredAngle = -bk
-                            if dr.CurrentAngle < -0.2 and dr.DesiredAngle > -0.2 then
-                                dr.MaxVelocity = 0.04
+                            bm = bm + math.min(dv.Velocity.Magnitude / 11, 0.5)
+                            dy.MaxVelocity = math.min(dv.Velocity.Magnitude / 111, 0.04)
+                            dy.DesiredAngle = -bm
+                            if dy.CurrentAngle < -0.2 and dy.DesiredAngle > -0.2 then
+                                dy.MaxVelocity = 0.04
                             end
                             repeat
                                 wait()
-                            until dr.CurrentAngle == dr.DesiredAngle or
-                                math.abs(dn.Velocity.Magnitude - dt) >= dn.Velocity.Magnitude / 10 + 1
-                            if dn.Velocity.Magnitude < 0.1 then
+                            until dy.CurrentAngle == dy.DesiredAngle or
+                                math.abs(dv.Velocity.Magnitude - dA) >= dv.Velocity.Magnitude / 10 + 1
+                            if dv.Velocity.Magnitude < 0.1 then
                                 wait(0.1)
                             end
                         end
                     end
                 )
             end
-            local function du()
-                local dp = Y:FindFirstChild("Cape")
-                if dp then
-                    dp:Destroy()
+            local function dB()
+                local dw = _:FindFirstChild("Cape")
+                if dw then
+                    dw:Destroy()
                 end
             end
-            if R then
-                if not Y:FindFirstChild("Cape") then
-                    dl()
+            if T then
+                if not _:FindFirstChild("Cape") then
+                    dt()
                 end
             else
-                du()
+                dB()
             end
         end
     }
 )
-local dv = {
+local dC = {
     {Name = "Mouse", Value = "Mouse"},
     {Name = "Bottom Center", Value = "BottomCenter"},
     {Name = "Top Center", Value = "TopCenter"},
     {Name = "Left Center", Value = "LeftCenter"},
     {Name = "Right Center", Value = "RightCenter"}
 }
-local dw = 1
-K:AddDropdown(
+local dD = 1
+M:AddDropdown(
     {
         Name = "Tracer Source",
-        Default = dv[dw].Name,
-        List = {dv[1].Name, dv[2].Name, dv[3].Name, dv[4].Name, dv[5].Name},
-        Callback = function(R)
-            for dx, dy in ipairs(dv) do
-                if dy.Name == R then
-                    dw = dx
+        Default = dC[dD].Name,
+        List = {dC[1].Name, dC[2].Name, dC[3].Name, dC[4].Name, dC[5].Name},
+        Callback = function(T)
+            for dE, dF in ipairs(dC) do
+                if dF.Name == T then
+                    dD = dE
                     break
                 end
             end
         end
     }
 )
-K:AddToggle(
+M:AddToggle(
     {
         Name = "Tracer",
         Value = false,
-        Callback = function(ae)
-            Tracer = ae
-            local e = game:GetService("RunService")
-            local b = game:GetService("Players")
-            local dz = game:GetService("Workspace")
-            local dA = game:GetService("UserInputService")
-            local j = dz.CurrentCamera
+        Callback = function(ag)
+            Tracer = ag
+            local g = game:GetService("RunService")
+            local d = game:GetService("Players")
+            local dG = game:GetService("Workspace")
+            local dH = game:GetService("UserInputService")
+            local l = dG.CurrentCamera
             local settings = {
                 DefaultSettings = false,
                 TeamCheck = false,
@@ -1610,96 +1645,96 @@ K:AddToggle(
                 TracerThickness = 1.8,
                 TracerTransparency = 0.8
             }
-            local dB = {}
-            local function dC(Y)
-                local cq = Drawing.new("Line")
-                cq.Thickness = settings.TracerThickness
-                cq.Transparency = settings.TracerTransparency
-                cq.Visible = false
-                cq.Color = settings.TracerColor
-                local function dD()
-                    if not Y:IsDescendantOf(dz) or not Y:FindFirstChild("HumanoidRootPart") then
-                        cq.Visible = false
+            local dI = {}
+            local function dJ(_)
+                local cx = Drawing.new("Line")
+                cx.Thickness = settings.TracerThickness
+                cx.Transparency = settings.TracerTransparency
+                cx.Visible = false
+                cx.Color = settings.TracerColor
+                local function dK()
+                    if not _:IsDescendantOf(dG) or not _:FindFirstChild("HumanoidRootPart") then
+                        cx.Visible = false
                         return
                     end
-                    local dE = Y:FindFirstChild("Head") or Y:FindFirstChild("HumanoidRootPart")
-                    if not dE then
-                        cq.Visible = false
+                    local dL = _:FindFirstChild("Head") or _:FindFirstChild("HumanoidRootPart")
+                    if not dL then
+                        cx.Visible = false
                         return
                     end
-                    local dF = dE.Position
-                    local dG, dH = j:WorldToViewportPoint(dF)
-                    local dI = dv[dw]
-                    if dI.Value == "Mouse" then
-                        cq.From = Vector2.new(dA:GetMouseLocation().X, dA:GetMouseLocation().Y)
-                    elseif dI.Value == "BottomCenter" then
-                        cq.From = Vector2.new(j.ViewportSize.X / 2, j.ViewportSize.Y)
-                    elseif dI.Value == "TopCenter" then
-                        cq.From = Vector2.new(j.ViewportSize.X / 2, 0)
-                    elseif dI.Value == "LeftCenter" then
-                        cq.From = Vector2.new(0, j.ViewportSize.Y / 2)
-                    elseif dI.Value == "RightCenter" then
-                        cq.From = Vector2.new(j.ViewportSize.X, j.ViewportSize.Y / 2)
+                    local dM = dL.Position
+                    local dN, dO = l:WorldToViewportPoint(dM)
+                    local dP = dC[dD]
+                    if dP.Value == "Mouse" then
+                        cx.From = Vector2.new(dH:GetMouseLocation().X, dH:GetMouseLocation().Y)
+                    elseif dP.Value == "BottomCenter" then
+                        cx.From = Vector2.new(l.ViewportSize.X / 2, l.ViewportSize.Y)
+                    elseif dP.Value == "TopCenter" then
+                        cx.From = Vector2.new(l.ViewportSize.X / 2, 0)
+                    elseif dP.Value == "LeftCenter" then
+                        cx.From = Vector2.new(0, l.ViewportSize.Y / 2)
+                    elseif dP.Value == "RightCenter" then
+                        cx.From = Vector2.new(l.ViewportSize.X, l.ViewportSize.Y / 2)
                     end
-                    if dH then
-                        cq.To = Vector2.new(dG.X, dG.Y)
+                    if dO then
+                        cx.To = Vector2.new(dN.X, dN.Y)
                         if settings.TeamCheck then
-                            cq.Visible = b.LocalPlayer.Team ~= Y.Team
+                            cx.Visible = d.LocalPlayer.Team ~= _.Team
                         else
-                            cq.Visible = Tracer
+                            cx.Visible = Tracer
                         end
                     else
-                        cq.Visible = false
+                        cx.Visible = false
                     end
                 end
-                dB[Y] = cq
-                return cq, dD
+                dI[_] = cx
+                return cx, dK
             end
-            local function dJ(X, Y)
-                if X == b.LocalPlayer then
+            local function dQ(Z, _)
+                if Z == d.LocalPlayer then
                     return
                 end
-                if not Y or not Y:IsDescendantOf(dz) or not Y:FindFirstChild("HumanoidRootPart") then
+                if not _ or not _:IsDescendantOf(dG) or not _:FindFirstChild("HumanoidRootPart") then
                     return
                 end
-                local dK, dL = dC(Y)
-                e.RenderStepped:Connect(
+                local dR, dS = dJ(_)
+                g.RenderStepped:Connect(
                     function()
-                        dL()
+                        dS()
                     end
                 )
-                Y.AncestryChanged:Connect(
+                _.AncestryChanged:Connect(
                     function()
-                        if not Y:IsDescendantOf(dz) then
-                            dK.Visible = false
-                            dB[Y] = nil
+                        if not _:IsDescendantOf(dG) then
+                            dR.Visible = false
+                            dI[_] = nil
                         end
                     end
                 )
             end
-            b.PlayerAdded:Connect(
-                function(X)
-                    X.CharacterAdded:Connect(
-                        function(Y)
-                            dJ(X, Y)
+            d.PlayerAdded:Connect(
+                function(Z)
+                    Z.CharacterAdded:Connect(
+                        function(_)
+                            dQ(Z, _)
                         end
                     )
                 end
             )
-            for W, X in ipairs(b:GetPlayers()) do
-                dJ(X, X.Character)
+            for Y, Z in ipairs(d:GetPlayers()) do
+                dQ(Z, Z.Character)
             end
-            dA.InputBegan:Connect(
-                function(dM)
-                    if dM.KeyCode == settings.ModeSkipKey and not dA:GetFocusedTextBox() then
-                        dw = dw % #dv + 1
-                        for W, cq in pairs(dB) do
-                            cq.Visible = settings.TracersVisible and Tracer
+            dH.InputBegan:Connect(
+                function(bM)
+                    if bM.KeyCode == settings.ModeSkipKey and not dH:GetFocusedTextBox() then
+                        dD = dD % #dC + 1
+                        for Y, cx in pairs(dI) do
+                            cx.Visible = settings.TracersVisible and Tracer
                         end
-                    elseif dM.KeyCode == settings.DisableKey and not dA:GetFocusedTextBox() then
+                    elseif bM.KeyCode == settings.DisableKey and not dH:GetFocusedTextBox() then
                         settings.TracersVisible = not settings.TracersVisible
-                        for W, cq in pairs(dB) do
-                            cq.Visible = settings.TracersVisible and Tracer
+                        for Y, cx in pairs(dI) do
+                            cx.Visible = settings.TracersVisible and Tracer
                         end
                     end
                 end
@@ -1714,43 +1749,43 @@ K:AddToggle(
         end
     }
 )
-local X, dN = game.Players.LocalPlayer, false
-local function dO(Y)
-    local dE = Y:FindFirstChild("Head")
-    if dE then
-        local dP = dE:FindFirstChild("face")
-        if dP then
-            dP:Destroy()
+local Z, dT = game.Players.LocalPlayer, false
+local function dU(_)
+    local dL = _:FindFirstChild("Head")
+    if dL then
+        local dV = dL:FindFirstChild("face")
+        if dV then
+            dV:Destroy()
         end
     end
 end
-local function dQ(ax)
-    if ax:IsA("Accessory") or ax:IsA("Shirt") or ax:IsA("Pants") or ax.Name == "Face" then
-        ax:Destroy()
-    elseif ax:IsA("BasePart") then
-        ax.Material = Enum.Material.ForceField
-        ax.Color = Color3.fromRGB(225, 160, 255)
+local function dW(az)
+    if az:IsA("Accessory") or az:IsA("Shirt") or az:IsA("Pants") or az.Name == "Face" then
+        az:Destroy()
+    elseif az:IsA("BasePart") then
+        az.Material = Enum.Material.ForceField
+        az.Color = Color3.fromRGB(225, 160, 255)
     end
 end
-local function dR(Y)
-    dO(Y)
-    for W, ax in ipairs(Y:GetChildren()) do
-        dQ(ax)
+local function dX(_)
+    dU(_)
+    for Y, az in ipairs(_:GetChildren()) do
+        dW(az)
     end
-    Y.ChildAdded:Connect(dQ)
+    _.ChildAdded:Connect(dW)
 end
-local function dS(Y)
+local function dY(_)
     wait(0.14)
-    if dN then
-        dR(Y)
+    if dT then
+        dX(_)
     end
 end
-K:AddToggle(
-    {Name = "Self visual", Value = false, Callback = function(cX)
-            dN = cX
-            if cX then
-                dS(X.Character or X.CharacterAdded:Wait())
+M:AddToggle(
+    {Name = "Self visual", Value = false, Callback = function(d3)
+            dT = d3
+            if d3 then
+                dY(Z.Character or Z.CharacterAdded:Wait())
             end
         end}
 )
-X.CharacterAdded:Connect(dS)
+Z.CharacterAdded:Connect(dY)
