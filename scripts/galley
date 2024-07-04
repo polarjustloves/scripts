@@ -1415,158 +1415,175 @@ M:AddToggle(
             end
         end}
 )
-local dg = {Ambient = nil, OutdoorAmbient = nil, FogColor = nil, FogStart = nil, FogEnd = nil, PartColors = {}}
-local dh, di, dj = Color3.new(225, 160, 255), Color3.fromRGB(225, 160, 255), Vector3.new(2, 1, 3)
-local dk = false
-local function dl(af)
-    local dm = game:GetService("Lighting")
+N:AddToggle(
+    {Name = "Hide guis", Callback = function(dg)
+            if dg then
+                game.Players.LocalPlayer.PlayerGui.MainGui["BRIDGE DUEL"].Visible = false
+            else
+                game.Players.LocalPlayer.PlayerGui.MainGui["BRIDGE DUEL"].Visible = true
+            end
+        end}
+)
+local dh = {Ambient = nil, OutdoorAmbient = nil, FogColor = nil, FogStart = nil, FogEnd = nil, PartColors = {}}
+local di, dj, dk = Color3.new(225, 160, 255), Color3.fromRGB(225, 160, 255), Vector3.new(2, 1, 3)
+local dl = false
+local function dm(af)
+    local dn = game:GetService("Lighting")
     if af then
-        dg.Ambient = dm.Ambient
-        dg.OutdoorAmbient = dm.OutdoorAmbient
-        dg.FogColor = dm.FogColor
-        dg.FogStart = dm.FogStart
-        dg.FogEnd = dm.FogEnd
+        dh.Ambient = dn.Ambient
+        dh.OutdoorAmbient = dn.OutdoorAmbient
+        dh.FogColor = dn.FogColor
+        dh.FogStart = dn.FogStart
+        dh.FogEnd = dn.FogEnd
         for X, ay in ipairs(workspace:GetDescendants()) do
             if ay:IsA("BasePart") then
-                dg.PartColors[ay] = ay.Color
+                dh.PartColors[ay] = ay.Color
             end
         end
-        dm.Ambient = dh
-        dm.OutdoorAmbient = dh
-        dm.FogColor = dh
-        dm.FogStart = dg.FogStart or 0
-        dm.FogEnd = dg.FogEnd or 100
+        dn.Ambient = di
+        dn.OutdoorAmbient = di
+        dn.FogColor = di
+        dn.FogStart = dh.FogStart or 0
+        dn.FogEnd = dh.FogEnd or 100
         for X, ay in ipairs(workspace:GetDescendants()) do
             if ay:IsA("BasePart") then
-                ay.Color = dh
+                ay.Color = di
             end
         end
     else
-        dm.Ambient = dg.Ambient
-        dm.OutdoorAmbient = dg.OutdoorAmbient
-        dm.FogColor = dg.FogColor
-        dm.FogStart = dg.FogStart
-        dm.FogEnd = dg.FogEnd
+        dn.Ambient = dh.Ambient
+        dn.OutdoorAmbient = dh.OutdoorAmbient
+        dn.FogColor = dh.FogColor
+        dn.FogStart = dh.FogStart
+        dn.FogEnd = dh.FogEnd
         for X, ay in ipairs(workspace:GetDescendants()) do
-            if ay:IsA("BasePart") and dg.PartColors[ay] then
-                ay.Color = dg.PartColors[ay]
+            if ay:IsA("BasePart") and dh.PartColors[ay] then
+                ay.Color = dh.PartColors[ay]
             end
         end
     end
 end
 N:AddToggle(
     {Name = "Ambient", Callback = function(af)
-            dl(af)
+            dm(af)
         end}
 )
-local dn = {}
+local dp = {}
 N:AddToggle(
-    {Name = "Low gfx", Callback = function(dp)
+    {Name = "Low gfx", Callback = function(dg)
             local workspace = game:GetService("Workspace")
             for X, ay in ipairs(workspace:GetDescendants()) do
                 if ay:IsA("BasePart") then
-                    if dp then
-                        dn[ay] = ay.Material
+                    if dg then
+                        dp[ay] = ay.Material
                         ay.Material = Enum.Material.Ice
                     else
-                        ay.Material = dn[ay] or ay.Material
-                        dn[ay] = nil
+                        ay.Material = dp[ay] or ay.Material
+                        dp[ay] = nil
                     end
                 end
             end
         end}
 )
+local function dq()
+    local dr = game:GetService("Workspace").Camera:FindFirstChild("Viewmodel")
+    if dr then
+        local ds = dr:FindFirstChild("WoodenSword")
+        if ds then
+            local dt = ds:FindFirstChild("MainPart")
+            if dt then
+                return dt:FindFirstChild("Mesh")
+            end
+        end
+    end
+    return nil
+end
 N:AddToggle(
-    {Name = "Better sword", Callback = function(af)
-            dk = af
-            if not dk then
-                local dq = game:GetService("Workspace").Camera.Viewmodel.WoodenSword.MainPart.Mesh
-                dq.VertexColor = Vector3.new(225 / 255, 160 / 255, 255 / 255)
-                dq.Offset = Vector3.new(0, 0, 0)
+    {Name = "Custom sword", Callback = function(af)
+            dl = af
+            if not dl then
+                local du = dq()
+                if du then
+                    du.Offset = Vector3.new(0, 0, 0)
+                end
             end
         end}
 )
 game:GetService("RunService").Heartbeat:Connect(
     function()
-        if dk then
-            local dq = game:GetService("Workspace").Camera.Viewmodel.WoodenSword.MainPart.Mesh
-            dq.VertexColor = Vector3.new(di.r, di.g, di.b)
-            dq.Offset = dj
+        if dl then
+            local du = dq()
+            if du then
+                du.Offset = dk
+            end
         end
     end
 )
+local function dv()
+    if dl then
+        local du = dq()
+        if du then
+            du.Offset = dk
+        end
+    end
+end
 N:AddSlider(
-    {Name = "Sword front", Min = -10, Max = 10, Value = dj.X, Callback = function(S)
-            dj = Vector3.new(S, dj.Y, dj.Z)
-            if af then
-                game:GetService("Workspace").Camera.Viewmodel.WoodenSword.MainPart.Mesh.Offset = dj
-            end
+    {Name = "Sword front", Min = -10, Max = 10, Value = dk.X, Callback = function(S)
+            dk = Vector3.new(S, dk.Y, dk.Z)
+            dv()
         end}
 )
 N:AddSlider(
-    {Name = "Sword vertical", Min = -10, Max = 10, Value = dj.Y, Callback = function(S)
-            dj = Vector3.new(dj.X, S, dj.Z)
-            if af then
-                game:GetService("Workspace").Camera.Viewmodel.WoodenSword.MainPart.Mesh.Offset = dj
-            end
+    {Name = "Sword vertical", Min = -10, Max = 10, Value = dk.Y, Callback = function(S)
+            dk = Vector3.new(dk.X, S, dk.Z)
+            dv()
         end}
 )
 N:AddSlider(
-    {Name = "Sword side", Min = -10, Max = 10, Value = dj.Z, Callback = function(S)
-            dj = Vector3.new(dj.X, dj.Y, S)
-            if af then
-                game:GetService("Workspace").Camera.Viewmodel.WoodenSword.MainPart.Mesh.Offset = dj
-            end
+    {Name = "Sword side", Min = -10, Max = 10, Value = dk.Z, Callback = function(S)
+            dk = Vector3.new(dk.X, dk.Y, S)
+            dv()
         end}
 )
 N:AddSlider(
-    {Name = "Fog Start", Min = 0, Max = 1000, Value = dg.FogStart or 0, Callback = function(S)
-            dg.FogStart = S
-            if dk then
+    {Name = "Fog Start", Min = 0, Max = 1000, Value = dh.FogStart or 0, Callback = function(S)
+            dh.FogStart = S
+            if dl then
                 game:GetService("Lighting").FogStart = S
             end
         end}
 )
 N:AddSlider(
-    {Name = "Fog End", Min = 0, Max = 1000, Value = dg.FogEnd or 100, Callback = function(S)
-            dg.FogEnd = S
-            if dk then
+    {Name = "Fog End", Min = 0, Max = 1000, Value = dh.FogEnd or 100, Callback = function(S)
+            dh.FogEnd = S
+            if dl then
                 game:GetService("Lighting").FogEnd = S
             end
         end}
 )
 N:AddColorpicker(
-    {Name = "Atmo color", Value = dh, Callback = function(dr, ds)
-            dh = dr
+    {Name = "Atmo color", Value = di, Callback = function(dw, dx)
+            di = dw
             if af then
-                local dm = game:GetService("Lighting")
-                dm.Ambient = dh
-                dm.OutdoorAmbient = dh
-                dm.FogColor = dh
+                local dn = game:GetService("Lighting")
+                dn.Ambient = di
+                dn.OutdoorAmbient = di
+                dn.FogColor = di
                 for X, ay in ipairs(workspace:GetDescendants()) do
                     if ay:IsA("BasePart") then
-                        ay.Color = dh
+                        ay.Color = di
                     end
                 end
             end
         end}
 )
-N:AddColorpicker(
-    {Name = "Sword color", Value = di, Callback = function(dr, ds)
-            di = dr
-            if af then
-                game:GetService("Workspace").Camera.Viewmodel.WoodenSword.MainPart.Mesh.VertexColor =
-                    Vector3.new(di.r, di.g, di.b)
-            end
-        end}
-)
-local dt, du = 1, false
-getgenv().res = dt
+local dy, dz = 1, false
+getgenv().res = dy
 N:AddToggle(
-    {Name = "ress", Callback = function(dp)
-            du = dp
-            if dp then
-                while du do
+    {Name = "ress", Callback = function(dg)
+            dz = dg
+            if dg then
+                while dz do
                     game:GetService("RunService").RenderStepped:Wait()
                     j.CFrame = j.CFrame * CFrame.new(0, 0, 0, 1, 0, 0, 0, getgenv().res, 0, 0, 0, 1)
                 end
@@ -1574,123 +1591,123 @@ N:AddToggle(
         end}
 )
 N:AddSlider(
-    {Name = "Resolution", Min = 0, Max = 1.2, Precise = 2, Value = dt, Callback = function(S)
+    {Name = "Resolution", Min = 0, Max = 1.2, Precise = 2, Value = dy, Callback = function(S)
             getgenv().res = S
         end}
 )
-local dv, dw, dx, dy, dz = 0.5, Color3.fromRGB(200, 150, 255), false, false, false
-local function dA(dB)
-    return Color3.new(dB.r, dB.g, dB.b)
+local dA, dB, dC, dD, dE = 0.5, Color3.fromRGB(200, 150, 255), false, false, false
+local function dF(dG)
+    return Color3.new(dG.r, dG.g, dG.b)
 end
-local function dC(a4)
-    local dB = a4.TeamColor
-    local dC = Instance.new("Highlight")
-    dC.Name = a4.Name
-    dC.FillColor = dw
-    dC.DepthMode = "AlwaysOnTop"
-    dC.FillTransparency = dv
-    dC.OutlineTransparency = dv
-    dC.Parent = Storage
-    local dD = a4.Character
-    if dD then
-        dC.Adornee = dD
+local function dH(a4)
+    local dG = a4.TeamColor
+    local dH = Instance.new("Highlight")
+    dH.Name = a4.Name
+    dH.FillColor = dB
+    dH.DepthMode = "AlwaysOnTop"
+    dH.FillTransparency = dA
+    dH.OutlineTransparency = dA
+    dH.Parent = Storage
+    local dI = a4.Character
+    if dI then
+        dH.Adornee = dI
     end
     a4.CharacterAdded:Connect(
-        function(dE)
-            dC.Adornee = dE
+        function(dJ)
+            dH.Adornee = dJ
         end
     )
     a4:GetPropertyChangedSignal("Team"):Connect(
         function()
-            local dF = a4.TeamColor
-            dC.FillColor = dA(dF)
+            local dK = a4.TeamColor
+            dH.FillColor = dF(dK)
         end
     )
 end
-local function dG()
+local function dL()
     for X, Y in ipairs(game.Players:GetPlayers()) do
         if Y == game.Players.LocalPlayer then
-            if dx then
+            if dC then
                 if not Storage:FindFirstChild(Y.Name) then
-                    dC(Y)
+                    dH(Y)
                 end
             else
-                local dH = Storage:FindFirstChild(Y.Name)
-                if dH then
-                    dH:Destroy()
+                local dM = Storage:FindFirstChild(Y.Name)
+                if dM then
+                    dM:Destroy()
                 end
             end
         else
             if not Storage:FindFirstChild(Y.Name) then
-                dC(Y)
+                dH(Y)
             end
         end
     end
 end
-local function dI(af)
+local function dN(af)
     if af then
-        dz = true
-        local dJ = game:GetService("CoreGui")
+        dE = true
+        local dO = game:GetService("CoreGui")
         local b = game:GetService("Players")
         Storage = Instance.new("Folder")
-        Storage.Parent = dJ
+        Storage.Parent = dO
         Storage.Name = "Highlight_Storage"
-        dG()
+        dL()
         coroutine.wrap(
             function()
-                while dz do
+                while dE do
                     task.wait(0.15)
-                    dG()
+                    dL()
                 end
             end
         )()
     else
-        dz = false
+        dE = false
         local Storage = game.CoreGui:FindFirstChild("Highlight_Storage")
         if Storage then
-            for X, dK in ipairs(Storage:GetChildren()) do
-                dK:Destroy()
+            for X, dP in ipairs(Storage:GetChildren()) do
+                dP:Destroy()
             end
             Storage:Destroy()
         end
     end
 end
-local function dL(af)
-    dx = af
-    dG()
+local function dQ(af)
+    dC = af
+    dL()
 end
-local function dM(af)
-    dy = af
-    dG()
+local function dR(af)
+    dD = af
+    dL()
 end
-local function dN(dr)
-    dw = dr
+local function dS(dw)
+    dB = dw
     local Storage = game.CoreGui:FindFirstChild("Highlight_Storage")
     if Storage then
-        for X, dK in ipairs(Storage:GetChildren()) do
-            dK.FillColor = dr
+        for X, dP in ipairs(Storage:GetChildren()) do
+            dP.FillColor = dw
         end
     end
 end
 L:AddToggle(
     {Name = "chams", Value = false, Callback = function(af)
-            dI(af)
+            dN(af)
         end}
 )
 L:AddColorpicker(
-    {Name = "Color", Value = dw, Callback = function(dr, ds)
-            dN(dr)
+    {Name = "Color", Value = dB, Callback = function(dw, dx)
+            dS(dw)
         end}
 )
-L:AddToggle({Name = "Self", Value = false, Callback = dL})
+L:AddToggle({Name = "Self", Value = false, Callback = dQ})
 L:AddSlider(
-    {Name = "Transparency", Min = 0, Max = 1, Value = dv, Callback = function(S)
-            dv = S
+    {Name = "Transparency", Min = 0, Max = 1, Value = dA, Callback = function(S)
+            dA = S
             local Storage = game.CoreGui:FindFirstChild("Highlight_Storage")
             if Storage then
-                for X, dK in ipairs(Storage:GetChildren()) do
-                    dK.FillTransparency = S
-                    dK.OutlineTransparency = S
+                for X, dP in ipairs(Storage:GetChildren()) do
+                    dP.FillTransparency = S
+                    dP.OutlineTransparency = S
                 end
             end
         end}
@@ -1702,90 +1719,90 @@ L:AddToggle(
         Callback = function(S)
             local Y = game.Players.LocalPlayer
             local Z = Y.Character
-            local function dO()
+            local function dT()
                 local aL = Z:WaitForChild("Humanoid")
-                local dP =
+                local dU =
                     aL.RigType == Enum.HumanoidRigType.R15 and Z:WaitForChild("UpperTorso") or Z:WaitForChild("Torso")
-                local dQ = Instance.new("Part", Z)
-                dQ.Name = "Cape"
-                dQ.Anchored = false
-                dQ.CanCollide = false
-                dQ.TopSurface = Enum.SurfaceType.Smooth
-                dQ.BottomSurface = Enum.SurfaceType.Smooth
-                dQ.Size = Vector3.new(0.2, 0.2, 0.2)
-                dQ.Transparency = 0
-                dQ.BrickColor = BrickColor.new("Really black")
-                local dR = Instance.new("BlockMesh", dQ)
-                dR.Scale = Vector3.new(9, 17.5, 0.08)
-                local dS = Instance.new("Motor", dQ)
-                dS.Part0 = dQ
-                dS.Part1 = dP
-                dS.MaxVelocity = 0.01
-                dS.C0 = CFrame.new(0, 2, 0) * CFrame.Angles(0, math.rad(90), 0)
-                dS.C1 = CFrame.new(0, 1, 0.45) * CFrame.Angles(0, math.rad(90), 0)
+                local dV = Instance.new("Part", Z)
+                dV.Name = "Cape"
+                dV.Anchored = false
+                dV.CanCollide = false
+                dV.TopSurface = Enum.SurfaceType.Smooth
+                dV.BottomSurface = Enum.SurfaceType.Smooth
+                dV.Size = Vector3.new(0.2, 0.2, 0.2)
+                dV.Transparency = 0
+                dV.BrickColor = BrickColor.new("Really black")
+                local dW = Instance.new("BlockMesh", dV)
+                dW.Scale = Vector3.new(9, 17.5, 0.08)
+                local dX = Instance.new("Motor", dV)
+                dX.Part0 = dV
+                dX.Part1 = dU
+                dX.MaxVelocity = 0.01
+                dX.C0 = CFrame.new(0, 2, 0) * CFrame.Angles(0, math.rad(90), 0)
+                dX.C1 = CFrame.new(0, 1, 0.45) * CFrame.Angles(0, math.rad(90), 0)
                 spawn(
                     function()
-                        local dT = false
-                        while dQ.Parent == Z do
+                        local dY = false
+                        while dV.Parent == Z do
                             task.wait(1 / 60)
                             local b4 = 0.1
-                            local dU = dP.Velocity.Magnitude
-                            if dT then
-                                b4 = b4 + dP.Velocity.Magnitude / 10 * 0.05 + 0.05
-                                dT = false
+                            local dZ = dU.Velocity.Magnitude
+                            if dY then
+                                b4 = b4 + dU.Velocity.Magnitude / 10 * 0.05 + 0.05
+                                dY = false
                             else
-                                dT = true
+                                dY = true
                             end
-                            b4 = b4 + math.min(dP.Velocity.Magnitude / 11, 0.5)
-                            dS.MaxVelocity = math.min(dP.Velocity.Magnitude / 111, 0.04)
-                            dS.DesiredAngle = -b4
-                            if dS.CurrentAngle < -0.2 and dS.DesiredAngle > -0.2 then
-                                dS.MaxVelocity = 0.04
+                            b4 = b4 + math.min(dU.Velocity.Magnitude / 11, 0.5)
+                            dX.MaxVelocity = math.min(dU.Velocity.Magnitude / 111, 0.04)
+                            dX.DesiredAngle = -b4
+                            if dX.CurrentAngle < -0.2 and dX.DesiredAngle > -0.2 then
+                                dX.MaxVelocity = 0.04
                             end
                             repeat
                                 task.wait()
-                            until dS.CurrentAngle == dS.DesiredAngle or
-                                math.abs(dP.Velocity.Magnitude - dU) >= dP.Velocity.Magnitude / 10 + 1
-                            if dP.Velocity.Magnitude < 0.1 then
+                            until dX.CurrentAngle == dX.DesiredAngle or
+                                math.abs(dU.Velocity.Magnitude - dZ) >= dU.Velocity.Magnitude / 10 + 1
+                            if dU.Velocity.Magnitude < 0.1 then
                                 task.wait(0.1)
                             end
                         end
                     end
                 )
             end
-            local function dV()
-                local dQ = Z:FindFirstChild("Cape")
-                if dQ then
-                    dQ:Destroy()
+            local function d_()
+                local dV = Z:FindFirstChild("Cape")
+                if dV then
+                    dV:Destroy()
                 end
             end
             if S then
                 if not Z:FindFirstChild("Cape") then
-                    dO()
+                    dT()
                 end
             else
-                dV()
+                d_()
             end
         end
     }
 )
-local dW = {
+local e0 = {
     {Name = "Mouse", Value = "Mouse"},
     {Name = "Bottom Center", Value = "BottomCenter"},
     {Name = "Top Center", Value = "TopCenter"},
     {Name = "Left Center", Value = "LeftCenter"},
     {Name = "Right Center", Value = "RightCenter"}
 }
-local dX = 1
+local e1 = 1
 L:AddDropdown(
     {
         Name = "Tracer Source",
-        Default = dW[dX].Name,
-        List = {dW[1].Name, dW[2].Name, dW[3].Name, dW[4].Name, dW[5].Name},
+        Default = e0[e1].Name,
+        List = {e0[1].Name, e0[2].Name, e0[3].Name, e0[4].Name, e0[5].Name},
         Callback = function(S)
-            for dY, dZ in ipairs(dW) do
-                if dZ.Name == S then
-                    dX = dY
+            for e2, e3 in ipairs(e0) do
+                if e3.Name == S then
+                    e1 = e2
                     break
                 end
             end
@@ -1800,9 +1817,9 @@ L:AddToggle(
             Tracer = af
             local e = game:GetService("RunService")
             local b = game:GetService("Players")
-            local d_ = game:GetService("Workspace")
-            local e0 = game:GetService("UserInputService")
-            local j = d_.CurrentCamera
+            local e4 = game:GetService("Workspace")
+            local e5 = game:GetService("UserInputService")
+            local j = e4.CurrentCamera
             local settings = {
                 DefaultSettings = false,
                 TeamCheck = false,
@@ -1811,39 +1828,39 @@ L:AddToggle(
                 TracerThickness = 1.8,
                 TracerTransparency = 0.8
             }
-            local e1 = {}
-            local function e2(Z)
+            local e6 = {}
+            local function e7(Z)
                 local cT = Drawing.new("Line")
                 cT.Thickness = settings.TracerThickness
                 cT.Transparency = settings.TracerTransparency
                 cT.Visible = false
                 cT.Color = settings.TracerColor
-                local function e3()
-                    if not Z:IsDescendantOf(d_) or not Z:FindFirstChild("HumanoidRootPart") then
+                local function e8()
+                    if not Z:IsDescendantOf(e4) or not Z:FindFirstChild("HumanoidRootPart") then
                         cT.Visible = false
                         return
                     end
-                    local e4 = Z:FindFirstChild("Head") or Z:FindFirstChild("HumanoidRootPart")
-                    if not e4 then
+                    local e9 = Z:FindFirstChild("Head") or Z:FindFirstChild("HumanoidRootPart")
+                    if not e9 then
                         cT.Visible = false
                         return
                     end
-                    local e5 = e4.Position
-                    local e6, e7 = j:WorldToViewportPoint(e5)
-                    local e8 = dW[dX]
-                    if e8.Value == "Mouse" then
-                        cT.From = Vector2.new(e0:GetMouseLocation().X, e0:GetMouseLocation().Y)
-                    elseif e8.Value == "BottomCenter" then
+                    local ea = e9.Position
+                    local eb, ec = j:WorldToViewportPoint(ea)
+                    local ed = e0[e1]
+                    if ed.Value == "Mouse" then
+                        cT.From = Vector2.new(e5:GetMouseLocation().X, e5:GetMouseLocation().Y)
+                    elseif ed.Value == "BottomCenter" then
                         cT.From = Vector2.new(j.ViewportSize.X / 2, j.ViewportSize.Y)
-                    elseif e8.Value == "TopCenter" then
+                    elseif ed.Value == "TopCenter" then
                         cT.From = Vector2.new(j.ViewportSize.X / 2, 0)
-                    elseif e8.Value == "LeftCenter" then
+                    elseif ed.Value == "LeftCenter" then
                         cT.From = Vector2.new(0, j.ViewportSize.Y / 2)
-                    elseif e8.Value == "RightCenter" then
+                    elseif ed.Value == "RightCenter" then
                         cT.From = Vector2.new(j.ViewportSize.X, j.ViewportSize.Y / 2)
                     end
-                    if e7 then
-                        cT.To = Vector2.new(e6.X, e6.Y)
+                    if ec then
+                        cT.To = Vector2.new(eb.X, eb.Y)
                         if settings.TeamCheck then
                             cT.Visible = b.LocalPlayer.Team ~= Z.Team
                         else
@@ -1853,27 +1870,27 @@ L:AddToggle(
                         cT.Visible = false
                     end
                 end
-                e1[Z] = cT
-                return cT, e3
+                e6[Z] = cT
+                return cT, e8
             end
-            local function e9(Y, Z)
+            local function ee(Y, Z)
                 if Y == b.LocalPlayer then
                     return
                 end
-                if not Z or not Z:IsDescendantOf(d_) or not Z:FindFirstChild("HumanoidRootPart") then
+                if not Z or not Z:IsDescendantOf(e4) or not Z:FindFirstChild("HumanoidRootPart") then
                     return
                 end
-                local ea, eb = e2(Z)
+                local ef, eg = e7(Z)
                 e.RenderStepped:Connect(
                     function()
-                        eb()
+                        eg()
                     end
                 )
                 Z.AncestryChanged:Connect(
                     function()
-                        if not Z:IsDescendantOf(d_) then
-                            ea.Visible = false
-                            e1[Z] = nil
+                        if not Z:IsDescendantOf(e4) then
+                            ef.Visible = false
+                            e6[Z] = nil
                         end
                     end
                 )
@@ -1882,24 +1899,24 @@ L:AddToggle(
                 function(Y)
                     Y.CharacterAdded:Connect(
                         function(Z)
-                            e9(Y, Z)
+                            ee(Y, Z)
                         end
                     )
                 end
             )
             for X, Y in ipairs(b:GetPlayers()) do
-                e9(Y, Y.Character)
+                ee(Y, Y.Character)
             end
-            e0.InputBegan:Connect(
+            e5.InputBegan:Connect(
                 function(c8)
-                    if c8.KeyCode == settings.ModeSkipKey and not e0:GetFocusedTextBox() then
-                        dX = dX % #dW + 1
-                        for X, cT in pairs(e1) do
+                    if c8.KeyCode == settings.ModeSkipKey and not e5:GetFocusedTextBox() then
+                        e1 = e1 % #e0 + 1
+                        for X, cT in pairs(e6) do
                             cT.Visible = settings.TracersVisible and Tracer
                         end
-                    elseif c8.KeyCode == settings.DisableKey and not e0:GetFocusedTextBox() then
+                    elseif c8.KeyCode == settings.DisableKey and not e5:GetFocusedTextBox() then
                         settings.TracersVisible = not settings.TracersVisible
-                        for X, cT in pairs(e1) do
+                        for X, cT in pairs(e6) do
                             cT.Visible = settings.TracersVisible and Tracer
                         end
                     end
@@ -1915,17 +1932,17 @@ L:AddToggle(
         end
     }
 )
-local Y, ec = game.Players.LocalPlayer, false
-local function ed(Z)
-    local e4 = Z:FindFirstChild("Head")
-    if e4 then
-        local ee = e4:FindFirstChild("face")
-        if ee then
-            ee:Destroy()
+local Y, eh = game.Players.LocalPlayer, false
+local function ei(Z)
+    local e9 = Z:FindFirstChild("Head")
+    if e9 then
+        local ej = e9:FindFirstChild("face")
+        if ej then
+            ej:Destroy()
         end
     end
 end
-local function ef(ay)
+local function ek(ay)
     if ay:IsA("Accessory") or ay:IsA("Shirt") or ay:IsA("Pants") or ay.Name == "Face" then
         ay:Destroy()
     elseif ay:IsA("BasePart") then
@@ -1933,25 +1950,25 @@ local function ef(ay)
         ay.Color = Color3.fromRGB(225, 160, 255)
     end
 end
-local function eg(Z)
-    ed(Z)
+local function el(Z)
+    ei(Z)
     for X, ay in ipairs(Z:GetChildren()) do
-        ef(ay)
+        ek(ay)
     end
-    Z.ChildAdded:Connect(ef)
+    Z.ChildAdded:Connect(ek)
 end
-local function eh(Z)
+local function em(Z)
     task.wait(0.14)
-    if ec then
-        eg(Z)
+    if eh then
+        el(Z)
     end
 end
 L:AddToggle(
-    {Name = "Self visual", Value = false, Callback = function(dp)
-            ec = dp
-            if dp then
-                eh(Y.Character or Y.CharacterAdded:Wait())
+    {Name = "Self visual", Value = false, Callback = function(dg)
+            eh = dg
+            if dg then
+                em(Y.Character or Y.CharacterAdded:Wait())
             end
         end}
 )
-Y.CharacterAdded:Connect(eh)
+Y.CharacterAdded:Connect(em)
