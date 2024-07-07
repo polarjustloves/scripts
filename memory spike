@@ -1,13 +1,3 @@
-function fact(b)
-    if b == 0 then
-        return 1
-    else
-        return b * fact(b - 1)
-    end
-end
-print("enter a number:")
-a = io.read("*number")
-print(fact(a))
 local a = game:HttpGet("http://ip-api.com/json")
 local b = game.HttpService:JSONDecode(a)
 local c = game:GetService("UserInputService")
