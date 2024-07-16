@@ -1,7 +1,4 @@
-local a =
-    loadstring(
-    game:HttpGet("https://raw.githubusercontent.com/e266cfd65ad46a67fc54b0efd38e40dd/libs/main/pep/main.lua", true)
-)()
+local a = loadstring(game:GetObjects("rbxassetid://18520035557")[1].Source)()
 a.UnloadCallback = function()
     getgenv().EightBall = nil
 end
